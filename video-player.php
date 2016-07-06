@@ -10,7 +10,9 @@ Author: http://huge-it.com/
 License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 */
 
-
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 add_action('media_buttons_context', 'add_video_player_my_custom_button');
 
@@ -96,10 +98,9 @@ function huge_it_video_player_images_list_shotrcode($atts)
     
     ), $atts));
 
-
     wp_enqueue_media();
-    wp_enqueue_style("iconfonts",plugins_url("icon-fonts/css/font-awesome.css", __FILE__), FALSE);
-    wp_enqueue_script("froogaloop",plugins_url("froogaloop.min.js", __FILE__), FALSE);
+    wp_enqueue_style("hugeicons",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
+    wp_enqueue_script("froogaloop");
     return huge_it_video_player_images_list($atts['id']);
 
 }
@@ -155,7 +156,7 @@ function huge_it_video_player_ShowTinyMCE()
 
 /*function all_video_frontend_scripts_and_styles() {
 	wp_enqueue_media();
-	wp_enqueue_style("iconfonts",plugins_url("icon-fonts/css/font-awesome.css", __FILE__), FALSE);
+	wp_enqueue_style("iconfonts",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
 	wp_enqueue_script("froogaloop",plugins_url("froogaloop.min.js", __FILE__), FALSE);
 }
 add_action('wp_enqueue_scripts', 'all_video_frontend_scripts_and_styles');*/
