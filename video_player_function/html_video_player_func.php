@@ -1,4 +1,9 @@
-<?php 
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 function print_html_nav($count_items,$page_number,$serch_fields=""){
 	?>   
          <script type="text/javascript">

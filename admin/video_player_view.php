@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
 	global $wpdb;
 	?>
