@@ -1,10 +1,10 @@
 === Video Player ===
 Contributors: Huge-IT
 Donate link: http://huge-it.com/video-player/
-Tags: video, video player, player, html5 player, youtube videos, HTML5 video player, playlists, video embed, Video Player plugin, MP4, myvideo, playlist, video blog, html5 video, HTML5 video gallery, m4v, embed video, embed youtube, video playlist, video plugin, video sidebar widget, video widget, videos, youtube player, youtube playlist, youtube plugin, video, ipod, iPad, flash player, embed, video ekleme, vimeo, webm,
+Tags: video, video player, player, youtube videos, playlists, Video Player plugin, myvideo, playlist, video playlist, video plugin, videos, youtube player,
 Requires at least: 3.0.1
-Tested up to: 4.5.2
-Stable tag: 1.1.6
+Tested up to: 4.5.3
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,11 +68,14 @@ Now you can set your Video Player options, images and use our Video Player.
 
 == Screenshots ==
 
-1.  WordPress Video Player Demo 1 Playlist View
-2.  WordPress Video Player Demo 2 Single View
-3.  WordPress Video Player Demo 3 Full width Album
+1.  [WordPress Video Player Demo 1 Playlist View](http://huge-it.com/wordpress-plugins-video-player-demo/)
+2.  [WordPress Video Player Demo 2 Single View](http://huge-it.com/wordpress-video-player-demo-2-single-view/)
+3.  [WordPress Video Player Demo 3 Full width Album](http://huge-it.com/wordpress-video-player-demo-3-full-width-album/)
 
 == Changelog ==
+
+= 1.1.7 =
+*  Added credits and attribution in the source code refering the original authors.
 
 = 1.1.6 =
 *  Admin bug fixed.
@@ -93,7 +96,7 @@ Now you can set your Video Player options, images and use our Video Player.
 *  Front end bug fixed.
 
 = 1.0.9 =
-*  Some Mirror Bug fixed in video player.
+*  Some Mirror Bug fixed.
 
 = 1.0.8 =
 *  Bug fixed.
@@ -105,7 +108,7 @@ Now you can set your Video Player options, images and use our Video Player.
 *  Bug fixed.
 
 = 1.0.3 =
-*  Video Player Bug fixed.
+*  Bug fixed.
 
 = 1.0.2 =
 *  Bug fixed.
@@ -235,6 +238,6 @@ Show Info. When “off” title of the video, like/dislike, share buttons all wi
 					
 **Vimeo Player Options**
 
-Color. Choose color for play button and duration line on Vimeo player
+Color. Choose color for play button and duration line
 
-Portrait.	 When “off” will hide video information
+Portrait. When “off” will hide video information
