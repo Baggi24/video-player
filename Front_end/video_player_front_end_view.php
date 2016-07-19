@@ -144,7 +144,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										$autoplay="false";
 									}
 								?>
-								//autoplay='<?=$autoplay; ?>';
+								autoplay='<?=$autoplay; ?>';
 								video_width=<?=$video_player[0]->width; ?>;;
 								video_param_width=<?=$video_player[0]->width; ?>;
 								
