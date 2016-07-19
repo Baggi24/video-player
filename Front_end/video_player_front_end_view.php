@@ -34,6 +34,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 	$video_playerID=$video_player[0]->id;
 	$video_playertitle=$video_player[0]->name;
 	$video_playeralbum=$video_player[0]->album_single;
+	$videoAautoPlay = $video_player[0]->autoplay;
 	$path_site = plugins_url("../images", __FILE__);
 	switch($video_playeralbum){
 		case 'single':
@@ -143,7 +144,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										$autoplay="false";
 									}
 								?>
-								autoplay='<?=$autoplay; ?>';
+								//autoplay='<?=$autoplay; ?>';
 								video_width=<?=$video_player[0]->width; ?>;;
 								video_param_width=<?=$video_player[0]->width; ?>;
 								
@@ -1882,6 +1883,9 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						load_icon.style.display="none";
 						removeClass("loading",global_container);
 						init_playlist_active_item();
+						<?php if($videoAautoPlay == 1):?>
+						jQuery('.thumbnail_play').click();
+						<?php endif;?>
 					},2000);
 					
 					
