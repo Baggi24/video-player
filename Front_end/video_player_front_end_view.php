@@ -1884,7 +1884,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						removeClass("loading",global_container);
 						init_playlist_active_item();
 						<?php if($videoAautoPlay == 1):?>
-						jQuery('.thumbnail_play').click();
+						if (jQuery('#huge_it_album_video_player_<?php echo $i; ?> .thumbnail_play').parent().css('display') != 'none'){
+							jQuery('#huge_it_album_video_player_<?php echo $i; ?> .thumbnail_play').click();
+						}
+						else{
+							jQuery('#huge_it_album_video_player_<?php echo $i; ?> img.thumb').click();
+						}
 						<?php endif;?>
 					},2000);
 					
