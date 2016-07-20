@@ -34,6 +34,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 	$video_playerID=$video_player[0]->id;
 	$video_playertitle=$video_player[0]->name;
 	$video_playeralbum=$video_player[0]->album_single;
+	$videoAautoPlay = $video_player[0]->autoplay;
 	$path_site = plugins_url("../images", __FILE__);
 	switch($video_playeralbum){
 		case 'single':
@@ -1882,6 +1883,14 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						load_icon.style.display="none";
 						removeClass("loading",global_container);
 						init_playlist_active_item();
+						<?php if($videoAautoPlay == 1):?>
+						if (jQuery('#huge_it_album_video_player_<?php echo $i; ?> .thumbnail_play').parent().css('display') != 'none'){
+							jQuery('#huge_it_album_video_player_<?php echo $i; ?> .thumbnail_play').click();
+						}
+						else{
+							jQuery('#huge_it_album_video_player_<?php echo $i; ?> img.thumb').click();
+						}
+						<?php endif;?>
 					},2000);
 					
 					
