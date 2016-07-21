@@ -4,7 +4,7 @@ Donate link: http://huge-it.com/video-player/
 Tags: video, video player, player, youtube videos, playlists, Video Player plugin, myvideo, playlist, video playlist, video plugin, videos, youtube player,
 Requires at least: 3.0.1
 Tested up to: 4.5.3
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,10 @@ Now you can set your Video Player options, images and use our Video Player.
 3.  [WordPress Video Player Demo 3 Full width Album](http://huge-it.com/wordpress-video-player-demo-3-full-width-album/)
 
 == Changelog ==
+
+= 1.1.8 =
+* 1) We have fixed the bug with auto-play that had been reported by a user in the last support forum post. 
+* 2) We have also used this bug fix opportunity to update the main banner of the plugin page in order to mention all the features of Video Player, so that users will get the full plugin information vividly.
 
 = 1.1.7 =
 *  Added credits and attribution in the source code refering the original authors.
