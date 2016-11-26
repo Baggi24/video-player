@@ -1,10 +1,9 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-function showPublishedvideo_player_1($id)
+function hugeit_vp_showPublishedvideo_player_1($id)
 {
 	global $wpdb;
 	$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_it_videos where video_player_id = '%d' order by ordering ASC",$id);
@@ -19,6 +18,6 @@ function showPublishedvideo_player_1($id)
         $value = $rowpar->value;
         $paramssld[$key] = $value;
     }
-	return front_end_video_player($videos, $paramssld, $video_player);
+	return hugeit_vp_front_end_video_player($videos, $paramssld, $video_player);
 }
 ?>

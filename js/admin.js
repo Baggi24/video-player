@@ -1,4 +1,14 @@
 jQuery(document).ready(function () {
+
+	jQuery(".close_free_banner").on("click",function(){
+		jQuery(".free_version_banner").css("display","none");
+		videoPlayerSetCookie( 'videoPlayerBannerShow', 'no', {expires:86400} );
+	});
+
+	jQuery(".close_black_friday").on("click",function(){
+		jQuery(".backend-banner").css("display","none");
+		videoPlayerSetCookie( 'videoPlayerBlackFriday', 'no', {expires:345600} );
+	});
 	
 	jQuery(".update_video_link").on("click tap",function(){
 		var button=jQuery(this);
@@ -41,8 +51,6 @@ jQuery(document).ready(function () {
 			}
 		},"json");
 	});
-
-	
 	
 	jQuery('#arrows-type input[name="params[slider_navigation_type]"]').change(function(){
 		jQuery(this).parents('ul').find('li.active').removeClass('active');
@@ -75,7 +83,7 @@ jQuery(document).ready(function () {
 			action:"video_player_ajax",
 			task:"get_video_thumb_from_id",
 			type:type,
-			video_id:video_id
+			video_id: video_id
 		}
 		jQuery.post(ajax_object.ajax_url,data,function(response){
 			if(response.success){
@@ -84,5 +92,36 @@ jQuery(document).ready(function () {
 			}
 		},"json");
 	});
-	
 });
+
+function videoPlayerSetCookie(name, value, options) {
+	options = options || {};
+
+	var expires = options.expires;
+
+	if (typeof expires == "number" && expires) {
+		var d = new Date();
+		d.setTime(d.getTime() + expires * 1000);
+		expires = options.expires = d;
+	}
+	if (expires && expires.toUTCString) {
+		options.expires = expires.toUTCString();
+	}
+
+
+	if(typeof value == "object"){
+		value = JSON.stringify(value);
+	}
+	value = encodeURIComponent(value);
+	var updatedCookie = name + "=" + value;
+
+	for (var propName in options) {
+		updatedCookie += "; " + propName;
+		var propValue = options[propName];
+		if (propValue !== true) {
+			updatedCookie += "=" + propValue;
+		}
+	}
+
+	document.cookie = updatedCookie;
+}

@@ -4,13 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-function get_youtube_thumb_id_from_url($url){						
+function hugeit_vp_get_youtube_thumb_id_from_url($url){
 	if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
 		return $match[1];
 	}
 }
 
-function hex2RGB($hexStr, $returnAsString = true, $seperator = ',') {
+function hugeit_vp_hex2RGB($hexStr, $returnAsString = true, $seperator = ',') {
     $hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $hexStr); // Gets a proper hex string
     $rgbArray = array();
     if (strlen($hexStr) == 6) { //If a proper hex code, convert using bitwise operation. No overhead... faster
@@ -28,7 +28,7 @@ function hex2RGB($hexStr, $returnAsString = true, $seperator = ',') {
     return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray; // returns the rgb string or the associative array
 }
 
-function front_end_video_player($videos, $paramssld, $video_player){
+function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 
 	ob_start();
 	$video_playerID=$video_player[0]->id;
@@ -51,10 +51,10 @@ function front_end_video_player($videos, $paramssld, $video_player){
 					<?php
 					foreach($videos as $video){
 						if($video->sl_type=="youtube"){
-							$video_thumb_url=get_youtube_thumb_id_from_url($video->video_url_1);
+							$video_thumb_url=hugeit_vp_get_youtube_thumb_id_from_url($video->video_url_1);
 							?>
-							var youtube_single_player_<?=$video->id; ?>;
-							youtube_single_player_<?=$video->id; ?> = new YT.Player('youtube_single_player_<?=$video->id; ?>',{
+							var youtube_single_player_<?php echo $video->id; ?>;
+							youtube_single_player_<?php echo $video->id; ?> = new YT.Player('youtube_single_player_<?php echo $video->id; ?>',{
 								videoId		: '<?php echo $video_thumb_url; ?>',
 								enablejsapi      : 1,
 								playerVars:{
@@ -75,28 +75,28 @@ function front_end_video_player($videos, $paramssld, $video_player){
 
 							});
 							
-							if(<?=$video_player[0]->autoplay; ?>==0){
-								jQuery("#youtube_single_player_container_<?=$video->id; ?> .thumbnail_block").css({display:'block'});
+							if(<?php echo $video_player[0]->autoplay; ?>==0){
+								jQuery("#youtube_single_player_container_<?php echo $video->id; ?> .thumbnail_block").css({display:'block'});
 							}
-							jQuery("#youtube_single_player_container_<?=$video->id; ?> .thumbnail_block").on("click",function(){
-								jQuery("#youtube_single_player_container_<?=$video->id; ?> .thumbnail_block").css({display:'none'});
-								youtube_single_player_<?=$video->id; ?>.playVideo();
+							jQuery("#youtube_single_player_container_<?php echo $video->id; ?> .thumbnail_block").on("click",function(){
+								jQuery("#youtube_single_player_container_<?php echo $video->id; ?> .thumbnail_block").css({display:'none'});
+								youtube_single_player_<?php echo $video->id; ?>.playVideo();
 							});
 
-							function ythw<?=$video->id; ?>(){
-								var w=<?=$video_player[0]->width; ?>;
-								if(jQuery("#youtube_single_player_container_<?=$video->id; ?>").parent().width()<w){
-									document.getElementById("youtube_single_player_container_<?=$video->id; ?>").style.width="100%";
-									var w=document.getElementById("youtube_single_player_container_<?=$video->id; ?>").offsetWidth;
-									document.getElementById("youtube_single_player_container_<?=$video->id; ?>").style.height=w*0.56+"px";
+							function ythw<?php echo $video->id; ?>(){
+								var w=<?php echo $video_player[0]->width; ?>;
+								if(jQuery("#youtube_single_player_container_<?php echo $video->id; ?>").parent().width()<w){
+									document.getElementById("youtube_single_player_container_<?php echo $video->id; ?>").style.width="100%";
+									var w=document.getElementById("youtube_single_player_container_<?php echo $video->id; ?>").offsetWidth;
+									document.getElementById("youtube_single_player_container_<?php echo $video->id; ?>").style.height=w*0.56+"px";
 								}else{
-									document.getElementById("youtube_single_player_container_<?=$video->id; ?>").style.width="<?php echo $video_player[0]->width; ?>px";
-									document.getElementById("youtube_single_player_container_<?=$video->id; ?>").style.height="<?php echo $video_player[0]->width*0.56; ?>px";
+									document.getElementById("youtube_single_player_container_<?php echo $video->id; ?>").style.width="<?php echo $video_player[0]->width; ?>px";
+									document.getElementById("youtube_single_player_container_<?php echo $video->id; ?>").style.height="<?php echo $video_player[0]->width*0.56; ?>px";
 								}
 							}
-							ythw<?=$video->id; ?>();
+							ythw<?php echo $video->id; ?>();
 							jQuery(window).on("resize",function(){
-								ythw<?=$video->id; ?>();
+								ythw<?php echo $video->id; ?>();
 							});
 
 							<?php
@@ -114,19 +114,18 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						$i=rand(1,100000);
 							?>
 							<script type="text/javascript">
-								/*init snigle video player when document is ready*/
+								/* init single video player when document is ready */
 							jQuery(document).ready(function(){
 								var huge_it_single_player_interval_<?php echo $i; ?> = setInterval(function(){
-									if(jQuery("#huge_it_sigle_video_player_<?=$i; ?>").is(":visible")){
-										init_huge_it_single_video_player_<?=$i; ?>("#huge_it_sigle_video_player_<?=$i; ?>");
+									if(jQuery("#huge_it_sigle_video_player_<?php echo $i; ?>").is(":visible")){
+										init_huge_it_single_video_player_<?php echo $i; ?>("#huge_it_sigle_video_player_<?php echo $i; ?>");
 										clearInterval(huge_it_single_player_interval_<?php echo $i; ?>);
 									}
 								},100);
-								
 							});
 
 							/* Single Player */
-							function init_huge_it_single_video_player_<?=$i; ?>(video_container_id){
+							function init_huge_it_single_video_player_<?php echo $i; ?>(video_container_id){
 								
 								var container,video,thumb_box,thumb,paused,dragging,volume_dragging,volume,progress_duration_bar,progress_bar,progress_played_bar,progress_thumb,progress_buffered,current_time,duration_time,current_time_text,duration_time_text,autoplay,video_param_width,video_width,play_btn,center_play_icon,center_pause_icon,center_wait_icon,backward_btn,forward_btn,mute_btn,volume_handle,volume_before,volume_current,volume_after,fullscreen_btn,hover_timer_box,hover_timer;
 								current_time="00";
@@ -144,9 +143,9 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										$autoplay="false";
 									}
 								?>
-								autoplay='<?=$autoplay; ?>';
-								video_width=<?=$video_player[0]->width; ?>;;
-								video_param_width=<?=$video_player[0]->width; ?>;
+								autoplay='<?php echo $autoplay; ?>';
+								video_width=<?php echo $video_player[0]->width; ?>;;
+								video_param_width=<?php echo $video_player[0]->width; ?>;
 								
 								/* check if video player exists */
 								container=document.querySelector(video_container_id);
@@ -429,7 +428,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 												saveVolume();
 											},500);
 										});
-
 									}
 									
 									function setVolume(e){
@@ -572,7 +570,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 												e.preventDefault();
 												break;
 										}
-										
 									}
 									
 									function huge_it_single_video_responsive(){
@@ -581,7 +578,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										var video_parent_width=video_parent.clientWidth-parseFloat(computedStyle.paddingRight)-parseFloat(computedStyle.paddingLeft);
 										if(!isFullScreen()){
 											if(video_parent_width<=video_param_width){
-												/*container.style.width="100%";*/
 												addClass("fullwidth",container);
 												jQuery.when(huge_it_single_video_responsive).done(function(){
 													setTimeout(function(){
@@ -591,7 +587,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 												});
 											}else{
 												removeClass("fullwidth",container);
-												/*container.style.width=video_param_width+"px";*/
 												jQuery.when(huge_it_single_video_responsive).done(function(){
 													setTimeout(function(){
 														video_width=video.offsetWidth;
@@ -605,7 +600,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 												video_width=video.offsetWidth;
 											},500);
 										}
-										
 									}
 									
 									function videoResize(){
@@ -653,8 +647,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									function hasClass(cls, element) {
 										return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 									}
-									
-									/* *** */
 
 									/* ADD EVENT LISTENERS */
 									/* *** */
@@ -737,8 +729,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 											volume_dragging="";
 										}
 									},false);
-									/* *** */
-									
 									
 									/* ONLOAD STUFF */
 									/* *** */
@@ -772,9 +762,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										}
 										
 									}
-									
-									
-									/* *** */		
 								}
 							}
 							</script>
@@ -782,7 +769,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								/*
 							parameters
 							*/
-							#huge_it_sigle_video_player_<?=$i; ?> {
+							#huge_it_sigle_video_player_<?php echo $i; ?> {
 								width:<?php echo $video_player[0]->width; ?>px;
 								<?php
 								switch($paramssld['video_pl_position']){
@@ -812,62 +799,62 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								border:<?php echo $paramssld['video_pl_border_size']; ?>px solid #<?php echo $paramssld['video_pl_border_color']; ?>;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block {
 								background:#<?php echo $paramssld['video_pl_background_color']; ?>;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom {
-								background:rgba(<?=hex2RGB($paramssld['video_pl_controls_panel_color']); ?>,<?=$paramssld['video_pl_controls_panel_opacity']/100; ?>);
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom {
+								background:rgba(<?php echo hugeit_vp_hex2RGB($paramssld['video_pl_controls_panel_color']); ?>,<?php echo $paramssld['video_pl_controls_panel_opacity']/100; ?>);
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_center {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_center {
 								color:#<?php echo $paramssld['video_pl_buttons_color']; ?> !important;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control,
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block .thumbnail_play {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control,
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block .thumbnail_play {
 								color:#<?php echo $paramssld['video_pl_buttons_color']; ?> !important;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control:hover,
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block .thumbnail_play:hover {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control:hover,
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block .thumbnail_play:hover {
 								color:#<?php echo $paramssld['video_pl_buttons_hover_color']; ?> !important;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
 								background:transparent;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
-								background:rgba(<?=hex2RGB($paramssld['video_pl_timeline_background']); ?>,<?=$paramssld['video_pl_timeline_background_opacity']/100; ?>);
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
+								background:rgba(<?php echo hugeit_vp_hex2RGB($paramssld['video_pl_timeline_background']); ?>,<?php echo $paramssld['video_pl_timeline_background_opacity']/100; ?>);
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
-								background:rgba(<?=hex2RGB($paramssld['video_pl_timeline_buffering_color']); ?>,<?=$paramssld['video_pl_timeline_buffering_opacity']/100; ?>);
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+								background:rgba(<?php echo hugeit_vp_hex2RGB($paramssld['video_pl_timeline_buffering_color']); ?>,<?php echo $paramssld['video_pl_timeline_buffering_opacity']/100; ?>);
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before,
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played{
-								background:#<?=$paramssld['video_pl_timeline_color']; ?>;
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before,
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played{
+								background:#<?php echo $paramssld['video_pl_timeline_color']; ?>;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
-								background:#<?=$paramssld['video_pl_timeline_slider_color']; ?>;
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+								background:#<?php echo $paramssld['video_pl_timeline_slider_color']; ?>;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
-								color:#<?=$paramssld['video_pl_curtime_color']; ?>;
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
+								color:#<?php echo $paramssld['video_pl_curtime_color']; ?>;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator,
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
-								color:#<?=$paramssld['video_pl_durtime_color']; ?>;
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator,
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
+								color:#<?php echo $paramssld['video_pl_durtime_color']; ?>;
 							}
 
 							/*
 							static
 							*/
-							#huge_it_sigle_video_player_<?=$i; ?> {
+							#huge_it_sigle_video_player_<?php echo $i; ?> {
 								position:relative;
 								display:table;
 								height:auto;
@@ -885,26 +872,26 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								    box-sizing: content-box;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.poster {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.poster {
 								overflow:hidden;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.fullwidth {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullwidth {
 								width:100%;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen {
 								width:100%;
 								transition:none;
                                                                 height:100%;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen video {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen video {
 								width:100%;
 								max-height:100%;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> div[data-title]:hover:after {
+							#huge_it_sigle_video_player_<?php echo $i; ?> div[data-title]:hover:after {
 								content: attr(data-title);
 								padding:8px 10px;
 								color: #fff;
@@ -926,7 +913,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								transition: opacity .1s cubic-bezier(0.0,0.0,0.2,1);
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_player {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_player {
 								position:relative;
 								float:left;
 								display:block;
@@ -935,7 +922,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								margin:0px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_player video {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_player video {
 								position:relative;
 								float:left;
 								display:block;
@@ -946,7 +933,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								background:#000;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block {
 								position:absolute;
 								display:none;
 								left:0px;
@@ -959,18 +946,18 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								vertical-align:middle;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block:before {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block:before {
 							  content: "";
 							  display: inline-block;
 							  vertical-align: middle;
 							  height: 100%;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.poster .thumbnail_block {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.poster .thumbnail_block {
 								display:block;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block img {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block img {
 								display:block;
 								position:absolute;
 								top:0px;
@@ -980,7 +967,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								max-width:100%;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block .thumbnail_play {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block .thumbnail_play {
 								position:absolute;
 								display:block;
 								left:50%;
@@ -996,11 +983,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								cursor:pointer;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .thumbnail_block .thumbnail_play:hover {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .thumbnail_block .thumbnail_play:hover {
 								transform:scale(1.05,1.05);
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_top {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_top {
 								position: absolute;
 								top: 0px;
 								left: 0px;
@@ -1018,22 +1005,22 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_top,
-							#huge_it_sigle_video_player_<?=$i; ?>.hide_controls.playing .huge_it_video_player_top {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_top,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.hide_controls.playing .huge_it_video_player_top {
 								opacity:0;
 							}
 
 
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing:not(.hide_controls):hover .huge_it_video_player_top {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing:not(.hide_controls):hover .huge_it_video_player_top {
 								opacity:1;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_top .video_title {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_top .video_title {
 								color: #fff;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom {
 								position:absolute;
 								display:block;
 								bottom:0px;
@@ -1045,23 +1032,23 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom {
 								height:80px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom {
 								opacity:0;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.hide_controls.playing .huge_it_video_player_bottom {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.hide_controls.playing .huge_it_video_player_bottom {
 								opacity:0;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing:not(.hide_controls):hover .huge_it_video_player_bottom {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing:not(.hide_controls):hover .huge_it_video_player_bottom {
 								opacity:1;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
 								position:absolute;
 								left:0px;
 								bottom:30px;
@@ -1081,12 +1068,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								-o-transform-origin:center center;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
 								height:30px;
 								bottom:50px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
 								position:absolute;
 								display:block;
 								bottom:7.5px;
@@ -1104,12 +1091,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								-o-transform-origin:center center;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
 								bottom:11px;
 								height:8px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
 								position:absolute;
 								display:block;
 								bottom:7.5px;
@@ -1127,12 +1114,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								-o-transform-origin:center center;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
 								bottom:11px;
 								height:8px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
 								position:absolute;
 								display:block;
 								bottom:3.5px;
@@ -1154,13 +1141,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								-o-transform-origin:center center;
 								
 							}
-
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
-								background:#<?=$paramssld['video_pl_timeline_slider_color']; ?>;
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+								background:#<?php echo $paramssld['video_pl_timeline_slider_color']; ?>;
 							}							
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
 								bottom:5px;
 								width:20px;
 								height:20px;
@@ -1168,17 +1154,15 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								margin-left:-10px;
 							}
 
-
-
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
 								transform:scale(0,0);
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .thumb {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .thumb {
 								transform:scale(1,1);
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 								position:absolute;
 								display:block;
 								bottom:7.5px;
@@ -1196,40 +1180,40 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								-o-transform-origin:center center;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 								bottom:11px;
 								height:8px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 								bottom:8.5px;
 								height:3px;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 								bottom:12.5px;
 								height:5px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
 								bottom:7.5px;
 								height:5px;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
-							#huge_it_sigle_video_player_<?=$i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
+							#huge_it_sigle_video_player_<?php echo $i; ?>.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
 								bottom:11px;
 								height:8px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .hover_timer {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_duration_slide .hover_timer {
 								position: absolute;
 								display:none;
 								left:0;
@@ -1269,8 +1253,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								}
 							}
 
-
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls {
 								position:absolute;
 								left:0px;
 								bottom:0px;
@@ -1280,15 +1263,15 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								margin:0px;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls {
 								text-align:center;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls {
 								height:50px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control {
 								position:relative;
 								display:inline-block;
 								width:30px;
@@ -1300,10 +1283,10 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								vertical-align:top;
 								cursor:pointer;
 							}
-                                                        #huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control i{
+                                                        #huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .control i{
                                                                 line-height: inherit;
                                                         }
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .control {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .control {
 								width:50px;
 								height:50px;
 								margin:0px 0px 0px 5px;
@@ -1311,43 +1294,43 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								line-height:50px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
 								
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
 								display:none;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
 
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
 								float:left;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
 								
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
 								display:none;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
 								
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
 								float:left;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
 								display:none;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 								position:relative;
 								display:inline-block;
 								width:50px;
@@ -1356,22 +1339,22 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								cursor: pointer;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 								float:left;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 								display:none;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 								position:relative;
 								display:inline-block;
 								width:100px;
 								height:50px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
 								position: absolute;
 								top:13.5px;
 								left:0px;
@@ -1380,13 +1363,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								z-index:7;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
 								top:22.5px;
 								height:5px;
 								width:100px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
 								position: absolute;
 								top:8.5px;
 								left:50px;
@@ -1397,7 +1380,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								z-index:8;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
 								top:15px;
 								height:20px;
 								width:6px;
@@ -1406,7 +1389,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								width: 4px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
 								position: absolute;
 								top:13.5px;
 								left:0px;
@@ -1416,13 +1399,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								z-index:6;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
 								top:22.5px;
 								height:5px;
 								width:100px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
 								position:relative;
 								display:inline-block;
 								min-width:50px;
@@ -1437,39 +1420,39 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								cursor:pointer;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
 								height:50px;
 								font-size:14px;
 								line-height:50px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
 								display:inline-block;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator {
 								display:inline-block;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
 								display:inline-block;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
 								float:right;
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
+							#huge_it_sigle_video_player_<?php echo $i; ?>.small .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
 								float:initial;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_center {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_center {
 								text-align:center;
 								font-size:15px;
 								line-height:40px;
 							}
 
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_center div {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_center div {
 								position:absolute;
 								display:none;
 								left:50%;
@@ -1488,11 +1471,10 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								z-index:6;
 								opacity:0;
 							}
-                                                        #huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_center i{
-                                                            line-height:40px;
+                                                        #huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_center i {
+                                                                line-height: 40px;
                                                         }
-
-							#huge_it_sigle_video_player_<?=$i; ?> .huge_it_video_player_center .center_wait {
+							#huge_it_sigle_video_player_<?php echo $i; ?> .huge_it_video_player_center .center_wait {
 								background:transparent;
 							}
 							
@@ -1509,14 +1491,14 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								}
 							}
 							
-							#huge_it_sigle_video_player_<?=$i; ?> * {
+							#huge_it_sigle_video_player_<?php echo $i; ?> * {
 								box-sizing:content-box !important;
 								text-indent: 0px;
 							}
 							</style>
-							<div id="huge_it_sigle_video_player_<?=$i; ?>">
+							<div id="huge_it_sigle_video_player_<?php echo $i; ?>">
 								<div class="huge_it_video_player_player">
-									<video  src="<?=$video->video_url_1;  ?>" data-current="--" data-duration="--">
+									<video  src="<?php echo $video->video_url_1;  ?>" data-current="--" data-duration="--">
 										Your browser does not support HTML5 video.
 									</video>
 								</div>
@@ -1524,7 +1506,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									<?php
 									if(!empty($video->image_url)){
 										?>
-										<img src="<?=$video->image_url; ?>" alt="poster" />
+										<img src="<?php echo $video->image_url; ?>" alt="poster" />
 										<?php
 									}
 									?>
@@ -1532,7 +1514,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								</div>
 								<?php if ($video->name != '') { ?>
 								<div class="huge_it_video_player_top">
-									<div class="video_title"><?=$video->name; ?></div>
+									<div class="video_title"><?php echo $video->name; ?></div>
 								</div>
 								<?php }?>
 								<div class="huge_it_video_player_bottom">
@@ -1575,7 +1557,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 							$i=rand(1,100000);
 							?>
 							<style>
-							#youtube_single_player_container_<?=$video->id; ?> {
+							#youtube_single_player_container_<?php echo $video->id; ?> {
 								display:block;
 								position:relative;
 								<?php
@@ -1611,7 +1593,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								border:<?php echo $paramssld['video_pl_border_size']; ?>px solid #<?php echo $paramssld['video_pl_border_color']; ?>;
 							}
 							
-							#youtube_single_player_<?=$video->id; ?> {
+							#youtube_single_player_<?php echo $video->id; ?> {
 								position:absolute;
 								top:0px;
 								left:0px;
@@ -1620,7 +1602,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								z-index:5;
 							}
 							
-							#youtube_single_player_container_<?=$video->id; ?> .thumbnail_block {
+							#youtube_single_player_container_<?php echo $video->id; ?> .thumbnail_block {
 								position:absolute;
 								display:none;
 								top:0px;
@@ -1631,7 +1613,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								z-index:6;
 							}
 							
-							#youtube_single_player_container_<?=$video->id; ?> .thumbnail_block .thumb {
+							#youtube_single_player_container_<?php echo $video->id; ?> .thumbnail_block .thumb {
 								position:absolute;
 								left:0px;
 								top:0px;
@@ -1641,7 +1623,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								vertical-align:middle
 							}
 							
-							#youtube_single_player_container_<?=$video->id; ?> .thumbnail_block .play {
+							#youtube_single_player_container_<?php echo $video->id; ?> .thumbnail_block .play {
 								position:absolute;
 								left:50%;
 								top:50%;
@@ -1652,11 +1634,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								cursor:pointer;
 							}
 							</style>
-							<div id="youtube_single_player_container_<?=$video->id; ?>">
-								<div id="youtube_single_player_<?=$video->id; ?>"></div>
+							<div id="youtube_single_player_container_<?php echo $video->id; ?>">
+								<div id="youtube_single_player_<?php echo $video->id; ?>"></div>
 								<div class="thumbnail_block">
-									<img class="thumb" src="<?=$video->image_url; ?>" alt="<?=$video->name; ?>" />
-									<img class="play" src="<?=plugins_url("../images/play.youtube.png",__FILE__); ?>" alt="youtube play" />
+									<img class="thumb" src="<?php echo $video->image_url; ?>" alt="<?php echo $video->name; ?>" />
+									<img class="play" src="<?php echo plugins_url("../images/play.youtube.png",__FILE__); ?>" alt="YouTube play" />
 								</div>
 							</div>
 							
@@ -1688,13 +1670,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										}
 									}
 									
-									if((<?=$j; ?>==0 && <?=$video_player[0]->autoplay; ?>==0) || <?=$j; ?>!=0){
-										jQuery("#vimeo_single_player_container_<?=$video->id; ?> .thumbnail_block").css({display:'block'});
+									if((<?php echo $j; ?>==0 && <?php echo $video_player[0]->autoplay; ?>==0) || <?php echo $j; ?>!=0){
+										jQuery("#vimeo_single_player_container_<?php echo $video->id; ?> .thumbnail_block").css({display:'block'});
 									}
 									
-									jQuery("#vimeo_single_player_container_<?=$video->id; ?> .thumbnail_block").on("click",function(){
-										jQuery("#vimeo_single_player_container_<?=$video->id; ?> .thumbnail_block").css({display:'none'});
-										jQuery("#vimeo_single_player_container_<?=$video->id; ?> #vimeo_single_player_<?=$video->id; ?>").attr("src","https://player.vimeo.com/video/<?=$vidid; ?>?player_id=vimeo_single_player_<?=$video->id; ?>&color=<?=$paramssld['video_pl_vimeo_color']; ?>&autoplay=1");
+									jQuery("#vimeo_single_player_container_<?php echo $video->id; ?> .thumbnail_block").on("click",function(){
+										jQuery("#vimeo_single_player_container_<?php echo $video->id; ?> .thumbnail_block").css({display:'none'});
+										jQuery("#vimeo_single_player_container_<?php echo $video->id; ?> #vimeo_single_player_<?php echo $video->id; ?>").attr("src","https://player.vimeo.com/video/<?php echo $vidid; ?>?player_id=vimeo_single_player_<?php echo $video->id; ?>&color=<?php echo $paramssld['video_pl_vimeo_color']; ?>&autoplay=1");
 									});
 									
 									vimhw<?php echo $i; ?>();
@@ -1706,7 +1688,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 							<style>
 								
 								
-								#vimeo_single_player_container_<?=$video->id; ?> {
+								#vimeo_single_player_container_<?php echo $video->id; ?> {
 									display:block;
 									position:relative;
 									<?php
@@ -1742,7 +1724,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									border:<?php echo $paramssld['video_pl_border_size']; ?>px solid #<?php echo $paramssld['video_pl_border_color']; ?>;
 								}
 								
-								#vimeo_single_player_<?=$video->id; ?> {
+								#vimeo_single_player_<?php echo $video->id; ?> {
 									position:absolute;
 									top:0px;
 									left:0px;
@@ -1751,7 +1733,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									z-index:5;
 								}
 								
-								#vimeo_single_player_container_<?=$video->id; ?> .thumbnail_block {
+								#vimeo_single_player_container_<?php echo $video->id; ?> .thumbnail_block {
 									position:absolute;
 									display:none;
 									top:0px;
@@ -1762,7 +1744,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									z-index:6;
 								}
 								
-								#vimeo_single_player_container_<?=$video->id; ?> .thumbnail_block .thumb {
+								#vimeo_single_player_container_<?php echo $video->id; ?> .thumbnail_block .thumb {
 									position:absolute;
 									left:0px;
 									top:0px;
@@ -1771,7 +1753,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									vertical-align:middle
 								}
 								
-								#vimeo_single_player_container_<?=$video->id; ?> .thumbnail_block .play {
+								#vimeo_single_player_container_<?php echo $video->id; ?> .thumbnail_block .play {
 									position:absolute;
 									left:50%;
 									top:50%;
@@ -1786,8 +1768,8 @@ function front_end_video_player($videos, $paramssld, $video_player){
 							<div id="vimeo_single_player_container_<?php echo $video->id; ?>">
 								<iframe id="vimeo_single_player_<?php echo $video->id; ?>" width="<?php echo $video_player[0]->width; ?>" height="<?php echo $video_player[0]->width*0.56; ?>" src="<?php echo $vidurl; ?>"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								<div class="thumbnail_block">
-									<img class="thumb" src="<?=$video->image_url; ?>" alt="<?=$video->name; ?>" />
-									<img class="play" src="<?=plugins_url("../images/play.vimeo.png",__FILE__); ?>" alt="vimeo play" />
+									<img class="thumb" src="<?php echo $video->image_url; ?>" alt="<?php echo $video->name; ?>" />
+									<img class="play" src="<?php echo plugins_url("../images/play.vimeo.png",__FILE__); ?>" alt="vimeo play" />
 								</div>
 							</div>
 							
@@ -1799,7 +1781,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 			<?php
 
 			break;
-/////////////////////////////////////////////////////album///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////album//////////////////////////////////////////////////////////////
 		case 'album':
 			$i=rand(1,1000);
 			?>
@@ -1811,7 +1793,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				YTdeferred.resolve(window.YT);
 			};
 
-
 		/*init Album video player when document is ready*/
 		jQuery(document).ready(function(){
 			var tag = document.createElement('script');
@@ -1822,32 +1803,30 @@ function front_end_video_player($videos, $paramssld, $video_player){
 			
 			
 			var huge_it_album_player_interval_<?php echo $i; ?> = setInterval(function(){
-				if(jQuery("#huge_it_album_video_player_<?=$i; ?>").is(":visible")){
-					init_huge_it_playlist_vide_player_<?=$i; ?>("#huge_it_album_video_player_<?=$i; ?>");
+				if(jQuery("#huge_it_album_video_player_<?php echo $i; ?>").is(":visible")){
+					init_huge_it_playlist_vide_player_<?php echo $i; ?>("#huge_it_album_video_player_<?php echo $i; ?>");
 					clearInterval(huge_it_album_player_interval_<?php echo $i; ?>);
 				}
 			},100);
 	
 	// Listen for the ready event for any vimeo video players on the page
-	function init_huge_it_playlist_vide_player_<?=$i; ?>(video_container_id){
+	function init_huge_it_playlist_vide_player_<?php echo $i; ?>(video_container_id){
 		var jQ_items,playlist_autoplay,player_width,video_width,video_param_width,global_container,container,load_icon,youtube,jQ_youtube,vimeo,jQ_vimeo,playlist_container,items;
-		
-		
-				
+
 		/* PLUGIN PARAMETERS */
 		
 		playlist_autoplay="false";
-		player_width=<?=$video_player[0]->width; ?>;
+		player_width=<?php echo $video_player[0]->width; ?>;
 		<?php 
 		if($video_player[0]->layout=="bottom"){
 			?>
-			video_width=<?=$video_player[0]->width; ?>;
-			video_param_width=<?=$video_player[0]->width; ?>
+			video_width=<?php echo $video_player[0]->width; ?>;
+			video_param_width=<?php echo $video_player[0]->width; ?>
 			<?php
 		}else{
 			?>
-			video_width=<?=$video_player[0]->width*(3/5); ?>;
-			video_param_width=<?=$video_player[0]->width*(3/5); ?>;
+			video_width=<?php echo $video_player[0]->width*(3/5); ?>;
+			video_param_width=<?php echo $video_player[0]->width*(3/5); ?>;
 			<?php
 		}
 		?>
@@ -1863,25 +1842,25 @@ function front_end_video_player($videos, $paramssld, $video_player){
 			container=global_container.querySelector(".huge_it_player");
 			load_icon=global_container.querySelector(".load_icon");
 			/* youtube player container */
-			youtube=global_container.querySelector("#youtube_player_<?=$i; ?>");
-			jQ_youtube=jQuery("#youtube_player_<?=$i; ?>");
+			youtube=global_container.querySelector("#youtube_player_<?php echo $i; ?>");
+			jQ_youtube=jQuery("#youtube_player_<?php echo $i; ?>");
 			/* vimeo player container */
-			vimeo_js=global_container.querySelector("#vimeo_<?=$i; ?>");
-			jQ_vimeo=jQuery("#vimeo_<?=$i; ?>");
+			vimeo_js=global_container.querySelector("#vimeo_<?php echo $i; ?>");
+			jQ_vimeo=jQuery("#vimeo_<?php echo $i; ?>");
 			/* playlist container */
 			playlist_container=global_container.querySelector(".playlist_wrapper");
 			/* playlist items */
 			items=playlist_container.querySelectorAll("li");
-			jQ_items=jQuery("#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper li");
+			jQ_items=jQuery("#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper li");
 			if(items.length){
 				
 				
 				/* create youtube player */
 				var youtube_player;
 				YTdeferred.done(function(YT) {
-					setTimeout(function(){
-						load_icon.style.display="none";
-						removeClass("loading",global_container);
+					setTimeout(function() {
+						load_icon.style.display = "none";
+						removeClass("loading", global_container);
 						init_playlist_active_item();
 						<?php if($videoAautoPlay == 1):?>
 						if (jQuery('#huge_it_album_video_player_<?php echo $i; ?> .thumbnail_play').parent().css('display') != 'none'){
@@ -1894,7 +1873,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 					},2000);
 					
 					
-					youtube_player = new YT.Player('youtube_player_<?=$i; ?>', {
+					youtube_player = new YT.Player('youtube_player_<?php echo $i; ?>', {
 						autoplay         : 0,
 						enablejsapi      : 1,
 						playerVars:{
@@ -1932,7 +1911,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 					
 					var vimeo;
 					
-					var vimeo_player=jQuery('#vimeo_<?=$i; ?>')[0];
+					var vimeo_player=jQuery('#vimeo_<?php echo $i; ?>')[0];
 					vimeo = Froogaloop(vimeo_player);
 					
 					vimeo.addEvent('ready', function() {
@@ -1978,7 +1957,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						/* PLUGIN PARAMETERS */
 						
 						autoplay=playlist_autoplay;
-						
 						
 						/* check if video player exists */
 						if(container && src!=""){
@@ -2239,11 +2217,8 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										video_width=video.offsetWidth;
 									},500);
 								});
-
 							}
-							
-							
-							
+
 							function setVolume(e){
 								var x = e.clientX;
 								var l=volume_handle.getBoundingClientRect().left;
@@ -2416,7 +2391,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								},500);
 							}
 							
-							
 							/* *** */
 
 							/* ADD EVENT LISTENERS */
@@ -2486,74 +2460,46 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								}
 							},false);
 							/* VOLUME CHANGING */
-							volume_handle.addEventListener("mousedown",function(e){
-								volume_dragging=1;
+							volume_handle.addEventListener("mousedown", function (e) {
+								volume_dragging = 1;
 								setVolume(e);
-							},false);
-							window.addEventListener("mousemove",function(e){
-								if(volume_dragging==1){
+							}, false);
+							window.addEventListener("mousemove", function (e) {
+								if (volume_dragging == 1) {
 									setVolume(e);
 								}
-							},false);
-							window.addEventListener("mouseup",function(){
-								if(volume_dragging==1){
-									volume_dragging="";
+							}, false);
+							window.addEventListener("mouseup", function () {
+								if (volume_dragging == 1) {
+									volume_dragging = "";
 								}
-							},false);
-							/* *** */
-							
-							
-							/* *** */
-							/*video.setAttribute("src",src);*/
-							/*if(autoplay=="true"){
-								video.autoplay = true;
-								addClass("playing",container);
-								removeClass("poster",container);
-								thumb_box.style.display="none";
-								play_btn.innerHTML='<i class="hugeicons hugeicons-pause"></i>';
-								playlist_autoplay=="true";
-							}else{
-								video.autoplay = false;
-								removeClass("playing",container);
-								play_btn.innerHTML='<i class="hugeicons hugeicons-play"></i>';
-								addClass("poster",container);
-								thumb_box.style.display="block";
-								playlist_autoplay=="true";
-							}*/
-							
+							}, false);
+
 							var timeout;
-							container.onmousemove = function(){
-								if(isFullScreen()){
-									removeClass("hide_controls",container);
+							container.onmousemove = function () {
+								if (isFullScreen()) {
+									removeClass("hide_controls", container);
 									clearTimeout(timeout);
-									timeout = setTimeout(function(){ 
-										addClass("hide_controls",container);
-									},3000);
+									timeout = setTimeout(function () {
+										addClass("hide_controls", container);
+									}, 3000);
 								}
-								
+
 							}
-							
-							
-							/* *** */		
 						}
 					}
 					
-					
-					
 					function init_playlist_active_item(){
-						/* AS THE ATTRIBUTES OF DOM ELEMENTS CHANGE I REDECLARE THESE VARIABLE(MAYBE THERE IS A BETTER WAY ??hmm) */
 						/* youtube player container */
-						youtube=global_container.querySelector("#youtube_player_<?=$i; ?>");
-						jQ_youtube=jQuery("#youtube_player_<?=$i; ?>");
+						youtube=global_container.querySelector("#youtube_player_<?php echo $i; ?>");
+						jQ_youtube=jQuery("#youtube_player_<?php echo $i; ?>");
 						/* vimeo player container */
-						vimeo_js=global_container.querySelector("#vimeo_<?=$i; ?>");
-						jQ_vimeo=jQuery("#vimeo_<?=$i; ?>");
+						vimeo_js=global_container.querySelector("#vimeo_<?php echo $i; ?>");
+						jQ_vimeo=jQuery("#vimeo_<?php echo $i; ?>");
 						
 						var active=playlist_container.querySelector("li.active")
 						var id=active.getAttribute("data-item-id");
 						var type=active.getAttribute("data-type");
-						
-						
 						
 						switch(type){
 							case "custom":
@@ -2563,14 +2509,14 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									youtube_player.loadVideoById("");
 								}
 								
-								global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb").style.display="none";
+								global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
 								/* HIDE VIMEO PLAYER */ 
 								vimeo_player.setAttribute("src","");
 								vimeo_js.style.display="none";
-								global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb").style.display="none";
+								global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb").style.display="none";
 								/* DISPLAY CUSTOM VIDEO */
 								container.style.display="block";
-								var ContainerParent = document.getElementById("huge_it_album_video_player_<?=$i; ?>");
+								var ContainerParent = document.getElementById("huge_it_album_video_player_<?php echo $i; ?>");
 								var src=active.getAttribute("data-src");
 								var thumb=active.getAttribute("data-poster");
 								var title=ContainerParent.querySelector('li.active');
@@ -2600,7 +2546,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 										container.querySelector(".thumbnail_block img").setAttribute("src",thumb);
 									}
 									container.querySelector(".thumbnail_block").style.display="block";
-
 								}
 								break;
 							case "youtube":
@@ -2611,17 +2556,16 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								youtube.style.display="block";
 								if(playlist_autoplay=="true"){
 									youtube_player.playVideo();
-									global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb").style.display="none";
+									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
 								}else{
 									youtube_player.pauseVideo();
-									global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb img.thumb").setAttribute("src",thumb);
-									global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb").style.display="block";
-									
+									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb img.thumb").setAttribute("src",thumb);
+									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="block";
 								}
 								/* HIDE VIMEO PLAYER */ 
 								vimeo_player.setAttribute("src","");
 								vimeo_js.style.display="none";
-								global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb").style.display="none";
+								global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb").style.display="none";
 								/* HIDE CUSTOM VIDEO */
 								container.style.display="none";
 								container.querySelector("video").setAttribute("src","");
@@ -2631,21 +2575,21 @@ function front_end_video_player($videos, $paramssld, $video_player){
 								/* HIDE YOUTUBE PLAYER */
 								youtube.style.display="none";
 								youtube_player.loadVideoById("");
-								global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb").style.display="none";
+								global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
 								/* DISPLAY VIMEO PLAYER */ 
 								var id=active.getAttribute("data-video-id");
 								var thumb=active.getAttribute("data-poster");
 								var vimeo_autoplay;
 								if(playlist_autoplay=="true"){
 									vimeo_autoplay="&autoplay=1";
-									global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb").style.display="none";
+									global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb").style.display="none";
 								}else{
 									vimeo_autoplay="";
-									global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb img.thumb").setAttribute("src",thumb);
-									global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb").style.display="block";
+									global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb img.thumb").setAttribute("src",thumb);
+									global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb").style.display="block";
 								}
 								
-								vimeo_player.setAttribute("src","https://player.vimeo.com/video/"+id+"?api=1&color=<?=$paramssld['video_pl_vimeo_color']; ?>&player_id=vimeo_<?=$i; ?>&fullscreen=0"+vimeo_autoplay);
+								vimeo_player.setAttribute("src","https://player.vimeo.com/video/"+id+"?api=1&color=<?php echo $paramssld['video_pl_vimeo_color']; ?>&player_id=vimeo_<?php echo $i; ?>&fullscreen=0"+vimeo_autoplay);
 								vimeo_js.style.display="block";
 								/* HIDE CUSTOM VIDEO */
 								container.style.display="none";
@@ -2712,8 +2656,8 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						var type=active.getAttribute("data-type");
 						if(type=="vimeo"){
 							var id=active.getAttribute("data-video-id");
-							global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb").style.display="none";
-							vimeo_player.setAttribute("src","https://player.vimeo.com/video/"+id+"?api=1&color=<?=$paramssld['video_pl_vimeo_color']; ?>&portrait=<?=$paramssld['video_pl_vimeo_portrait']; ?>&player_id=vimeo_<?=$i; ?>&fullscreen=0&autoplay=1");
+							global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb").style.display="none";
+							vimeo_player.setAttribute("src","https://player.vimeo.com/video/"+id+"?api=1&color=<?php echo $paramssld['video_pl_vimeo_color']; ?>&portrait=<?php echo $paramssld['video_pl_vimeo_portrait']; ?>&player_id=vimeo_<?php echo $i; ?>&fullscreen=0&autoplay=1");
 							playlist_autoplay="true";
 						}
 						
@@ -2724,18 +2668,15 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						var type=active.getAttribute("data-type");
 						if(type=="youtube"){
 							var id=active.getAttribute("data-video-id");
-							global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb").style.display="none";
+							global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
 							youtube_player.loadVideoById(id);
 							youtube_player.playVideo();
 							playlist_autoplay="true";
 						}
 					}
-					
-					
-					
+
 					/* ADD EVENT LISTENERS */
 					init_playlist_custom_video();
-					
 					
 					huge_it_playlist_responsive();
 					jQuery(window).on("resize",function(){
@@ -2745,8 +2686,8 @@ function front_end_video_player($videos, $paramssld, $video_player){
 						change_track(jQuery(this));
 					});
 					
-					global_container.querySelector(".players_wrapper #youtube_<?=$i; ?>_thumb").addEventListener("click",removeYoutubeThumb,false);
-					global_container.querySelector(".players_wrapper #vimeo_<?=$i; ?>_thumb").addEventListener("click",removeVimeoThumb,false);
+					global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").addEventListener("click",removeYoutubeThumb,false);
+					global_container.querySelector(".players_wrapper #vimeo_<?php echo $i; ?>_thumb").addEventListener("click",removeVimeoThumb,false);
 					
 				});
 			}
@@ -2754,21 +2695,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 		}
 	}
 });
-
-
-
-
-
-
-
-
 			</script>
 			<style>
 			/*
 			parameters
 			*/
-			#huge_it_album_video_player_<?=$i; ?> {
-				width:<?=$video_player[0]->width; ?>px;
+			#huge_it_album_video_player_<?php echo $i; ?> {
+				width:<?php echo $video_player[0]->width; ?>px;
 				height:auto;
 				<?php
 				switch($paramssld['video_pl_position']){
@@ -2799,7 +2732,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				border:<?php echo $paramssld['video_pl_border_size']; ?>px solid #<?php echo $paramssld['video_pl_border_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper {
 				<?php 
 				switch($video_player[0]->layout){
 					case "left":
@@ -2821,13 +2754,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				?>
 			}
 
-			#huge_it_album_video_player_<?=$i; ?>,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .custom_thumb,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .thumbnail_block {
+			#huge_it_album_video_player_<?php echo $i; ?>,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .custom_thumb,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .thumbnail_block {
 				background:#f1f1f1;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player {
 				position:relative;
 				float:left;
 				display:block;
@@ -2836,118 +2769,118 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				margin:0px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper > iframe {
-				height:<?=$video_player[0]->width*(3/5)*0.56; ?>px;
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper > iframe {
+				height:<?php echo $video_player[0]->width*(3/5)*0.56; ?>px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper {
-				width:<?=$video_player[0]->width*(3/5); ?>px;
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper {
+				width:<?php echo $video_player[0]->width*(3/5); ?>px;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?>.align_bottom .players_wrapper {
-				width:<?=$video_player[0]->width; ?>px;
+			#huge_it_album_video_player_<?php echo $i; ?>.align_bottom .players_wrapper {
+				width:<?php echo $video_player[0]->width; ?>px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .thumbnail_block {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .thumbnail_block {
 				background:#<?php echo $paramssld['video_pl_background_color']; ?>;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom {
-				background:rgba(<?=hex2RGB($paramssld['video_pl_controls_panel_color']); ?>,<?=$paramssld['video_pl_controls_panel_opacity']/100; ?>);
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom {
+				background:rgba(<?php echo hugeit_vp_hex2RGB($paramssld['video_pl_controls_panel_color']); ?>,<?php echo $paramssld['video_pl_controls_panel_opacity']/100; ?>);
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .huge_it_player .thumbnail_block .thumbnail_play,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_center,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .control {
+			#huge_it_album_video_player_<?php echo $i; ?> .huge_it_player .thumbnail_block .thumbnail_play,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_center,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .control {
 				color:#<?php echo $paramssld['video_pl_buttons_color']; ?> !important;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .control:hover,
-			#huge_it_album_video_player_<?=$i; ?> .huge_it_player .thumbnail_block .thumbnail_play:hover {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .control:hover,
+			#huge_it_album_video_player_<?php echo $i; ?> .huge_it_player .thumbnail_block .thumbnail_play:hover {
 				color:#<?php echo $paramssld['video_pl_buttons_hover_color']; ?> !important;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
 				background:transparent;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
-				background:rgba(<?=hex2RGB($paramssld['video_pl_timeline_background']); ?>,<?=$paramssld['video_pl_timeline_background_opacity']/100; ?>);
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
+				background:rgba(<?php echo hugeit_vp_hex2RGB($paramssld['video_pl_timeline_background']); ?>,<?php echo $paramssld['video_pl_timeline_background_opacity']/100; ?>);
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
-				background:rgba(<?=hex2RGB($paramssld['video_pl_timeline_buffering_color']); ?>,<?=$paramssld['video_pl_timeline_buffering_opacity']/100; ?>);
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+				background:rgba(<?php echo hugeit_vp_hex2RGB($paramssld['video_pl_timeline_buffering_color']); ?>,<?php echo $paramssld['video_pl_timeline_buffering_opacity']/100; ?>);
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played{
-				background:#<?=$paramssld['video_pl_timeline_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played{
+				background:#<?php echo $paramssld['video_pl_timeline_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
-				background:#<?=$paramssld['video_pl_timeline_color']; ?> !important;
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+				background:#<?php echo $paramssld['video_pl_timeline_color']; ?> !important;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
-				color:#<?=$paramssld['video_pl_curtime_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
+				color:#<?php echo $paramssld['video_pl_curtime_color']; ?>;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
-				color:#<?=$paramssld['video_pl_durtime_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
+				color:#<?php echo $paramssld['video_pl_durtime_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper,
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul {
-				background:#<?=$paramssld['video_pl_playlist_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper,
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul {
+				background:#<?php echo $paramssld['video_pl_playlist_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper h3 {
-				color:#<?=$paramssld['video_pl_playlist_head_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper h3 {
+				color:#<?php echo $paramssld['video_pl_playlist_head_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item:hover {
-				background:#<?=$paramssld['video_pl_playlist_hover_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item:hover {
+				background:#<?php echo $paramssld['video_pl_playlist_hover_color']; ?>;
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item.active {
-				background:#<?=$paramssld['video_pl_playlist_active_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item.active {
+				background:#<?php echo $paramssld['video_pl_playlist_active_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item .playlist_button .item_title {
-				color:#<?=$paramssld['video_pl_playlist_text_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item .playlist_button .item_title {
+				color:#<?php echo $paramssld['video_pl_playlist_text_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item:hover .playlist_button .item_title {
-				color:#<?=$paramssld['video_pl_playlist_hover_text_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item:hover .playlist_button .item_title {
+				color:#<?php echo $paramssld['video_pl_playlist_hover_text_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item.active .playlist_button .item_title {
-				color:#<?=$paramssld['video_pl_playlist_active_text_color']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item.active .playlist_button .item_title {
+				color:#<?php echo $paramssld['video_pl_playlist_active_text_color']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb {
-				border-left-color: #<?=$paramssld['video_pl_playlist_scroll_thumb']; ?>;
-				background: #<?=$paramssld['video_pl_playlist_scroll_thumb']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb {
+				border-left-color: #<?php echo $paramssld['video_pl_playlist_scroll_thumb']; ?>;
+				background: #<?php echo $paramssld['video_pl_playlist_scroll_thumb']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar-track {
-				border-left-color: #<?=$paramssld['video_pl_playlist_scroll_track']; ?>;
-				background: #<?=$paramssld['video_pl_playlist_scroll_track']; ?>;
-				-webkit-box-shadow: inset 0 0 1px #<?=$paramssld['video_pl_playlist_scroll_track']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar-track {
+				border-left-color: #<?php echo $paramssld['video_pl_playlist_scroll_track']; ?>;
+				background: #<?php echo $paramssld['video_pl_playlist_scroll_track']; ?>;
+				-webkit-box-shadow: inset 0 0 1px #<?php echo $paramssld['video_pl_playlist_scroll_track']; ?>;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb:hover {
-				border-left-color: #<?=$paramssld['video_pl_playlist_scroll_thumb_hover']; ?>;
-				background: #<?=$paramssld['video_pl_playlist_scroll_thumb_hover']; ?>;
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb:hover {
+				border-left-color: #<?php echo $paramssld['video_pl_playlist_scroll_thumb_hover']; ?>;
+				background: #<?php echo $paramssld['video_pl_playlist_scroll_thumb_hover']; ?>;
 			}
 
 			/*
 			static
 			*/
 
-			#huge_it_album_video_player_<?=$i; ?> {
+			#huge_it_album_video_player_<?php echo $i; ?> {
 				position:relative;
 				display:table;
 				height:auto;
@@ -2965,23 +2898,21 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				box-sizing:content-box;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?>.fullwidth {
+			#huge_it_album_video_player_<?php echo $i; ?>.fullwidth {
 				width:100%;
 			}
 
-
-
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper {
 				position:relative;
 				display:table;
 				height:auto;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?>.fullwidth .players_wrapper {
+			#huge_it_album_video_player_<?php echo $i; ?>.fullwidth .players_wrapper {
 				width:100%;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player {
 				position:relative;
 				display:table;
 				height:auto;
@@ -2998,11 +2929,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				-ms-user-select:none;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?>.loading {
+			#huge_it_album_video_player_<?php echo $i; ?>.loading {
 				overflow:hidden;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .load_icon {
+			#huge_it_album_video_player_<?php echo $i; ?> .load_icon {
 				position:absolute;
 				display:block;
 				width:100%;
@@ -3011,7 +2942,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:15;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .load_icon img {
+			#huge_it_album_video_player_<?php echo $i; ?> .load_icon img {
 				width:50px;
 				position:absolute;
 				top:50%;
@@ -3020,8 +2951,8 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				margin-top:30px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_player,
-			#huge_it_album_video_player_<?=$i; ?> .playlist_player iframe {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_player,
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_player iframe {
 				position:relative;
 				display:block;
 				width:100%;
@@ -3030,28 +2961,25 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:5;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.poster {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.poster {
 				overflow:hidden;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullwidth {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullwidth {
 				width:100%;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen {
 				width:100%;
 				transition:none;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen video {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen video {
 				width:100%;
 				max-height:100%;
-				
 			}
 
-
-
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player div[data-title]:hover:after {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player div[data-title]:hover:after {
 				content: attr(data-title);
 				padding:8px 10px;
 				color: #fff;
@@ -3073,7 +3001,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				transition: opacity .1s cubic-bezier(0.0,0.0,0.2,1);
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_player {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_player {
 				position:relative;
 				float:left;
 				display:block;
@@ -3082,7 +3010,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				margin:0px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_player video {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_player video {
 				position:relative;
 				float:left;
 				display:block;
@@ -3092,7 +3020,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:5;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .thumbnail_block {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .thumbnail_block {
 				position:absolute;
 				display:none;
 				left:0px;
@@ -3106,11 +3034,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				white-space:nowrap;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.poster .thumbnail_block {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.poster .thumbnail_block {
 				display:block;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .thumbnail_block img {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .thumbnail_block img {
 				position:absolute;
 				left:0px;
 				top:0px;
@@ -3119,7 +3047,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				max-height:none;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .thumbnail_block .thumbnail_play {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .thumbnail_block .thumbnail_play {
 				position:absolute;
 				display:block;
 				left:50%;
@@ -3134,13 +3062,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				transition:transform .2s cubic-bezier(0.0,0.0,0.2,1);
 				cursor:pointer;
 			}
-
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .thumbnail_block .thumbnail_play:hover {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .thumbnail_block .thumbnail_play:hover {
 				transform:scale(1.05,1.05);
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_top {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_top {
 				position: absolute;
 				top: 0px;
 				left: 0px;
@@ -3158,22 +3085,20 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_top,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.hide_controls.playing .huge_it_video_player_top {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_top,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.hide_controls.playing .huge_it_video_player_top {
 				opacity:0;
 			}
 
-
-
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing:not(.hide_controls):hover .huge_it_video_player_top {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing:not(.hide_controls):hover .huge_it_video_player_top {
 				opacity:1;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_top .video_title {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_top .video_title {
 				color: #fff;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom {
 				position:absolute;
 				display:block;
 				bottom:0px;
@@ -3185,23 +3110,23 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom {
 				height:80px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom {
 				opacity:0;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.hide_controls.playing .huge_it_video_player_bottom {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.hide_controls.playing .huge_it_video_player_bottom {
 				opacity:0;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing:not(.hide_controls):hover .huge_it_video_player_bottom {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing:not(.hide_controls):hover .huge_it_video_player_bottom {
 				opacity:1;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
 				position:absolute;
 				left:0px;
 				bottom:30px;
@@ -3221,12 +3146,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				-o-transform-origin:center center;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide {
 				height:30px;
 				bottom:50px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
 				position:absolute;
 				display:block;
 				bottom:7.5px;
@@ -3244,12 +3169,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				-o-transform-origin:center center;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration {
 				bottom:11px;
 				height:8px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
 				position:absolute;
 				display:block;
 				bottom:7.5px;
@@ -3267,12 +3192,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				-o-transform-origin:center center;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played {
 				bottom:11px;
 				height:8px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
 				position:absolute;
 				display:block;
 				bottom:3.5px;
@@ -3295,7 +3220,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
 				bottom:5px;
 				width:20px;
 				height:20px;
@@ -3303,17 +3228,15 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				margin-left:-10px;
 			}
 
-
-
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .thumb {
 				transform:scale(0,0);
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .thumb {
 				transform:scale(1,1);
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 				position:absolute;
 				display:block;
 				bottom:7.5px;
@@ -3331,40 +3254,40 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				-o-transform-origin:center center;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 				bottom:11px;
 				height:8px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 				bottom:8.5px;
 				height:3px;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .duration,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .played,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide .buffered {
 				bottom:12.5px;
 				height:5px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
 				bottom:7.5px;
 				height:5px;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .duration,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .played,
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.playing.fullscreen .huge_it_video_player_bottom .huge_it_video_player_duration_slide:hover .buffered {
 				bottom:11px;
 				height:8px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .hover_timer {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_duration_slide .hover_timer {
 				position: absolute;
 				display:none;
 				left:0;
@@ -3404,8 +3327,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				}
 			}
 
-
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls {
 				position:absolute;
 				left:0px;
 				bottom:0px;
@@ -3415,15 +3337,15 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				margin:0px;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls {
 				text-align:center;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls {
 				height:50px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .control {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .control {
 				position:relative;
 				display:inline-block;
 				width:30px;
@@ -3435,10 +3357,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				vertical-align:top;
 				cursor:pointer;
 			}
-                        #huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .control i{
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .control i{
                                 line-height: inherit;
                         }
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .control {
+		
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .control {
 				width:50px;
 				height:50px;
 				margin:0px 0px 0px 5px;
@@ -3446,43 +3369,43 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				line-height:50px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
 				
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_back {
 				display:none;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
 
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .play_pause {
 				float:initial;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .fast_forward {
 				display:none;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
 				
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
 				float:initial;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .mute_button {
 				display:none;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 				position:relative;
 				display:inline-block;
 				width:50px;
@@ -3491,22 +3414,22 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				cursor: pointer;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 				float:initial;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.very_small .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 				display:none;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle {
 				position:relative;
 				display:inline-block;
 				width:100px;
 				height:50px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
 				position: absolute;
 				top:13.5px;
 				left:0px;
@@ -3515,13 +3438,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:7;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_before {
 				top:22.5px;
 				height:5px;
 				width:100px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
 				position: absolute;
 				top:8.5px;
 				left:50px;
@@ -3532,7 +3455,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:8;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_current {
 				top:15px;
 				height:20px;
 				width:6px;
@@ -3541,7 +3464,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				width: 4px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
 				position: absolute;
 				top:13.5px;
 				left:0px;
@@ -3551,13 +3474,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:6;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .volume_handle .volume_after {
 				top:22.5px;
 				height:5px;
 				width:100px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
 				position:relative;
 				display:inline-block;
 				min-width:50px;
@@ -3572,39 +3495,39 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				cursor:pointer;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.fullscreen .huge_it_video_player_bottom .huge_it_video_player_controls .timer {
 				height:50px;
 				font-size:14px;
 				line-height:50px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer .current_time {
 				display:inline-block;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer .separator {
 				display:inline-block;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .timer .duration_time {
 				display:inline-block;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
 				float:right;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player.small .huge_it_video_player_bottom .huge_it_video_player_controls .full_screen {
 				float:initial;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center {
 				text-align:center;
 				font-size:15px;
 				line-height:40px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center div {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center div {
 				position:absolute;
 				display:none;
 				left:50%;
@@ -3623,10 +3546,10 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				z-index:6;
 				opacity:0;
 			}
-                        #huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center i {
+                        #huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center i{
                                 line-height: 40px;
                         }
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center .center_wait {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .huge_it_player .huge_it_video_player_center .center_wait {
 				background:transparent;
 			}
 
@@ -3641,16 +3564,16 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				}
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper {
 				float:left;
 				display:block;
-				width:<?=$video_player[0]->width*(2/5); ?>px;
+				width:<?php echo $video_player[0]->width*(2/5); ?>px;
 				height:100%;
 				margin:0px;
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper h3 {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper h3 {
 				position: relative;
 				float: left;
 				display: block;
@@ -3668,10 +3591,10 @@ function front_end_video_player($videos, $paramssld, $video_player){
 
 
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul {
 				position:absolute;
 				display:block;
-				width:<?=$video_player[0]->width*(2/5); ?>px;
+				width:<?php echo $video_player[0]->width*(2/5); ?>px;
 				top:50px;
 				height:calc(100% - 50px);
 				height:-webkit-calc(100% - 50px);
@@ -3685,24 +3608,24 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar-track {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar-track {
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar {
 				width: 10px;
 				height: 9px;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb {
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb:hover {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul::-webkit-scrollbar-thumb:hover {
 				
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item {
 				position:relative;
 				float:left;
 				display:block;
@@ -3714,7 +3637,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 			}
 			
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item .playlist_button {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item .playlist_button {
 				position:relative;
 				float:left;
 				display:block;
@@ -3727,7 +3650,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				cursor:pointer;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item .playlist_button .thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item .playlist_button .thumb {
 				position:relative;
 				float:left;
 				display:block;
@@ -3739,14 +3662,14 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				white-space: nowrap;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item .playlist_button .thumb:before {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item .playlist_button .thumb:before {
 				content:'';
 				display:inline-block;
 				height:100%;
 				vertical-align:middle;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item .playlist_button img {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item .playlist_button img {
 				display: inline-block;
 				vertical-align: middle;
 				width: auto;
@@ -3755,7 +3678,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 			}
 			
 			
-			#huge_it_album_video_player_<?=$i; ?> .playlist_wrapper ul li.item .playlist_button .item_title {
+			#huge_it_album_video_player_<?php echo $i; ?> .playlist_wrapper ul li.item .playlist_button .item_title {
 				position: relative;
 				display: block;
 				float:right;
@@ -3772,11 +3695,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				overflow: hidden;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?>.fullwidth .playlist_wrapper {
+			#huge_it_album_video_player_<?php echo $i; ?>.fullwidth .playlist_wrapper {
 				width:100%;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?>.fullwidth .playlist_wrapper ul {
+			#huge_it_album_video_player_<?php echo $i; ?>.fullwidth .playlist_wrapper ul {
 				position:relative;
 				top:0px;
 				width:100%;
@@ -3784,11 +3707,11 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				margin:0px;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?>.align_bottom .playlist_wrapper {
+			#huge_it_album_video_player_<?php echo $i; ?>.align_bottom .playlist_wrapper {
 				width:100%;
 			}
 			
-			#huge_it_album_video_player_<?=$i; ?>.align_bottom .playlist_wrapper ul {
+			#huge_it_album_video_player_<?php echo $i; ?>.align_bottom .playlist_wrapper ul {
 				position:relative;
 				top:0px;
 				width:100%;
@@ -3797,7 +3720,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 			}
 
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .custom_thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .custom_thumb {
 				position: absolute;
 				display: none;
 				left: 0px;
@@ -3810,7 +3733,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				vertical-align: middle;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .custom_thumb img.thumb {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .custom_thumb img.thumb {
 				display:block;
 				position:absolute;
 				top:0px;
@@ -3819,7 +3742,7 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				max-height:none;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> .players_wrapper .custom_thumb img.play {
+			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .custom_thumb img.play {
 				position:absolute;
 				top:calc(50% - 24.5px);
 				top:-webkit-calc(50% - 24.5px);
@@ -3836,15 +3759,15 @@ function front_end_video_player($videos, $paramssld, $video_player){
 				cursor: pointer;
 			}
 
-			#huge_it_album_video_player_<?=$i; ?> * {
+			#huge_it_album_video_player_<?php echo $i; ?> * {
 				box-sizing:content-box !important;
 				text-indent: 0px;
 			}
 
 			</style>
-			<div id="huge_it_album_video_player_<?=$i; ?>" class="loading <?php if($video_player[0]->layout=="bottom"){ echo "align_bottom"; } ?>">
+			<div id="huge_it_album_video_player_<?php echo $i; ?>" class="loading <?php if($video_player[0]->layout=="bottom"){ echo "align_bottom"; } ?>">
 				<div class="load_icon">
-					<img src="<?=plugins_url('video-player/images/loading.gif'); ?>" alt="loading" />
+					<img src="<?php echo plugins_url('video-player/images/loading.gif'); ?>" alt="loading" />
 				</div>
 				<div class="players_wrapper">
 					<div class="huge_it_player playlist_player">
@@ -3894,13 +3817,13 @@ function front_end_video_player($videos, $paramssld, $video_player){
 							<div class="center_wait"><i class="hugeicons hugeicons-spinner hugeicons-pulse"></i></div>
 						</div>
 					</div>
-					<div id="youtube_<?=$i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?=$videos[0]->image_url; ?>" alt="" /><img class="play" src="<?=plugins_url('video-player/images/play.youtube.png'); ?>" alt="youtube play" /></div>
-					<div id="youtube_player_<?=$i; ?>" class="playlist_player"></div>
-					<div id="vimeo_<?=$i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?=$videos[0]->image_url; ?>" alt="" /><img class="play" src="<?=plugins_url('video-player/images/play.vimeo.png'); ?>" alt="vimeo play" /></div>
-					<iframe id="vimeo_<?=$i; ?>" class="playlist_player" src="" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					<div id="youtube_<?php echo $i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?php echo $videos[0]->image_url; ?>" alt="" /><img class="play" src="<?php echo plugins_url('video-player/images/play.youtube.png'); ?>" alt="youtube play" /></div>
+					<div id="youtube_player_<?php echo $i; ?>" class="playlist_player"></div>
+					<div id="vimeo_<?php echo $i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?php echo $videos[0]->image_url; ?>" alt="" /><img class="play" src="<?php echo plugins_url('video-player/images/play.vimeo.png'); ?>" alt="vimeo play" /></div>
+					<iframe id="vimeo_<?php echo $i; ?>" class="playlist_player" src="" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 				</div>
 				<div class="playlist_wrapper">
-					<h3><?=$video_player[0]->name; ?></h3>
+					<h3><?php echo $video_player[0]->name; ?></h3>
 					<ul>
 						<?php
 						$j=0;
@@ -3908,26 +3831,26 @@ function front_end_video_player($videos, $paramssld, $video_player){
 							switch($video->sl_type){
 								case "video":
 									?>
-									<li class="item <?php if($j==0){ echo "active"; } ?>" data-item-id="<?=$j; ?>" data-type="custom" data-src="<?=$video->video_url_1; ?>" data-poster="<?=$video->image_url; ?>" data-title="<?=$video->name; ?>">
+									<li class="item <?php if($j==0){ echo "active"; } ?>" data-item-id="<?php echo $j; ?>" data-type="custom" data-src="<?php echo $video->video_url_1; ?>" data-poster="<?php echo $video->image_url; ?>" data-title="<?php echo $video->name; ?>">
 										<div class="playlist_button">
 											<div class="thumb">
 												<?php if($video->image_url != ""){ ?>
-													<img src="<?=$video->image_url; ?>" alt="<?=$video->name; ?>" />
+													<img src="<?php echo $video->image_url; ?>" alt="<?php echo $video->name; ?>" />
 												<?php } ?>
 											</div>
-											<span class="item_title"><?=$video->name; ?></span>
+											<span class="item_title"><?php echo $video->name; ?></span>
 										</div>
 									</li>
 									<?php
 									break;
 								case "youtube":
 									?>
-									<li class="item <?php if($j==0){ echo "active"; } ?>" data-item-id="<?=$j; ?>" data-type="youtube" data-video-id="<?=get_youtube_thumb_id_from_url($video->video_url_1); ?>" data-poster="<?=$video->image_url; ?>" data-title="<?=$video->name; ?>">
+									<li class="item <?php if($j==0){ echo "active"; } ?>" data-item-id="<?php echo $j; ?>" data-type="youtube" data-video-id="<?php echo hugeit_vp_get_youtube_thumb_id_from_url($video->video_url_1); ?>" data-poster="<?php echo $video->image_url; ?>" data-title="<?php echo $video->name; ?>">
 										<div class="playlist_button">
 											<div class="thumb">
-												<img src="<?=$video->image_url; ?>" alt="<?=$video->name; ?>" />
+												<img src="<?php echo $video->image_url; ?>" alt="<?php echo $video->name; ?>" />
 											</div>
-											<span class="item_title"><?=$video->name; ?></span>
+											<span class="item_title"><?php echo $video->name; ?></span>
 										</div>
 									</li>
 									<?php
@@ -3943,12 +3866,12 @@ function front_end_video_player($videos, $paramssld, $video_player){
 									}
 									$vidurl="https://player.vimeo.com/video/".$vidid."?player_id=vimeo_player_".$video->id."&color=".$paramssld['video_pl_vimeo_color']."&autoplay=".$autoplay;
 									?>
-									<li class="item <?php if($j==0){ echo "active"; } ?>" data-item-id="<?=$j; ?>" data-type="vimeo" data-video-id="<?=$vidid; ?>" data-poster="<?=$video->image_url; ?>">
+									<li class="item <?php if($j==0){ echo "active"; } ?>" data-item-id="<?php echo $j; ?>" data-type="vimeo" data-video-id="<?php echo $vidid; ?>" data-poster="<?php echo $video->image_url; ?>">
 										<div class="playlist_button">
 											<div class="thumb">
-												<img src="<?=$video->image_url; ?>" alt="<?=$video->name; ?>" />
+												<img src="<?php echo $video->image_url; ?>" alt="<?php echo $video->name; ?>" />
 											</div>
-											<span class="item_title"><?=$video->name; ?></span>
+											<span class="item_title"><?php echo $video->name; ?></span>
 										</div>
 									</li>
 									<?php 
@@ -3957,9 +3880,6 @@ function front_end_video_player($videos, $paramssld, $video_player){
 							$j++;
 						}
 						?>
-						
-						
-						
 					</ul>
 				</div>
 			</div>

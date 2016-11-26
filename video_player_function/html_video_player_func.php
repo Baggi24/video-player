@@ -1,10 +1,9 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-function print_html_nav($count_items,$page_number,$serch_fields=""){
+function hugeit_vp_print_html_nav($count_items,$page_number,$serch_fields=""){
 	?>   
          <script type="text/javascript">
 				 function clear_serch_texts()

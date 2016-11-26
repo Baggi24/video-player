@@ -1,11 +1,8 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
 ?>
-
 <style>
 .element {
 	position: relative;
@@ -164,33 +161,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="element hugeitmicro-item">
 	<div class="left-block">
 		<div class="main-image-block">
-			<a href="http://huge-it.com/google-map/" target="_blank"><img src="<?php echo plugins_url( '../images/google-map.png' , __FILE__ ); ?>"></a>
+			<a href="http://huge-it.com/wordpress-responsive-slider/" target="_blank"><img
+					src="<?php echo esc_attr(plugins_url( '../images/responsive-slider-logo.png', __FILE__ )); ?>"></a>
 		</div>
 	</div>
 	<div class="right-block">
-        <div class="title-block"><a href="http://huge-it.com/google-map/" target="_blank"><h3>Wordpress Google Map</h3></a></div>
-			<p>Huge-IT Google Map. One more perfect tool from Huge-IT. Improved Google Map, where we have our special contribution. Most simple and effective tool for rapid creation of individual Google Map in posts and pages.</p>
+		<div class="title-block"><a href="http://huge-it.com/wordpress-responsive-slider/" target="_blank"><h3>WordPress
+					Responsive Slider</h3></a></div>
 		<div class="description-block">
-		</div>			  				
+			<p>The newly launched Responsive Slider from Huge-IT is the fastest loading slider for WordPress. Besides
+				being fully responsive, allowing to post unlimited slides in free version, Professional version of this
+				plugin will allow changing every corner of sliders, including buttons, arrows, bullets and more. Check
+				out the link for more details.</p>
+		</div>
 		<div class="button-block">
-			<a href="http://huge-it.com/google-map/" target="_blank">View Plugin</a>
+			<a href="http://huge-it.com/wordpress-responsive-slider/" target="_blank">View Plugin</a>
 		</div>
 	</div>
 </div>
 <div class="element hugeitmicro-item">
 	<div class="left-block">
 		<div class="main-image-block">
-			<a href="http://huge-it.com/slider/" target="_blank"><img src="<?php echo plugins_url( '../images/slider.png' , __FILE__ ); ?>"></a>
+			<a href="http://huge-it.com/wordpress-pricing-table-builder/" target="_blank"><img
+					src="<?php echo plugins_url( '../images/pricing-table-icon.png', __FILE__ ); ?>"></a>
 		</div>
 	</div>
 	<div class="right-block">
-        <div class="title-block"><a href="http://huge-it.com/slider/" target="_blank"><h3>Wordpress Slider</h3></a></div>
+		<div class="title-block"><a href="http://huge-it.com/wordpress-pricing-table-builder/" target="_blank"><h3><?php echo __("Pricing Table");?></h3></a></div>
 		<div class="description-block">
-			<p>Huge-IT slider is an awesome WordPress slider plugin with a lot of nice features. Just install and build sliders in a few minutes.</p>
-			<p>Huge-IT Slider is a quick and easy way to add custom sliders to the WordPress websites (both to templates and posts/pages). The slider allows having unlimited amount of images with their titles and descriptions.</p>
-		</div>			  				
+			<p><?php echo __("Make awesome sales with beautiful and responsive Pricing Table plugin for WordPress. This plugin includes more than 120 default themes to choose from, has variety of options and is free to download.","pportfolio-gallery");?>.</p>
+		</div>
 		<div class="button-block">
-			<a href="http://huge-it.com/slider/" target="_blank">View Plugin</a>
+			<a href="http://huge-it.com/wordpress-pricing-table-builder/" target="_blank">View Plugin</a>
 		</div>
 	</div>
 </div>
@@ -201,12 +203,69 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 	<div class="right-block">
-        <div class="title-block"><a href="http://huge-it.com/wordpress-gallery/" target="_blank"><h3>Wordpress Image Gallery</h3></a></div>
+		<div class="title-block"><a href="http://huge-it.com/wordpress-gallery/" target="_blank"><h3>Wordpress Image Gallery</h3></a></div>
 		<div class="description-block">
 			<p>Huge-IT Gallery images is perfect for using for creating various galleries within various views, to creating various sliders with plenty of styles, beautiful lightboxes with it’s options for any taste. The product allows adding descriptions and titles for each image of the Gallery. It is rather useful wherever using with various pages and posts, as well as within custom location.</p>
-		</div>			  				
+		</div>
 		<div class="button-block">
 			<a href="http://huge-it.com/wordpress-gallery/" target="_blank">View Plugin</a>
+		</div>
+	</div>
+</div>
+<div class="element hugeitmicro-item">
+	<div class="left-block">
+		<div class="main-image-block">
+			<a href="http://huge-it.com/slider/" target="_blank"><img src="<?php echo plugins_url( '../images/slider.png' , __FILE__ ); ?>"></a>
+		</div>
+	</div>
+	<div class="right-block">
+		<div class="title-block"><a href="http://huge-it.com/slider/" target="_blank"><h3>Wordpress Slider</h3></a></div>
+		<div class="description-block">
+			<p>Huge-IT slider is an awesome WordPress slider plugin with a lot of nice features. Just install and build sliders in a few minutes.</p>
+			<p>Huge-IT Slider is a quick and easy way to add custom sliders to the WordPress websites (both to templates and posts/pages). The slider allows having unlimited amount of images with their titles and descriptions.</p>
+		</div>
+		<div class="button-block">
+			<a href="http://huge-it.com/slider/" target="_blank">View Plugin</a>
+		</div>
+	</div>
+</div>
+<div class="element hugeitmicro-item">
+	<div class="left-block">
+		<div class="main-image-block">
+			<a href="http://huge-it.com/forms/" target="_blank">
+				<img
+					src="<?php echo esc_attr(plugins_url( '../images/form-logo.png', __FILE__ )); ?>">
+			</a>
+		</div>
+	</div>
+	<div class="right-block">
+		<div class="title-block">
+			<a href="http://huge-it.com/forms/" target="_blank">
+				<h3>WordPress Forms</h3>
+			</a>
+		</div>
+		<div class="description-block">
+			<p>Form Builder. this is one of the most important elements of WordPress website because without it you
+				cannot to always keep in touch with your visitors.</p>
+		</div>
+		<div class="button-block">
+			<a href="http://huge-it.com/forms/" target="_blank">View Plugin</a>
+		</div>
+	</div>
+</div>
+<div class="element hugeitmicro-item">
+	<div class="left-block">
+		<div class="main-image-block">
+			<a href="http://huge-it.com/google-map/" target="_blank"><img src="<?php echo plugins_url( '../images/google-map.png' , __FILE__ ); ?>"></a>
+		</div>
+	</div>
+	<div class="right-block">
+        <div class="title-block"><a href="http://huge-it.com/google-map/" target="_blank"><h3>Wordpress Google Map</h3></a></div>
+			<p>Huge-IT Google Map. One more perfect tool from Huge-IT. Improved Google Map, where we have our special contribution. Most simple and effective tool for rapid creation of individual Google Map in posts and pages.</p>
+		<div class="description-block">
+		</div>			  				
+		<div class="button-block">
+			<a href="http://huge-it.com/google-map/" target="_blank">View Plugin</a>
 		</div>
 	</div>
 </div>

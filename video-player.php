@@ -1,37 +1,33 @@
 <?php
-
 /*
 Plugin Name: Huge IT Video Player
 Plugin URI: http://huge-it.com/video-player/
 Description: Huge-IT Video player is perfect for using for creating various portfolios within various views. 
-Version: 1.1.8
+Version: 10.0
 Author: Huge-IT
 Author: http://huge-it.com/
 License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+Text Domain: hugeit_vp
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-add_action('media_buttons_context', 'add_video_player_my_custom_button');
+add_action('media_buttons_context', 'hugeit_vp_custom_button');
+
+add_action('admin_footer', 'hugeit_vp_inline_popup_content');
 
 
-add_action('admin_footer', 'add_video_player_inline_popup_content');
-
-
-function add_video_player_my_custom_button($context) {
-  
+function hugeit_vp_custom_button($context) {
 
   $img = plugins_url( '/images/post.button.png' , __FILE__ );
-  
 
   $container_id = 'huge_it_video_player';
-  
 
   $title = 'Select Huge IT Video Album to insert into post';
 
-  $context .= '<a class="button thickbox" title="Select Video Album to insert into post"    href="#TB_inline?width=400&inlineId='.$container_id.'">
+  $context .= '<a class="button thickbox" title="'.$title.'"    href="#TB_inline?width=400&inlineId='.$container_id.'">
 		<span class="wp-media-buttons-icon" style="background: url('.$img.'); background-repeat: no-repeat; background-position: left bottom;"></span>
 	Add Video Player
 	</a>';
@@ -39,7 +35,7 @@ function add_video_player_my_custom_button($context) {
   return $context;
 }
 
-function add_video_player_inline_popup_content() {
+function hugeit_vp_inline_popup_content() {
 ?>
 <script type="text/javascript">
 				jQuery(document).ready(function() {
@@ -71,73 +67,55 @@ function add_video_player_inline_popup_content() {
 							echo "No slideshows found", "huge_it_video_player";
 						}
 						?>
-	
 </div>
 <?php
 }
-///////////////////////////////////shortcode update/////////////////////////////////////////////
+/**
+ * Shortcode update
+ */
 
-
-add_action('init', 'hugesl_video_player_do_output_buffer');
-function hugesl_video_player_do_output_buffer() {
-        ob_start();
+add_action('init', 'hugeit_vp_do_output_buffer');
+function hugeit_vp_do_output_buffer() {
+	if( is_admin() && isset($_GET['page']) && $_GET['page'] == 'hugeit_vp_video_player' ){
+		ob_start();
+	}
 }
-add_action('init', 'video_player_lang_load');
+add_action('init', 'hugeit_vp_lang_load');
 
-function video_player_lang_load()
+function hugeit_vp_lang_load()
 {
     load_plugin_textdomain('sp_video_player', false, basename(dirname(__FILE__)) . '/Languages');
-
 }
 
-
-function huge_it_video_player_images_list_shotrcode($atts)
+function hugeit_vp_images_list_shotrcode($atts)
 {
     extract(shortcode_atts(array(
         'id' => 'no huge_it video_player',
-    
     ), $atts));
 
     wp_enqueue_media();
-    wp_enqueue_style("hugeicons",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
+    wp_enqueue_style("font-awesome",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
     wp_enqueue_script("froogaloop");
-    return huge_it_video_player_images_list($atts['id']);
 
+    return hugeit_vp_images_list($atts['id']);
 }
 
-///////////////////// end filter
+// end filter
 
+add_shortcode('huge_it_video_player', 'hugeit_vp_images_list_shotrcode');
 
-add_shortcode('huge_it_video_player', 'huge_it_video_player_images_list_shotrcode');
-
-
-
-
-function   huge_it_video_player_images_list($id)
-{
+function hugeit_vp_images_list($id) {
 
     require_once("Front_end/video_player_front_end_view.php");
     require_once("Front_end/video_player_front_end_func.php");
-    if (isset($_GET['product_id'])) {
-        if (isset($_GET['view'])) {
-            if ($_GET['view'] == 'huge_itvideo_player') {
-                return showPublishedvideo_player_1($id);
-            } else {
-                return front_end_single_product($_GET['product_id']);
-            }
-        } else {
-            return front_end_single_product($_GET['product_id']);
-        }
-    } else {
-        return showPublishedvideo_player_1($id);
-    }
+
+    $id = absint($id);
+    return hugeit_vp_showPublishedvideo_player_1($id);
 }
 
+add_filter('admin_head', 'hugeit_vp_ShowTinyMCE');
 
-
-
-add_filter('admin_head', 'huge_it_video_player_ShowTinyMCE');
-function huge_it_video_player_ShowTinyMCE()
+function hugeit_vp_ShowTinyMCE()
 {
     // conditions here
     wp_enqueue_script('common');
@@ -154,138 +132,50 @@ function huge_it_video_player_ShowTinyMCE()
     do_action('admin_print_styles');
 }
 
-/*function all_video_frontend_scripts_and_styles() {
+function hugeit_vp_frontend_scripts_and_styles() {
 	wp_enqueue_media();
 	wp_enqueue_style("iconfonts",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
 	wp_enqueue_script("froogaloop",plugins_url("froogaloop.min.js", __FILE__), FALSE);
 }
-add_action('wp_enqueue_scripts', 'all_video_frontend_scripts_and_styles');*/
+add_action('wp_enqueue_scripts', 'hugeit_vp_frontend_scripts_and_styles');
 
-
-add_action('admin_menu', 'huge_it_video_player_options_panel');
-function huge_it_video_player_options_panel()
+add_action('admin_menu', 'hugeit_vp_options_panel');
+function hugeit_vp_options_panel()
 {
-    $page_cat = add_menu_page('Theme page title', 'Video Player', 'manage_options', 'video_players_huge_it_video_player', 'video_players_huge_it_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
-    $page_option = add_submenu_page('video_players_huge_it_video_player', 'General Options', 'General Options', 'manage_options', 'Options_video_player_styles', 'Options_video_player_styles');
-	add_submenu_page('video_players_huge_it_video_player', 'Featured Plugins', 'Featured Plugins', 'manage_options', 'huge_it__video_player_featured_plugins', 'huge_it__video_player_featured_plugins');
-		
-	add_action('admin_print_styles-' . $page_cat, 'huge_it_video_player_admin_script');
-    add_action('admin_print_styles-' . $page_option, 'huge_it_video_player_option_admin_script');
+    $page_cat = add_menu_page('Theme page title', 'Video Player', 'manage_options', 'hugeit_vp_video_player', 'hugeit_vp_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
+    $page_option = add_submenu_page('hugeit_vp_video_player', 'General Options', 'General Options', 'manage_options', 'hugeit_vp_Options_styles', 'hugeit_vp_Options_styles');
+	add_submenu_page('hugeit_vp_video_player', 'Featured Plugins', 'Featured Plugins', 'manage_options', 'hugeit_vp_featured_plugins', 'hugeit_vp_featured_plugins');
+	$page_licensing = add_submenu_page('hugeit_vp_video_player', 'Licensing', 'Licensing', 'manage_options', 'hugeit_vp_licensing', 'hugeit_vp_licensing');
+
+	add_action('admin_print_styles-' . $page_cat, 'hugeit_vp_admin_script');
+    add_action('admin_print_styles-' . $page_option, 'hugeit_vp_option_admin_script');
+    add_action('admin_print_styles-' . $page_licensing, 'hugeit_vp_admin_licensing');
 }
-function huge_it__video_player_featured_plugins()
+function hugeit_vp_featured_plugins()
 {
 	include_once("admin/huge_it_featured_plugins.php");
 }
-
-
-function video_player_sliders_huge_it_slider()
-{
-
-    require_once("admin/video_player_slider_func.php");
-    require_once("admin/video_player_slider_view.php");
-    if (!function_exists('print_html_nav'))
-        require_once("video_player_function/html_video_player_func.php");
-
-
-    if (isset($_GET["task"]))
-        $task = $_GET["task"]; 
-    else
-        $task = '';
-    if (isset($_GET["id"]))
-        $id = $_GET["id"];
-    else
-        $id = 0;
-    global $wpdb;
-    switch ($task) {
-
-        case 'add_cat':
-            add_slider();
-            break;
-		case 'add_shortcode_post':
-            add_shortcode_post();
-            break;
-		case 'popup_posts':
-            if ($id)
-                popup_posts($id);
-            break;
-		case 'video_player_video':
-            if ($id)
-                video_player_video($id);
-            else {
-                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                video_player_video($id);
-            }
-            break;
-		case 'video_player_upload':
-            if ($id)
-                video_player_upload($id);
-            else {
-                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                video_player_upload($id);
-            }
-            break;
-		case 'video_player_vimeo':
-            if ($id)
-                video_player_vimeo($id);
-            else {
-                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                video_player_vimeo($id);
-            }
-            break;
-        case 'edit_cat':
-            if ($id)
-                editslider($id);
-            else {
-                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                editslider($id);
-            }
-            break;
-
-        case 'save':
-            if ($id)
-                apply_cat($id);
-        case 'apply':
-            if ($id) {
-                apply_cat($id);
-                editslider($id);
-            } 
-            break;
-        case 'remove_cat':
-            removeslider($id);
-            showslider();
-            break;
-        default:
-            showslider();
-            break;
-    }
+function hugeit_vp_licensing() {
+	include_once ("admin/video_player_licensing.php");
 }
 
-function video_player_Options_slider_styles()
-{
-    require_once("admin/video_player_slider_options_func.php");
-    require_once("admin/video_player_slider_options_view.php");
-    if (isset($_GET['task']))
-        if ($_GET['task'] == 'save')
-            save_styles_options();
-    showStyles();
+////////////////////////// Huge it Slider ///////////////////////////////////////////
+
+function hugeit_vp_admin_licensing() {
+	wp_enqueue_style("admin_css", plugins_url("style/admin.licensing.css", __FILE__), FALSE);
 }
 
-//////////////////////////Huge it Slider ///////////////////////////////////////////
-
-function huge_it_video_player_admin_script()
+function hugeit_vp_admin_script()
 {
 	wp_enqueue_media();
-	wp_enqueue_style("jquery_ui", "http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css", FALSE);
-	wp_enqueue_style("jquery_ui", plugins_url("style/jquery-ui.css", __FILE__), FALSE);
+	wp_enqueue_style("jquery_ui_smoothness", plugins_url("style/smoothness.css", __FILE__), FALSE);
 	wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
 	wp_enqueue_script("admin_js", plugins_url("js/admin.js", __FILE__), FALSE);
 	wp_localize_script('admin_js', 'ajax_object',array( 'ajax_url' => admin_url( 'admin-ajax.php' )));
 }
 
-
-function huge_it_video_player_option_admin_script()
-{
-	wp_enqueue_script("jquery_old", "http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js", FALSE);
+function hugeit_vp_option_admin_script() {
+    wp_enqueue_script('jquery');
 	wp_enqueue_script("simple_slider_js",  plugins_url("js/simple-slider.js", __FILE__), FALSE);
 	wp_enqueue_style("simple_slider_css", plugins_url("style/simple-slider.css", __FILE__), FALSE);
 	wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
@@ -294,107 +184,112 @@ function huge_it_video_player_option_admin_script()
 	wp_localize_script('admin_js', 'ajax_object',array( 'ajax_url' => admin_url( 'admin-ajax.php' )));
 }
 
-
-function video_players_huge_it_video_player()
-{
+function hugeit_vp_video_player() {
 
     require_once("admin/video_player_func.php");
     require_once("admin/video_player_view.php");
-    if (!function_exists('print_html_nav'))
+    if (!function_exists('hugeit_vp_print_html_nav'))
         require_once("video_player_function/html_video_player_func.php");
-
 
     if (isset($_GET["task"]))
         $task = $_GET["task"]; 
     else
         $task = '';
     if (isset($_GET["id"]))
-        $id = $_GET["id"];
+        $id = absint($_GET["id"]);
     else
         $id = 0;
     global $wpdb;
     switch ($task) {
 
         case 'add_cat':
-            add_video_player();
+        	$add_cat = !wp_verify_nonce($_GET['hugeit_vp_add_cat_data'], 'hugeit_vp_add_cat_');
+			$add_new = !wp_verify_nonce($_GET['hugeit_vp_add_cat_data'], 'hugeit_vp_add_new_');
+			if ((!isset($_GET['hugeit_vp_add_cat_data']) && ($add_cat || $add_new) )) {
+				wp_die('Security check failure.');
+			}
+            hugeit_vp_add_video_player();
             break;
 		case 'video_player_video':
-            if ($id)
-                video_player_video($id);
-            else {
+            if ($id) {
+                if (!empty($_POST) && (!isset($_GET['hugeit_vp_add_video']) || !wp_verify_nonce($_GET['hugeit_vp_add_video'], 'add_video_' . absint($_GET['id'])))) {
+                    wp_die('Security check failure.');
+                }
+                hugeit_vp_video_player_video($id);
+            } else {
                 $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                video_player_video($id);
-            }
-            break;
-		case 'video_player_upload':
-            if ($id)
-                video_player_upload($id);
-            else {
-                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                video_player_upload($id);
-            }
-            break;
-		case 'video_player_vimeo':
-            if ($id)
-                video_player_vimeo($id);
-            else {
-                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                video_player_vimeo($id);
+                hugeit_vp_video_player_video($id);
             }
             break;
         case 'edit_cat':
-            if ($id)
-                editvideo_player($id);
+            if ($id) {
+				$edit_cat_nonce = !wp_verify_nonce($_GET['hugeit_vp_edit_cat'], 'edit_cat_' . absint($_GET['id']) );
+				$remove_slide = !wp_verify_nonce($_GET['hugeit_vp_edit_cat'], 'remove_slide_' . absint($_GET['id']) );
+
+				if(!isset($_GET['hugeit_vp_edit_cat']) && ($edit_cat_nonce || $remove_slide) ) {
+					wp_die('Security check failure.');
+				}
+				hugeit_vp_edit_video_player($id);
+			}
             else {
                 $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_it_video_players");
-                editvideo_player($id);
+                hugeit_vp_edit_video_player($id);
             }
             break;
-
-        case 'save':
-            if ($id)
-                apply_cat($id);
         case 'apply':
             if ($id) {
-                apply_cat($id);
-                editvideo_player($id);
+				if (!isset($_REQUEST['hugeit_vp_save_data'])) {
+					wp_die('Security check failure.');
+				}
+				$save_verify_nonce = wp_verify_nonce($_REQUEST['hugeit_vp_save_data'], 'save_data_' . absint($_REQUEST['id'])  );
+				$add_new_verify_nonce = wp_verify_nonce($_REQUEST['hugeit_vp_save_data'], 'hugeit_vp_add_new_' . absint($_REQUEST['id']));
+
+				if (!($save_verify_nonce || $add_new_verify_nonce)) {
+					wp_die('Security check failure.');
+				}
+				hugeit_vp_apply_cat($id);
+                hugeit_vp_edit_video_player($id);
             } 
             break;
         case 'remove_cat':
-            removevideo_player($id);
-            showvideo_player();
+        	if(!isset($_GET['hugeit_vp_remove_cat']) || !wp_verify_nonce($_GET['hugeit_vp_remove_cat'], 'remove_cat_' . absint($_GET['id']) )) {
+				wp_die('Security check failure.');
+			}
+			hugeit_vp_remove_video_player($id);
+            hugeit_vp_show_video_player();
             break;
         default:
-            showvideo_player();
+            hugeit_vp_show_video_player();
             break;
     }
-
-
 }
 
-add_action("wp_ajax_video_player_ajax","wp_ajax_video_player_callback");
+add_action("wp_ajax_video_player_ajax", "hugeit_vp_ajax_callback");
 
-function wp_ajax_video_player_callback(){
-	function get_youtube_thumb_id_from_url($url){						
-		if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
+function hugeit_vp_ajax_callback(){
+	function hugeit_vp_get_youtube_thumb_id_from_url($url){
+		if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', esc_url($url), $match)) {
 			if(!empty($match[1])){
 				return $match[1];
 			}else{
 				return false;
 			}
-			
 		}
 	}
 	
 	if(isset($_POST['task'])){
 		if($_POST['task']=="get_video_meta_from_url"){
+            if(!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'hugeit_vp_add_video_save')){
+                wp_die("Security check failure.");
+            }
+
 			$video_url=$_POST['url'];
 			$youtube_exp = explode("youtu", $video_url);
 			$vimeo_exp = explode("vimeo", $video_url);
 			$video_title="";
 			$video_image="";
 			if(isset($youtube_exp[1])){
-				$video_id=get_youtube_thumb_id_from_url($video_url);
+				$video_id=hugeit_vp_get_youtube_thumb_id_from_url($video_url);
 				$video_title="";
 				$video_image='http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg';
 				$type="youtube";
@@ -409,7 +304,7 @@ function wp_ajax_video_player_callback(){
 					$type="vimeo";
 				}
 			}
-			
+
 			if($video_title=="" && $video_image==""){
 				echo json_encode(array("fail"=>1));
 				die();
@@ -419,13 +314,13 @@ function wp_ajax_video_player_callback(){
 			}
 		}
 		if($_POST['task']=="get_video_thumb_from_id"){
-			$video_id=$_POST['video_id'];
+			$video_id = $_POST['video_id'];
 			$video_image="";
 			if($_POST['type']=="youtube"){
 				$video_image='http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg';
 			}
 			if($_POST['type']=="vimeo"){
-				$hash=file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
+				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
 				$hash = unserialize($hash);
 				$video_image=$hash[0]['thumbnail_large'];
 			}
@@ -438,7 +333,7 @@ function wp_ajax_video_player_callback(){
 		
 		if($_POST['task']=="change_video_link"){
 			if(isset($_POST['type']) && !empty($_POST['type'])){
-				$type=$_POST['type'];
+				$type = $_POST['type'];
 			}
 			if(isset($_POST['link']) && !empty($_POST['link'])){
 				$link=$_POST['link'];
@@ -446,11 +341,10 @@ function wp_ajax_video_player_callback(){
 			
 			if($type=="youtube"){
 				
-				$video_id=get_youtube_thumb_id_from_url($link);
+				$video_id =hugeit_vp_get_youtube_thumb_id_from_url($link);
 				if($video_id){
 					$video_image='http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg';
 				}
-				
 				
 			}elseif($type=="vimeo"){
 				
@@ -473,20 +367,24 @@ function wp_ajax_video_player_callback(){
 	}
 }
 
-function Options_video_player_styles()
+function hugeit_vp_Options_styles()
 {
     require_once("admin/video_player_Options_func.php");
     require_once("admin/video_player_Options_view.php");
-    if (isset($_GET['task']))
-        if ($_GET['task'] == 'save')
-            save_styles_options();
-    showStyles();
+    if (isset($_GET['task'])) {
+		if ($_GET['task'] == 'save') {
+			if (!isset($_REQUEST['hugeit_vp_save_options']) || !wp_verify_nonce($_REQUEST['hugeit_vp_save_options'], 'save_options_')) {
+				wp_die('Security check failure.');
+			}
+			hugeit_vp_save_styles_options();
+		}
+	}
+    hugeit_vp_showStyles();
 }
 /**
  * Huge IT Widget
  */
 class Huge_it_video_player_Widget extends WP_Widget {
-
 
 	public function __construct() {
 		parent::__construct(
@@ -495,7 +393,6 @@ class Huge_it_video_player_Widget extends WP_Widget {
 			array( 'description' => __( 'Huge IT Video Player', 'huge_it_video_player' ), ) 
 		);
 	}
-
 	
 	public function widget( $args, $instance ) {
 		extract($args);
@@ -514,7 +411,6 @@ class Huge_it_video_player_Widget extends WP_Widget {
 		}
 	}
 
-
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['video_player_id'] = strip_tags( $new_instance['video_player_id'] );
@@ -522,7 +418,6 @@ class Huge_it_video_player_Widget extends WP_Widget {
 
 		return $instance;
 	}
-
 
 	public function form( $instance ) {
 		$selected_video_player = 0;
@@ -532,59 +427,48 @@ class Huge_it_video_player_Widget extends WP_Widget {
 		if (isset($instance['video_player_id'])) {
 			$selected_video_player = $instance['video_player_id'];
 		}
-
 		if (isset($instance['title'])) {
 			$title = $instance['title'];
 		}
-
-        
-
-        
 		?>
 		<p>
-			
-				<p>
-					<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
-					<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
-				</p>
-				<label for="<?php echo $this->get_field_id('video_player_id'); ?>"><?php _e('Select Video Album:', 'huge_it_video_player'); ?></label> 
-				<select id="<?php echo $this->get_field_id('video_player_id'); ?>" name="<?php echo $this->get_field_name('video_player_id'); ?>">
-				
-				<?php
-				 global $wpdb;
-				$query="SELECT * FROM ".$wpdb->prefix."huge_it_video_players ";
-				$rowwidget=$wpdb->get_results($query);
-				foreach($rowwidget as $rowwidgetecho){
-				?>
-					<option <?php if($rowwidgetecho->id == $instance['video_player_id']){ echo 'selected'; } ?> value="<?php echo $rowwidgetecho->id; ?>"><?php echo $rowwidgetecho->name; ?></option>
-					<?php } ?>
-				</select>
+            <p>
+                <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+                <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+            </p>
+            <label for="<?php echo $this->get_field_id('video_player_id'); ?>"><?php _e('Select Video Album:', 'huge_it_video_player'); ?></label>
+            <select id="<?php echo $this->get_field_id('video_player_id'); ?>" name="<?php echo $this->get_field_name('video_player_id'); ?>">
+
+            <?php
+             global $wpdb;
+            $query="SELECT * FROM ".$wpdb->prefix."huge_it_video_players ";
+            $rowwidget=$wpdb->get_results($query);
+            foreach($rowwidget as $rowwidgetecho){
+            ?>
+                <option <?php if($rowwidgetecho->id == $instance['video_player_id']){ echo 'selected'; } ?> value="<?php echo $rowwidgetecho->id; ?>"><?php echo $rowwidgetecho->name; ?></option>
+                <?php } ?>
+            </select>
 		</p>
 		<?php 
 	}
 }
 
-add_action('widgets_init', 'register_Huge_it_video_player_Widget');  
+add_action('widgets_init', 'hugeit_vp_register_Widget');
 
-function register_Huge_it_video_player_Widget() {  
-    register_widget('Huge_it_video_player_Widget'); 
+function hugeit_vp_register_Widget() {
+    register_widget('Huge_it_video_player_Widget');
 }
 
-
-
 //////////////////////////////////////////////////////                                             ///////////////////////////////////////////////////////
-//////////////////////////////////////////////////////               Activate video_player                     ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////               Activate video_player         ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////                                             ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////                                             ///////////////////////////////////////////////////////
 
-
-function huge_it_video_player_activate()
+function hugeit_vp_activate()
 {
     global $wpdb;
 
-/// creat database tables
-
-
+// create database tables
 
     $sql_huge_it_video_params = "
 CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_params`(
@@ -595,7 +479,6 @@ CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_params`(
   `value` varchar(200) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ";
-
 
     $sql_huge_it_videos = "
 CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_videos` (
@@ -631,8 +514,6 @@ CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_players` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ";
-
-
 
     $table_name = $wpdb->prefix . "huge_it_video_params";
     $sql_1 = <<<query1
@@ -688,43 +569,28 @@ query1;
     $table_name = $wpdb->prefix . "huge_it_videos";
     $sql_2 = "
 INSERT INTO 
-
 `" . $table_name . "` (`name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `ordering`, `published`) VALUES
 ('Big Buck Bunny Trailer', '1', 'http://butlerccwebdev.net/support/html5-video/media/bigbuckbunnytrailer-480p.mp4', 'https://peach.blender.org/wp-content/uploads/bbb-splash.png', '', 'video', '0', '1')";
 
-
- /*$sql_2_1 = "
-INSERT INTO 
-
-`" . $table_name . "` (`name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `ordering`, `published`) VALUES
-('Big Buck Bunny', '1', 'https://sendvid.com/3x2tvrjn#', 'http://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg', '', 'video', '0', '1')";*/
-
  $sql_2_2 = "
 INSERT INTO 
-
 `" . $table_name . "` (`name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `ordering`, `published`) VALUES
 ('Big Buck Bunny(Youtube)', '1', 'https://www.youtube.com/watch?v=YE7VzlLtp-4', 'http://img.youtube.com/vi/YE7VzlLtp-4/mqdefault.jpg', '', 'youtube', '0', '1')";
 
-
  $sql_2_3 = "
 INSERT INTO 
-
 `" . $table_name . "` (`name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `ordering`, `published`) VALUES
 ('Big Buck Bunny(Vimeo)', '1', 'https://vimeo.com/1084537', 'http://i.vimeocdn.com/video/20963649_640.jpg', '', 'vimeo', '0', '1')";
 
-    $table_name = $wpdb->prefix . "huge_it_video_players";
-
+$table_name = $wpdb->prefix . "huge_it_video_players";
 
     $sql_3 = "
-
 INSERT INTO `$table_name` (`id`, `name`, `layout`, `width`, `album_single`, `ordering`, `published`, `ht_videos`) VALUES
 (1, 'My First Video Album', 'right', '640', 'album', '1', '1', '1')";
-
 
     $wpdb->query($sql_huge_it_video_params);
     $wpdb->query($sql_huge_it_videos);
     $wpdb->query($sql_huge_it_video_players);
-
 
     if (!$wpdb->get_var("select count(*) from " . $wpdb->prefix . "huge_it_video_params")) {
         $wpdb->query($sql_1);
@@ -751,5 +617,4 @@ INSERT INTO `$table_name` (`id`, `name`, `layout`, `width`, `album_single`, `ord
 		$wpdb->query("INSERT INTO `".$wpdb->prefix."huge_it_video_params` (`name`, `title`,`description`, `value`) VALUES ('video_pl_controls_panel_opacity', 'Controls', 'Controls', '0')");
 	}
 }
-
-register_activation_hook(__FILE__, 'huge_it_video_player_activate');
+register_activation_hook(__FILE__, 'hugeit_vp_activate');
