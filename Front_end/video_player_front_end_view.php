@@ -3770,7 +3770,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 			</style>
 			<div id="huge_it_album_video_player_<?php echo $i; ?>" class="loading <?php if($video_player[0]->layout=="bottom"){ echo "align_bottom"; } ?>">
 				<div class="load_icon">
-					<img src="<?php echo plugins_url('video-player/images/loading.gif'); ?>" alt="loading" />
+					<img src="<?php echo plugins_url('../images/loading.gif', __FILE__); ?>" alt="loading" />
 				</div>
 				<div class="players_wrapper">
 					<div class="huge_it_player playlist_player">
@@ -3820,9 +3820,9 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 							<div class="center_wait"><i class="hugeicons hugeicons-spinner hugeicons-pulse"></i></div>
 						</div>
 					</div>
-					<div id="youtube_<?php echo $i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?php echo $videos[0]->image_url; ?>" alt="" /><img class="play" src="<?php echo plugins_url('video-player/images/play.youtube.png'); ?>" alt="youtube play" /></div>
+					<div id="youtube_<?php echo $i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?php echo $videos[0]->image_url; ?>" alt="" /><img class="play" src="<?php echo plugins_url('../images/play.youtube.png', __FILE__); ?>" alt="youtube play" /></div>
 					<div id="youtube_player_<?php echo $i; ?>" class="playlist_player"></div>
-					<div id="vimeo_<?php echo $i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?php echo $videos[0]->image_url; ?>" alt="" /><img class="play" src="<?php echo plugins_url('video-player/images/play.vimeo.png'); ?>" alt="vimeo play" /></div>
+					<div id="vimeo_<?php echo $i; ?>_thumb" class="custom_thumb"><img class="thumb" src="<?php echo $videos[0]->image_url; ?>" alt="" /><img class="play" src="<?php echo plugins_url('../images/play.vimeo.png', __FILE__); ?>" alt="vimeo play" /></div>
 					<iframe id="vimeo_<?php echo $i; ?>" class="playlist_player" src="" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 				</div>
 				<div class="playlist_wrapper">
