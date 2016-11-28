@@ -31,10 +31,13 @@ function hugeit_vp_hex2RGB($hexStr, $returnAsString = true, $seperator = ',') {
 function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 
 	ob_start();
-	$video_playerID=$video_player[0]->id;
-	$video_playertitle=$video_player[0]->name;
-	$video_playeralbum=$video_player[0]->album_single;
-	$videoAautoPlay = $video_player[0]->autoplay;
+	if(isset($video_player[0]->id)) :
+        $video_playerID=$video_player[0]->id;
+        $video_playertitle=$video_player[0]->name;
+        $video_playeralbum=$video_player[0]->album_single;
+        $videoAautoPlay = $video_player[0]->autoplay;
+
+
 	$path_site = plugins_url("../images", __FILE__);
 	switch($video_playeralbum){
 		case 'single':
@@ -3887,5 +3890,6 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 			break;
 	}
 	return ob_get_clean();
+    endif;
 }
 ?>
