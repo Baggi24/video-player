@@ -120,9 +120,9 @@ function hugeit_vp_html_edit_video_player($ord_elem, $row, $cat_row, $rowim, $ro
 ?>
 <script type="text/javascript">
 jQuery("#save-buttom").click(function(){
-	submitbutton("apply");
+	hugeit_vp_submitbutton("apply");
 })
-function submitbutton(pressbutton, id)
+function hugeit_vp_submitbutton(pressbutton, id)
 {
 	if(!document.getElementById('name').value){
 	alert("Name is required.");
@@ -236,7 +236,7 @@ jQuery(function() {
 			<div class="huge-it-newuploader uploader add-new-image">
 				<input type="button" class="button button-primary wp-media-buttons-icon" name="_unique_name_button" id="_unique_name_button" value="Upload Video" />
 			</div>
-			<a href="admin.php?page=hugeit_vp_video_player&task=video_player_video&id=<?php echo absint($_GET['id']); ?>&TB_iframe=1" class="button button-primary add-video-slide thickbox"  id="slideup3s" value="iframepop">
+			<a href="admin.php?page=hugeit_vp_video_player&task=video_player_video&id=<?php echo absint($_GET['id']); ?>&TB_iframe=1&width=783&height=610" class="button button-primary add-video-slide thickbox"  id="slideup3s" value="iframepop">
 				<span class="wp-media-buttons-icon"></span>Add Video From Url
 			</a>
 			</div>
@@ -334,7 +334,7 @@ jQuery(function() {
 									</div>
 								</div>
 								<div class="remove-image-container">
-									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
+									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); hugeit_vp_submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
 								</div>
 							</div>
 						<div class="clear"></div>
@@ -428,7 +428,7 @@ jQuery(function() {
 										<div class="yt_play_center"></div>
 								</div>
 								<div class="remove-image-container">
-									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
+									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); hugeit_vp_submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
 								</div>
 							</div>
 
@@ -541,7 +541,7 @@ jQuery(function() {
 
 								</div>
 								<div class="remove-image-container">
-									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
+									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); hugeit_vp_submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
 								</div>
 							</div>
 							<div class="clear"></div>
@@ -598,7 +598,7 @@ jQuery(function() {
 					</ul>
 						<div id="major-publishing-actions">
 							<div id="publishing-action">
-								<input type="button" onclick="submitbutton('apply')" value="Save Video Player" id="save-buttom" class="button button-primary button-large">
+								<input type="button" onclick="hugeit_vp_submitbutton('apply')" value="Save Video Player" id="save-buttom" class="button button-primary button-large">
 							</div>
 							<div class="clear"></div>
 						</div>

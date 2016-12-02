@@ -5,9 +5,9 @@ jQuery(document).ready(function () {
 		videoPlayerSetCookie( 'videoPlayerBannerShow', 'no', {expires:86400} );
 	});
 
-	jQuery(".close_black_friday").on("click",function(){
+	jQuery(".close_christmas").on("click",function(){
 		jQuery(".backend-banner").css("display","none");
-		videoPlayerSetCookie( 'videoPlayerBlackFriday', 'no', {expires:345600} );
+		videoPlayerSetCookie( 'videoPlayerChristmas', 'no', {expires:345600} );
 	});
 	
 	jQuery(".update_video_link").on("click tap",function(){

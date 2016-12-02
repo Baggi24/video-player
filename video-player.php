@@ -110,26 +110,7 @@ function hugeit_vp_images_list($id) {
     require_once("Front_end/video_player_front_end_func.php");
 
     $id = absint($id);
-    return hugeit_vp_showPublishedvideo_player_1($id);
-}
-
-add_filter('admin_head', 'hugeit_vp_ShowTinyMCE');
-
-function hugeit_vp_ShowTinyMCE()
-{
-    // conditions here
-    wp_enqueue_script('common');
-    wp_enqueue_script('jquery-color');
-    wp_print_scripts('editor');
-    if (function_exists('add_thickbox')) add_thickbox();
-    wp_print_scripts('media-upload');
-    if (version_compare(get_bloginfo('version'), 3.3) < 0) {
-        if (function_exists('wp_tiny_mce')) wp_tiny_mce();
-    }
-    wp_admin_css();
-    wp_enqueue_script('utils');
-    do_action("admin_print_styles-post-php");
-    do_action('admin_print_styles');
+    return hugeit_vp_show_published_video_player_1($id);
 }
 
 function hugeit_vp_frontend_scripts_and_styles() {
@@ -142,15 +123,12 @@ add_action('wp_enqueue_scripts', 'hugeit_vp_frontend_scripts_and_styles');
 add_action('admin_menu', 'hugeit_vp_options_panel');
 function hugeit_vp_options_panel()
 {
-    $page_cat = add_menu_page('Theme page title', 'Video Player', 'manage_options', 'hugeit_vp_video_player', 'hugeit_vp_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
-    $page_option = add_submenu_page('hugeit_vp_video_player', 'General Options', 'General Options', 'manage_options', 'hugeit_vp_Options_styles', 'hugeit_vp_Options_styles');
+    $GLOBALS['hugeit_vp_page_category'] = add_menu_page('Theme page title', 'Video Player', 'manage_options', 'hugeit_vp_video_player', 'hugeit_vp_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
+    $GLOBALS['hugeit_vp_page_option'] = add_submenu_page('hugeit_vp_video_player', 'General Options', 'General Options', 'manage_options', 'hugeit_vp_Options_styles', 'hugeit_vp_Options_styles');
 	add_submenu_page('hugeit_vp_video_player', 'Featured Plugins', 'Featured Plugins', 'manage_options', 'hugeit_vp_featured_plugins', 'hugeit_vp_featured_plugins');
-	$page_licensing = add_submenu_page('hugeit_vp_video_player', 'Licensing', 'Licensing', 'manage_options', 'hugeit_vp_licensing', 'hugeit_vp_licensing');
-
-	add_action('admin_print_styles-' . $page_cat, 'hugeit_vp_admin_script');
-    add_action('admin_print_styles-' . $page_option, 'hugeit_vp_option_admin_script');
-    add_action('admin_print_styles-' . $page_licensing, 'hugeit_vp_admin_licensing');
+	add_submenu_page('hugeit_vp_video_player', 'Licensing', 'Licensing', 'manage_options', 'hugeit_vp_licensing', 'hugeit_vp_licensing');
 }
+
 function hugeit_vp_featured_plugins()
 {
 	include_once("admin/huge_it_featured_plugins.php");
@@ -161,38 +139,40 @@ function hugeit_vp_licensing() {
 
 ////////////////////////// Huge it Slider ///////////////////////////////////////////
 
-function hugeit_vp_admin_licensing() {
-	wp_enqueue_style("admin_css", plugins_url("style/admin.licensing.css", __FILE__), FALSE);
-}
+add_action( 'admin_enqueue_scripts', 'hugeit_vp_admin_script' );
 
-function hugeit_vp_admin_script()
+function hugeit_vp_admin_script($hook)
 {
-	wp_enqueue_media();
-	wp_enqueue_style("jquery_ui_smoothness", plugins_url("style/smoothness.css", __FILE__), FALSE);
-	wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
-	wp_enqueue_script("admin_js", plugins_url("js/admin.js", __FILE__), FALSE);
-	wp_localize_script('admin_js', 'ajax_object',array( 'ajax_url' => admin_url( 'admin-ajax.php' )));
-}
+    global $hugeit_vp_page_category;
+    global $hugeit_vp_page_option;
 
-function hugeit_vp_option_admin_script() {
-    wp_enqueue_script('jquery');
-	wp_enqueue_script("simple_slider_js",  plugins_url("js/simple-slider.js", __FILE__), FALSE);
-	wp_enqueue_style("simple_slider_css", plugins_url("style/simple-slider.css", __FILE__), FALSE);
-	wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
-	wp_enqueue_script("admin_js", plugins_url("js/admin.js", __FILE__), FALSE);
-	wp_enqueue_script('param_block2', plugins_url("elements/jscolor/jscolor.js", __FILE__));
-	wp_localize_script('admin_js', 'ajax_object',array( 'ajax_url' => admin_url( 'admin-ajax.php' )));
+    if($hook == $hugeit_vp_page_category) {
+        wp_enqueue_media();
+        wp_enqueue_style("jquery_ui_smoothness", plugins_url("style/smoothness.css", __FILE__), FALSE);
+        wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
+        wp_enqueue_script("admin_js", plugins_url("js/admin.js", __FILE__), FALSE);
+        wp_localize_script('admin_js', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+    }
+    if($hook == $hugeit_vp_page_option) {
+        wp_enqueue_script('jquery');
+        wp_enqueue_script("simple_slider_js",  plugins_url("js/simple-slider.js", __FILE__), FALSE);
+        wp_enqueue_style("simple_slider_css", plugins_url("style/simple-slider.css", __FILE__), FALSE);
+        wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
+        wp_enqueue_script("admin_js", plugins_url("js/admin.js", __FILE__), FALSE);
+        wp_enqueue_script('param_block2', plugins_url("elements/jscolor/jscolor.js", __FILE__));
+        wp_localize_script('admin_js', 'ajax_object',array( 'ajax_url' => admin_url( 'admin-ajax.php' )));
+    }
 }
 
 function hugeit_vp_video_player() {
 
     require_once("admin/video_player_func.php");
     require_once("admin/video_player_view.php");
-    if (!function_exists('hugeit_vp_print_html_nav'))
-        require_once("video_player_function/html_video_player_func.php");
 
-    if (isset($_GET["task"]))
-        $task = $_GET["task"]; 
+    $tasks = array('add_cat', 'video_player_video', 'edit_cat', 'apply', 'remove_cat');
+
+    if (isset($_GET["task"]) && in_array($_GET['task'], $tasks))
+        $task = esc_html($_GET["task"]);
     else
         $task = '';
     if (isset($_GET["id"]))
@@ -201,7 +181,6 @@ function hugeit_vp_video_player() {
         $id = 0;
     global $wpdb;
     switch ($task) {
-
         case 'add_cat':
         	$add_cat = !wp_verify_nonce($_GET['hugeit_vp_add_cat_data'], 'hugeit_vp_add_cat_');
 			$add_new = !wp_verify_nonce($_GET['hugeit_vp_add_cat_data'], 'hugeit_vp_add_new_');
@@ -278,12 +257,14 @@ function hugeit_vp_ajax_callback(){
 	}
 	
 	if(isset($_POST['task'])){
-		if($_POST['task']=="get_video_meta_from_url"){
+        $task = sanitize_text_field($_POST['task']);
+
+		if($task == "get_video_meta_from_url"){
             if(!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'hugeit_vp_add_video_save')){
                 wp_die("Security check failure.");
             }
 
-			$video_url=$_POST['url'];
+			$video_url = esc_url($_POST['url']);
 			$youtube_exp = explode("youtu", $video_url);
 			$vimeo_exp = explode("vimeo", $video_url);
 			$video_title="";
@@ -291,7 +272,7 @@ function hugeit_vp_ajax_callback(){
 			if(isset($youtube_exp[1])){
 				$video_id=hugeit_vp_get_youtube_thumb_id_from_url($video_url);
 				$video_title="";
-				$video_image='http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg';
+				$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 				$type="youtube";
 			}else{
 				if(isset($vimeo_exp[1])){
@@ -299,8 +280,8 @@ function hugeit_vp_ajax_callback(){
 					$vidid=end($vidid);
 					$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
 					$hash = unserialize($hash);
-					$video_image=$hash[0]['thumbnail_large'];
-					$video_title=$hash[0]['title'];
+					$video_image = esc_url($hash[0]['thumbnail_large']);
+					$video_title = esc_html($hash[0]['title']);
 					$type="vimeo";
 				}
 			}
@@ -313,16 +294,16 @@ function hugeit_vp_ajax_callback(){
 				die();
 			}
 		}
-		if($_POST['task']=="get_video_thumb_from_id"){
-			$video_id = $_POST['video_id'];
+		if($task == "get_video_thumb_from_id"){
+			$video_id = esc_html($_POST['video_id']);
 			$video_image="";
 			if($_POST['type']=="youtube"){
-				$video_image='http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg';
+				$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 			}
 			if($_POST['type']=="vimeo"){
 				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
 				$hash = unserialize($hash);
-				$video_image=$hash[0]['thumbnail_large'];
+				$video_image = esc_url($hash[0]['thumbnail_large']);
 			}
 			
 			if(isset($video_image)){
@@ -331,29 +312,26 @@ function hugeit_vp_ajax_callback(){
 			}
 		}
 		
-		if($_POST['task']=="change_video_link"){
+		if($task == "change_video_link"){
 			if(isset($_POST['type']) && !empty($_POST['type'])){
-				$type = $_POST['type'];
+				$type = sanitize_text_field($_POST['type']);
 			}
 			if(isset($_POST['link']) && !empty($_POST['link'])){
-				$link=$_POST['link'];
+				$link = esc_url($_POST['link']);
 			}
 			
 			if($type=="youtube"){
-				
 				$video_id =hugeit_vp_get_youtube_thumb_id_from_url($link);
 				if($video_id){
-					$video_image='http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg';
+					$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 				}
 				
 			}elseif($type=="vimeo"){
-				
 				$link_explode = explode( "/", $link);
-				$video_id=end($link_explode);
-				$hash=file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
+				$video_id = end($link_explode);
+				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
 				$hash = unserialize($hash);
-				$video_image=$hash[0]['thumbnail_large'];
-				
+				$video_image = esc_url($hash[0]['thumbnail_large']);
 			}
 			
 			if(isset($video_image) && !empty($video_image)){
@@ -372,7 +350,8 @@ function hugeit_vp_Options_styles()
     require_once("admin/video_player_Options_func.php");
     require_once("admin/video_player_Options_view.php");
     if (isset($_GET['task'])) {
-		if ($_GET['task'] == 'save') {
+        $task = sanitize_text_field($_GET['task']);
+		if ($task == 'save') {
 			if (!isset($_REQUEST['hugeit_vp_save_options']) || !wp_verify_nonce($_REQUEST['hugeit_vp_save_options'], 'save_options_')) {
 				wp_die('Security check failure.');
 			}
@@ -470,6 +449,8 @@ function hugeit_vp_activate()
 
 // create database tables
 
+    $collate = $wpdb->get_charset_collate();
+
     $sql_huge_it_video_params = "
 CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_params`(
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -478,7 +459,7 @@ CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_params`(
   `description` text CHARACTER SET utf8 NOT NULL,
   `value` varchar(200) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ";
+) AUTO_INCREMENT=8 {$collate}";
 
     $sql_huge_it_videos = "
 CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_videos` (
@@ -494,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_videos` (
   `published` tinyint(4) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5";
+) AUTO_INCREMENT=5 {$collate}";
 
     $sql_huge_it_video_players = "
 CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_players` (
@@ -513,7 +494,7 @@ CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "huge_it_video_players` (
   `ht_videos` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ";
+) AUTO_INCREMENT=2 {$collate}";
 
     $table_name = $wpdb->prefix . "huge_it_video_params";
     $sql_1 = <<<query1
@@ -597,7 +578,7 @@ INSERT INTO `$table_name` (`id`, `name`, `layout`, `width`, `album_single`, `ord
     }
     if (!$wpdb->get_var("select count(*) from " . $wpdb->prefix . "huge_it_videos")) {
       $wpdb->query($sql_2);
-      //$wpdb->query($sql_2_1);
+
       $wpdb->query($sql_2_2);
       $wpdb->query($sql_2_3);
     }

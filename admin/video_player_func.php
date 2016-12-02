@@ -8,7 +8,7 @@ function hugeit_vp_show_video_player() {
   global $wpdb;
 	
 	if(isset($_POST['search_events_by_title'])){
-	$search_tag=esc_html(stripslashes($_POST['search_events_by_title']));
+	$search_tag = esc_html(stripslashes($_POST['search_events_by_title']));
 	}
 	else {
 	$search_tag = '';
@@ -68,7 +68,7 @@ function hugeit_vp_edit_video_player($id) {
 	  global $wpdb;
 		if(isset($_GET["removeslide"])){
 			if($_GET["removeslide"] != ''){
-				$idfordelete = $_GET["removeslide"];
+				$idfordelete = absint($_GET["removeslide"]);
 				$wpdb->query($wpdb->prepare("DELETE FROM ".$wpdb->prefix."huge_it_videos  WHERE id = %d ", $idfordelete));
 			}
 		}
@@ -113,7 +113,7 @@ function hugeit_vp_edit_video_player($id) {
 	 $rowsposts8 = '';
 	 $postsbycat = '';
 	 if(isset($_POST["iframecatid"])){
-	 	  $query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."term_relationships where term_taxonomy_id = %d order by object_id ASC",$_POST["iframecatid"]);
+	 	  $query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."term_relationships where term_taxonomy_id = %d order by object_id ASC", sanitize_text_field($_POST["iframecatid"]));
 		$rowsposts8=$wpdb->get_results($query);
 
 		   foreach($rowsposts8 as $rowsposts13){
@@ -166,7 +166,7 @@ function hugeit_vp_video_player_video($id){
 	if(isset($_POST["show_video_url_1"]) or isset($_POST["show_video_url_2"])){
 		if($_POST["show_video_url_1"] != ''){
 			
-		$youtubeviminsert = $_POST["show_video_url_1"];
+		$youtubeviminsert = esc_url($_POST["show_video_url_1"]);
 		$youtubeinsert = explode("youtu", $youtubeviminsert);
 		$vimeoinsert = explode("vimeo", $youtubeviminsert);
 	
@@ -185,29 +185,29 @@ function hugeit_vp_video_player_video($id){
 			}
 		}
 		if(isset($youtubeinsert[1])){
-			$video_thumb_url=hugeit_vp_get_youtube_thumb_id_from_url($_POST["show_video_url_1"]);
+			$video_thumb_url = esc_html(hugeit_vp_get_youtube_thumb_id_from_url($_POST["show_video_url_1"]));
 			$sql_video = "INSERT INTO 
 			`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
-			( '".$_POST["show_title"]."', '".$id."', '".$_POST["show_video_url_1"]."', 'http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg', 'youtube', '0', '1' )";
+			( '".sanitize_text_field($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', 'http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg', 'youtube', '0', '1' )";
 		}else{
 			if(isset($vimeoinsert[1])){
-				$vidid = explode( "/", $_POST["show_video_url_1"]);
-				$vidid=end($vidid);
-				$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
+				$vidid = explode( "/", esc_url($_POST["show_video_url_1"]));
+				$vidid = end($vidid);
+				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
 				$hash = unserialize($hash);
-				$video_thumb_url=$hash[0]['thumbnail_large'];
+				$video_thumb_url = $hash[0]['thumbnail_large'];
 				if($_POST["show_title"]==""){
-					$title=$hash[0]['title'];
+					$title = $hash[0]['title'];
 				}else{
-					$title=$_POST["show_title"];
+					$title = esc_html($_POST["show_title"]);
 				}
 				$sql_video = "INSERT INTO 
 				`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
-				( '".$title."', '".$id."', '".$_POST["show_video_url_1"]."', '".$video_thumb_url."', 'vimeo', '0', '1' )";
+				( '".$title."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', '".$video_thumb_url."', 'vimeo', '0', '1' )";
 			}else{
 				$sql_video = "INSERT INTO 
 				`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
-				( '".$_POST["show_title"]."', '".$id."', '".$_POST["show_video_url_1"]."', '".$_POST["show_video_image_url"]."', 'video', '0', '1' )";
+				( '".esc_html($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', '".esc_url($_POST["show_video_image_url"])."', 'video', '0', '1' )";
 			}
 		}
 		$wpdb->query($sql_video);
@@ -248,23 +248,21 @@ function hugeit_vp_apply_cat($id){
 		 {
 			echo '';
 		 }
-//		 $cat_row=$wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_it_video_players WHERE id!= %d ", $id));
-//		 $max_ord=$wpdb->get_var('SELECT MAX(ordering) FROM '.$wpdb->prefix.'huge_it_video_players');
       
 	if(isset($_POST["content"])){
-	$script_cat = preg_replace('#<script(.*?)>(.*?)</script>#is', '', stripslashes($_POST["content"]));
+	$script_cat = preg_replace('#<script(.*?)>(.*?)</script>#is', '', esc_html(stripslashes($_POST["content"])));
 	}
-			if(isset($_POST["album_name"])){
+        if(isset($_POST["album_name"])){
 			if($_POST["album_name"] != ''){
 			
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  name = %s  WHERE id = %d ", $_POST["album_name"], $id));
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  album_single = %s  WHERE id = %d ", $_POST["album_single"], $id));
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  layout = %s  WHERE id = %d ", $_POST["album_playlist_layout"], $id));
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  width = %s  WHERE id = %d ", $_POST["album_width"], $id));
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  autoplay = %s  WHERE id = %d ", $_POST["album_autoplay"], $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  name = %s  WHERE id = %d ", esc_html($_POST["album_name"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  album_single = %s  WHERE id = %d ", esc_html($_POST["album_single"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  layout = %s  WHERE id = %d ", esc_html($_POST["album_playlist_layout"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  width = %s  WHERE id = %d ", absint($_POST["album_width"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  autoplay = %s  WHERE id = %d ", absint($_POST["album_autoplay"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  ordering = '1'  WHERE id = %d ", $id));
 			}
-			}
+        }
 		
 	$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_it_video_players WHERE id = %d", $id);
     $row=$wpdb->get_row($query);
@@ -275,13 +273,12 @@ function hugeit_vp_apply_cat($id){
     foreach ($rowim as $key=>$rowimages){
 		$rowimages_id = absint($rowimages->id);
 		if(isset($_POST["order_by_". $rowimages_id .""])){
-			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  ordering = %d  WHERE ID = %d ", $_POST["order_by_".$rowimages_id.""], $rowimages_id));
-			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  name = '%s'  WHERE ID = %d ", $_POST["titleimage".$rowimages_id.""], $rowimages_id));
-			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  video_url_1 = '%s'  WHERE ID = %d ", $_POST["for_video_1". $rowimages_id .""], $rowimages_id));
-			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  image_url = '%s'  WHERE ID = %d ", $_POST["imagess". $rowimages_id .""], $rowimages_id));
+			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  ordering = %d  WHERE ID = %d ", absint($_POST["order_by_".$rowimages_id.""]), $rowimages_id));
+			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  name = '%s'  WHERE ID = %d ", esc_html($_POST["titleimage".$rowimages_id.""]), $rowimages_id));
+			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  video_url_1 = '%s'  WHERE ID = %d ", esc_url($_POST["for_video_1". $rowimages_id .""]), $rowimages_id));
+			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  image_url = '%s'  WHERE ID = %d ", esc_url($_POST["imagess". $rowimages_id .""]), $rowimages_id));
 		}
 	}
-
 	if (isset($_POST['params'])) {
 		  $params = $_POST['params'];
 		  foreach ($params as $key => $value) {

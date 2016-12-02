@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-function hugeit_vp_showPublishedvideo_player_1($id)
+function hugeit_vp_show_published_video_player_1($id)
 {
 	global $wpdb;
 	$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_it_videos where video_player_id = '%d' order by ordering ASC",$id);

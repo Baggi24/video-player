@@ -1,3 +1,4 @@
+<?php wp_enqueue_style("admin_css", plugins_url("../style/admin.licensing.css", __FILE__), FALSE); ?>
 <div style="width:95%">
     <p>
         <?php _e( 'You are using the Lite version of the Google Maps for WordPress. If you want to get more awesome options,

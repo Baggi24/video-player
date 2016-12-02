@@ -1243,137 +1243,30 @@
 	}
 }
 
-/* Black Friday Sale */
+/*<<<<<<<<< Christmas Banner>>>>>>>>>>>>>>>*/
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i');
-
-.black-friday {
-	width: 100%;
-	min-height: 191px;
-	background-image: url(../img/back.png);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Open Sans', sans-serif;
-	flex-flow: row wrap;
-	padding: 10px;
-}
-
-.black-friday .image-block {
-	height: 190px;
-	width: 277px;
-	overflow: hidden;
-}
-
-.black-friday .image-block img {
-	max-width: 100%;
-}
-
-.black-friday .text-block {
-	max-width: 490px;
-	margin: 0 15px;
-}
-
-.black-friday .text-block .text-header {
-	padding: 8px 0;
-	border-bottom: 2px solid rgba(83, 83, 83, 0.4);
-}
-
-.black-friday .text-block .text-header p {
-	color: #fff;
-	font-size: 24px;
-}
-
-.black-friday .text-block .text-header p span {
-	height: 64px;
-	display: block;
-	float: left;
-	margin-right: 5px;
-}
-
-.black-friday .text-block .text-header p i {
-	color: #ffed27;
-	font-size: 30px;
-	font-weight: bold;
-}
-
-.black-friday .text-block .text-body {
-	color: #fff;
-	font-size: 16px;
-	padding-top: 10px;
-	line-height: 20px;
-}
-
-.black-friday  .button-block {
-	display: flex;
-	justify-content: flex-end;
-	margin-top: 76px;
-}
-
-.black-friday  .button-block a {
-	text-decoration: none;
-	color: #fff;
-	text-transform: uppercase;
-	font-size: 30px;
-	width: 230px;
-	height: 54px;
-	line-height: 54px;
-	text-align: center;
-	position: relative;
-	background-image: linear-gradient(to left,transparent 16px, #c41a2b 16px),linear-gradient(to bottom,transparent 16px, #c41a2b 16px);
-	background-size: calc(100% + 16px) 100%,17px calc(100% + 16px);
-	background-position: 100% 0,100% 0;
-	background-repeat: no-repeat;
-	transition: all 0.3s linear;
-}
-
-.black-friday  .button-block a:before {
-	content: "";
-	width: 16px;
-	height: 16px;
-	top: 0;
-	right: 0;
-	position: absolute;
-	display: block;
-	background-image: linear-gradient(225deg, transparent 48%, #fff 50%);
-	transition: all 0.3s linear;
-}
-
-.black-friday  .button-block a:after {
-	content: "";
-	width: 16px;
-	height: 16px;
-	top: 16px;
-	right: 0;
-	position: absolute;
-	display: block;
-	background-image: linear-gradient(45deg, transparent 50%,rgba(0,0,0,.17) 50%);
-	transition: all 0.3s linear;
-
-}
-
-.black-friday  .button-block a:hover {
-	background-position: calc(100% + 16px) 0,100% -16px;
-}
-
-.black-friday  .button-block a:hover:before,
-.black-friday  .button-block a:hover:after{
-	width: 0;
-	height: 0;
-}
-
-/*<<<<<<<<<backend-banner>>>>>>>>>>>>>>>*/
-
-.backend-banner {
+.backend-christmas-banner {
 	width: 100%;
 	min-height: 122px;
 	background-color: #161616;
 	margin-top: 20px;
 	display: flex;
 	justify-content: center;
+	position: relative;
 }
 
-.banner-block {
+.backend-christmas-banner .close_christmas {
+	width: 21px;
+	height: 21px;
+	display: block;
+	position: absolute;
+	background-image: url(../images/backend.png);
+	background-position: -22px -454px;
+	right: 20px;
+	top: 20px;
+}
+
+.backend-christmas-banner  .banner-block {
 	width: 100%;
 	height: 100%;
 	max-width: 1366px;
@@ -1382,62 +1275,65 @@
 	padding: 10px 0;
 }
 
-.backend-banner .close_black_friday {
-	width: 21px;
-	height: 21px;
-	display: block;
-	position: relative;
-	background-image: url(../images/backend.png);
-	background-position: -22px -454px;
-	left: 145px;
-	top: 10px;
-}
-
-.banner-block .image-block {
+.backend-christmas-banner  .banner-block .image-block {
 	min-width: 263px;
 	height: 122px;
 	background-image: url(../images/backend.png);
-	background-position: 0px 7px;
+	background-position: -78px -589px;
 	background-repeat: no-repeat;
 }
 
-.banner-block .image-block a {
-    width: 100%;
-    height: 100%;
-    display: block;
+..backend-christmas-banner  banner-block .image-block a {
+	width: 100%;
+	height: 100%;
+	display: block;
 }
 
-.banner-block .text-block {
-    color: #838383;
-    font-size: 18px;
-    line-height: 25px;
-    text-align: center;
-    width: calc(80% - 30px);
-    padding: 0 15px;
+.backend-christmas-banner  .banner-block .text-block {
+	color: #bec0c3;
+	font-size: 16px;
+	line-height: 25px;
+	text-align: center;
+	width: calc(70% - 30px);
+	padding: 0 15px;
 }
 
-.banner-block .text-block a {
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-    color: #838383;
+.backend-christmas-banner  .banner-block .text-block a {
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
+	color: #bec0c3;
 }
 
-.banner-block .text-block span {
+.backend-christmas-banner  .banner-block .text-block span {
 	font-size: 28px;
 	color: #f7e127;
 }
 
-.banner-block .text-block span strong {
+.backend-christmas-banner  .banner-block .text-block button {
+	height: 35px;
+	border: none;
+	border-radius: 35px;
+	background-color: #33a00a;
+	font-size: 16px;
+	color: #fff;
+	padding: 0 25px;
+	margin-top: 10px;
+}
+
+.backend-christmas-banner .banner-block .text-block span strong {
 	font-weight: bold;
 }
 
-.banner-block .share-block {
+.backend-christmas-banner .banner-block .share-block {
 	min-width: 200px;
-	height: 100%
+	height: 100%;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
 }
 
-.banner-block .share-block span{
+.backend-christmas-banner .banner-block .share-block span{
 	color: #838383;
 	font-size: 16px;
 	padding-bottom: 14px;
@@ -1445,12 +1341,12 @@
 	padding-top: 10px;
 }
 
-.banner-block .share-block ul li{
+.backend-christmas-banner .banner-block .share-block ul li{
 	float: left;
 	margin-right: 7px;
 }
 
-.banner-block .share-block ul a{
+.backend-christmas-banner .banner-block .share-block ul a{
 	width: 41px;
 	height: 41px;
 	border: 1px solid #fff;
@@ -1459,26 +1355,56 @@
 	background-image: url(../images/backend.png);
 }
 
-.banner-block .share-block ul a.facebook {
+.backend-christmas-banner .banner-block .share-block ul a.facebook {
 	background-position: -4px -306px;
 }
 
-.banner-block .share-block ul a.twitter {
+.backend-christmas-banner .banner-block .share-block ul a.facebook:hover {
+	background-color: #3b5998;
+}
+
+.backend-christmas-banner .banner-block .share-block ul a.twitter {
 	background-position: -10px -378px;
 }
 
-.banner-block .share-block ul a.google {
+.backend-christmas-banner .banner-block .share-block ul a.twitter:hover {
+	background-color: #55acee;
+}
+
+.backend-christmas-banner .banner-block .share-block ul a.google {
 	background-position: -10px -193px;
 }
 
-.banner-block .share-block ul a.youtube {
-	background-position: -9px -241px;
+.backend-christmas-banner .banner-block .share-block ul a.google:hover {
+	background-color: #d83a3c;
+}
+
+.backend-christmas-banner .banner-block .share-block ul a.youtube {
+	background-position: -6px -247px;
+}
+
+.backend-christmas-banner .banner-block .share-block ul a.youtube:hover {
+	background-color: #c8302a;
 }
 
 
 @media screen and (max-width: 820px) {
-	.banner-block {
+	.backend-christmas-banner  .banner-block {
 		flex-flow: row wrap;
 		justify-content: center;
 	}
+
+	.backend-christmas-banner .banner-block .text-block {
+		margin: 20px 0;
+		width: 90%;
+	}
+
+	.backend-christmas-banner .banner-block .share-block span {
+		margin-right: 10px;
+	}
+}
+
+.backend-christmas-banner .text-block p {
+	line-height: normal;
+	font-size: 16px;
 }

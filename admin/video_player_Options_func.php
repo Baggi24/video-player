@@ -33,7 +33,7 @@ function hugeit_vp_save_styles_options()
       $params = $_POST['params'];
       foreach ($params as $key => $value) {
           $wpdb->update($wpdb->prefix . 'huge_it_video_params',
-              array('value' => $value),
+              array('value' => sanitize_text_field($value)),
               array('name' => $key),
               array('%s')
           );
