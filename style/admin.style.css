@@ -1275,7 +1275,7 @@
 	padding: 10px 0;
 }
 
-.backend-christmas-banner  .banner-block .image-block {
+.backend-christmas-banner .banner-block .image-block {
 	min-width: 263px;
 	height: 122px;
 	background-image: url(../images/backend.png);
@@ -1283,7 +1283,7 @@
 	background-repeat: no-repeat;
 }
 
-..backend-christmas-banner  banner-block .image-block a {
+.backend-christmas-banner .banner-block .image-block a {
 	width: 100%;
 	height: 100%;
 	display: block;

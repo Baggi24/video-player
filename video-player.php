@@ -95,7 +95,7 @@ function hugeit_vp_images_list_shotrcode($atts)
 
     wp_enqueue_media();
     wp_enqueue_style("font-awesome",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
-    wp_enqueue_script("froogaloop");
+    wp_enqueue_script("froogaloop",plugins_url("froogaloop.min.js", __FILE__), FALSE);
 
     return hugeit_vp_images_list($atts['id']);
 }
@@ -112,13 +112,6 @@ function hugeit_vp_images_list($id) {
     $id = absint($id);
     return hugeit_vp_show_published_video_player_1($id);
 }
-
-function hugeit_vp_frontend_scripts_and_styles() {
-	wp_enqueue_media();
-	wp_enqueue_style("iconfonts",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
-	wp_enqueue_script("froogaloop",plugins_url("froogaloop.min.js", __FILE__), FALSE);
-}
-add_action('wp_enqueue_scripts', 'hugeit_vp_frontend_scripts_and_styles');
 
 add_action('admin_menu', 'hugeit_vp_options_panel');
 function hugeit_vp_options_panel()
@@ -349,15 +342,6 @@ function hugeit_vp_Options_styles()
 {
     require_once("admin/video_player_Options_func.php");
     require_once("admin/video_player_Options_view.php");
-    if (isset($_GET['task'])) {
-        $task = sanitize_text_field($_GET['task']);
-		if ($task == 'save') {
-			if (!isset($_REQUEST['hugeit_vp_save_options']) || !wp_verify_nonce($_REQUEST['hugeit_vp_save_options'], 'save_options_')) {
-				wp_die('Security check failure.');
-			}
-			hugeit_vp_save_styles_options();
-		}
-	}
     hugeit_vp_showStyles();
 }
 /**

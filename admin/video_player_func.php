@@ -279,18 +279,7 @@ function hugeit_vp_apply_cat($id){
 			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  image_url = '%s'  WHERE ID = %d ", esc_url($_POST["imagess". $rowimages_id .""]), $rowimages_id));
 		}
 	}
-	if (isset($_POST['params'])) {
-		  $params = $_POST['params'];
-		  foreach ($params as $key => $value) {
-          $wpdb->update($wpdb->prefix . 'huge_it_video_params',
-              array('value' => $value),
-              array('name' => $key),
-              array('%s')
-          );
-      }
-    }
-	   
-	   if(isset($_POST["imagess"])){
+    if(isset($_POST["imagess"])){
 	   if($_POST["imagess"] != ''){
 				   		   $query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_it_videos where video_player_id = %d order by id ASC", $row->id);
 			   $rowim=$wpdb->get_results($query);
@@ -310,11 +299,11 @@ INSERT INTO
 
       $wpdb->query($sql_2);
 		}
-	   }
-	   }
+        }
+    }
 	   
 	if(isset($_POST["posthuge-it-description-length"])){
-	 $wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  published = %d WHERE id = %d ", $_POST["posthuge-it-description-length"], $_GET['id']));
+	 $wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  published = %d WHERE id = %d ", absint($_POST["posthuge-it-description-length"]), absint($_GET['id'])));
 	}
 	?>
 	<div class="updated"><p><strong><?php _e('Item Saved'); ?></strong></p></div>
