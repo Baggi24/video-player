@@ -89,7 +89,6 @@ function hugeit_vp_edit_video_player($id) {
 			`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `video_width`, `ordering`, `published`) VALUES
 			( '', '".$row->id."', '', '', '', 'par_TV', 2, '1' )";
 
-			$wpdb->query($sql_huge_it_videos);
 			$wpdb->query($sql_2);
 	   		}
 	   }
@@ -140,7 +139,6 @@ INSERT INTO
 `" . $table_name . "` ( `name`, `album_single`, `layout`, `width`, `ordering`, `align`, `margin_top`, `margin_bottom`, `autoplay`, `preload`, `published`, `ht_videos`) VALUES
 ( 'New Video Album', 'single', 'right', '640', '1', 'left', '0', '0', '0', '0', '300', '1')";
 
-    $wpdb->query($sql_huge_it_video_players);
     $wpdb->query($sql_2);
 
    $query="SELECT * FROM ".$wpdb->prefix."huge_it_video_players order by id ASC";
@@ -197,7 +195,7 @@ function hugeit_vp_video_player_video($id){
 				$hash = unserialize($hash);
 				$video_thumb_url = $hash[0]['thumbnail_large'];
 				if($_POST["show_title"]==""){
-					$title = $hash[0]['title'];
+					$title = esc_sql($hash[0]['title']);
 				}else{
 					$title = esc_html($_POST["show_title"]);
 				}
