@@ -10,44 +10,44 @@
     <div class="video-player">
         <div class="video-block">
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon player-advanced"></span>
                     <span class="text">Player’s Advanced Styling</span>
                 </a>
             </div>
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon video-resizer"></span>
                     <span class="text">Video Resizer Settings</span>
                 </a>
             </div>
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon advanced-color"></span>
                     <span class="text">Advanced Color Styling</span>
                 </a>
             </div>
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon playlist"></span>
                     <span class="text">Playlist Full Customization</span>
                 </a>
             </div>
 
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon youtube"></span>
                     <span class="text">Advanced Youtube Options</span>
                 </a>
             </div>
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon vimeo"></span>
                     <span class="text">Advanced Vimeo Options</span>
                 </a>
             </div>
             <div class="licens">
-                <a href="http://huge-it.com/video-player/">
+                <a target="_blank" href="http://huge-it.com/video-player/">
                     <span class="icon advanced"></span>
                     <span class="text">advanced customization</span>
                 </a>

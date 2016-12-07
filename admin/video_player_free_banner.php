@@ -23,10 +23,10 @@
 <div class="backend-christmas-banner" <?php if( isset($_COOKIE['videoPlayerChristmas']) && $_COOKIE['videoPlayerChristmas'] == "no" ) echo 'style="display:none"'; ?>>
     <div class="banner-block">
         <div class="image-block">
-            <a target="_blank" href="http://huge-it.com/video-player/">
+            <a target="_blank" href="http://huge-it.com/">
         </div>
         <div class="text-block">
-            <a target="_blank" href="http://huge-it.com/video-player/">
+            <a target="_blank" href="http://huge-it.com/">
                 <p>Upgrade your plugin and get Developer's License for 13 WordPress plugins worth <span>$760 for <strong>$149</strong> </span>
                     Plus, we add 12 months of FREE support and updates. The deal is available for a limited time only.</p>
                 <button>Get Sale Now</button>

@@ -87,9 +87,8 @@ function hugeit_vp_edit_video_player($id) {
 				$sql_2 = "
 			INSERT INTO 		
 			`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `video_width`, `ordering`, `published`) VALUES
-			( '', '".$row->id."', '', '', '', 'par_TV', 2, '1' )";
+			( '', '". absint($row->id)."', '', '', '', 'par_TV', 2, '1' )";
 
-			$wpdb->query($sql_huge_it_videos);
 			$wpdb->query($sql_2);
 	   		}
 	   }
@@ -140,7 +139,6 @@ INSERT INTO
 `" . $table_name . "` ( `name`, `album_single`, `layout`, `width`, `ordering`, `align`, `margin_top`, `margin_bottom`, `autoplay`, `preload`, `published`, `ht_videos`) VALUES
 ( 'New Video Album', 'single', 'right', '640', '1', 'left', '0', '0', '0', '0', '300', '1')";
 
-    $wpdb->query($sql_huge_it_video_players);
     $wpdb->query($sql_2);
 
    $query="SELECT * FROM ".$wpdb->prefix."huge_it_video_players order by id ASC";
@@ -163,6 +161,7 @@ INSERT INTO
 
 function hugeit_vp_video_player_video($id){
 	global $wpdb;
+	$id = absint($id);
 	if(isset($_POST["show_video_url_1"]) or isset($_POST["show_video_url_2"])){
 		if($_POST["show_video_url_1"] != ''){
 			
@@ -185,7 +184,7 @@ function hugeit_vp_video_player_video($id){
 			}
 		}
 		if(isset($youtubeinsert[1])){
-			$video_thumb_url = esc_html(hugeit_vp_get_youtube_thumb_id_from_url($_POST["show_video_url_1"]));
+			$video_thumb_url = sanitize_text_field(hugeit_vp_get_youtube_thumb_id_from_url($_POST["show_video_url_1"]));
 			$sql_video = "INSERT INTO 
 			`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
 			( '".sanitize_text_field($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', 'http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg', 'youtube', '0', '1' )";
@@ -195,11 +194,11 @@ function hugeit_vp_video_player_video($id){
 				$vidid = end($vidid);
 				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
 				$hash = unserialize($hash);
-				$video_thumb_url = $hash[0]['thumbnail_large'];
+				$video_thumb_url = esc_url($hash[0]['thumbnail_large']);
 				if($_POST["show_title"]==""){
-					$title = $hash[0]['title'];
+					$title = esc_sql($hash[0]['title']);
 				}else{
-					$title = esc_html($_POST["show_title"]);
+					$title = sanitize_text_field($_POST["show_title"]);
 				}
 				$sql_video = "INSERT INTO 
 				`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
@@ -207,7 +206,7 @@ function hugeit_vp_video_player_video($id){
 			}else{
 				$sql_video = "INSERT INTO 
 				`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
-				( '".esc_html($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', '".esc_url($_POST["show_video_image_url"])."', 'video', '0', '1' )";
+				( '".sanitize_text_field($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', '".esc_url($_POST["show_video_image_url"])."', 'video', '0', '1' )";
 			}
 		}
 		$wpdb->query($sql_video);
@@ -238,6 +237,7 @@ function hugeit_vp_remove_video_player($id){
 }
 
 function hugeit_vp_apply_cat($id){
+        $id = absint($id);
 
 		 global $wpdb;
 		 if(!is_numeric($id)){
@@ -250,14 +250,14 @@ function hugeit_vp_apply_cat($id){
 		 }
       
 	if(isset($_POST["content"])){
-	$script_cat = preg_replace('#<script(.*?)>(.*?)</script>#is', '', esc_html(stripslashes($_POST["content"])));
+	$script_cat = preg_replace('#<script(.*?)>(.*?)</script>#is', '', sanitize_text_field(stripslashes($_POST["content"])));
 	}
         if(isset($_POST["album_name"])){
 			if($_POST["album_name"] != ''){
 			
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  name = %s  WHERE id = %d ", esc_html($_POST["album_name"]), $id));
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  album_single = %s  WHERE id = %d ", esc_html($_POST["album_single"]), $id));
-	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  layout = %s  WHERE id = %d ", esc_html($_POST["album_playlist_layout"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  name = %s  WHERE id = %d ", sanitize_text_field($_POST["album_name"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  album_single = %s  WHERE id = %d ", sanitize_text_field($_POST["album_single"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  layout = %s  WHERE id = %d ", sanitize_text_field($_POST["album_playlist_layout"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  width = %s  WHERE id = %d ", absint($_POST["album_width"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  autoplay = %s  WHERE id = %d ", absint($_POST["album_autoplay"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  ordering = '1'  WHERE id = %d ", $id));
@@ -274,7 +274,7 @@ function hugeit_vp_apply_cat($id){
 		$rowimages_id = absint($rowimages->id);
 		if(isset($_POST["order_by_". $rowimages_id .""])){
 			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  ordering = %d  WHERE ID = %d ", absint($_POST["order_by_".$rowimages_id.""]), $rowimages_id));
-			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  name = '%s'  WHERE ID = %d ", esc_html($_POST["titleimage".$rowimages_id.""]), $rowimages_id));
+			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  name = '%s'  WHERE ID = %d ", sanitize_text_field($_POST["titleimage".$rowimages_id.""]), $rowimages_id));
 			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  video_url_1 = '%s'  WHERE ID = %d ", esc_url($_POST["for_video_1". $rowimages_id .""]), $rowimages_id));
 			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_videos SET  image_url = '%s'  WHERE ID = %d ", esc_url($_POST["imagess". $rowimages_id .""]), $rowimages_id));
 		}
@@ -295,7 +295,7 @@ function hugeit_vp_apply_cat($id){
     $sql_2 = "
 INSERT INTO 
 `" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `video_url_2`, `sl_type`, `ordering`, `published`) VALUES
-( '', '".$row->id."', '".$imagesnewupload."', '', '', 'video', '0', '1' )";
+( '', '".absint($row->id)."', '".$imagesnewupload."', '', '', 'video', '0', '1' )";
 
       $wpdb->query($sql_2);
 		}

@@ -17,7 +17,7 @@
 	height: 115px;
 	background-color: #c30000;
 	border-radius: 3px;
-	background-image: url(../img/sprite.png);
+	background-image: url(../images/sprite.png);
 	background-position: 8px 0px;
 	position: relative;
 	margin: 0 7px;
@@ -37,7 +37,7 @@
 }
 
 .video-player .video-block .licens .icon {
-	background-image: url(../img/sprite.png);
+	background-image: url(../images/sprite.png);
 }
 
 .video-player .video-block .licens .text {
