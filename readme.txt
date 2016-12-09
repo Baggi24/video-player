@@ -3,8 +3,8 @@ Contributors: Huge-IT
 Donate link: http://huge-it.com/video-player/
 Tags: video, video player, player, youtube videos, playlists, Video Player plugin, myvideo, playlist, video playlist, video plugin, videos, youtube player,
 Requires at least: 3.0.1
-Tested up to: 4.5.3
-Stable tag: 1.1.8
+Tested up to: 4.7
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,9 @@ Video Player - Inserting video player on a page is a perfect way to supplement w
 * [Wordpress Video Player](http://huge-it.com/video-player/)
 * [Demo Video Player](http://huge-it.com/wordpress-plugins-video-player-demo/)
 * [FAQ Video Player](http://huge-it.com/wordpress-video-player-faq/)
-* [User Video Player Manual](http://huge-it.com/wordpress-video-player-user-manual/)
+* [Video Player User Manual](http://huge-it.com/wordpress-video-player-user-manual/)
+* [Video Player Support](http://huge-it.com/contact-us/)
+* [Video Player Github Project](https://github.com/Huge-IT/video-player)
 
 Inserting video on a page is a perfect way to supplement website with media content and expand the user’s interest in your site. 
 Huge-IT Video Player is extremely necessary video tool for your sites, which provides a wide range of different file formats. One of them is uploading your own video file, as well as video from some custom url, and also famous video sources like YouTube and Vimeo.In Video Player Simply insert the link, and add thumbnail image. Due to our Video Player you can quickly and easily view your favorite videos. 
@@ -73,6 +75,18 @@ Now you can set your Video Player options, images and use our Video Player.
 3.  [WordPress Video Player Demo 3 Full width Album](http://huge-it.com/wordpress-video-player-demo-3-full-width-album/)
 
 == Changelog ==
+
+= 1.2.0 =
+* 1) Changed function names, defines and classnames to have unique prefixes
+* 2) Fixed the issue with direct file access to plugin files
+* 3) Made further code optimization in order to meet required WordPress coding standards
+* 4) Added nonces for all _POST, _GET requests
+* 5) Removed unused code and comments
+* 6) Added validation and sanitation
+* 7) Made major bug fixing
+* 8) Solved issue with "forcing php sessions on all pages" 
+* 9) Solved issue with calling files remotely (js,css)"
+* 10) Fixed the playing sound in the background when paused
 
 = 1.1.8 =
 * 1) We have fixed the bug with auto-play that had been reported by a user in the last support forum post. 
