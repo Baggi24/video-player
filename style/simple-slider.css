@@ -1,3 +1,10 @@
+
+/*
+ * Copyright (c) 2012 James Smith (http://loopj.com)
+ *
+ * Licensed under the MIT license (http://mit-license.org/)
+*/
+
 .options-block .slider {
 	width:60%;
 	margin-top:8px;
@@ -30,7 +37,6 @@
   background: -webkit-linear-gradient(top, #0074a2, #0074a2);
 }
 
-
 .slider > .track, .slider > .highlight-track {
   background: #ccc;
   background: -webkit-linear-gradient(top, #bbb, #ddd);
@@ -57,4 +63,3 @@
 	
 	border-color: #2ea2cc;
 }
-

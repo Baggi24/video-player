@@ -10,19 +10,14 @@
  */
 
 var jscolor = {
-
-
 	dir : '', // location of jscolor directory (leave empty to autodetect)
 	bindClass : 'color', // class name
 	binding : true, // automatic binding via <input class="...">
 	preloading : true, // use image preloading?
 
-
 	install : function() {
 		jscolor.addEvent(window, 'load', jscolor.init);
 	},
-
-
 	init : function() {
 		if(jscolor.binding) {
 			jscolor.bind();
@@ -32,7 +27,6 @@ var jscolor = {
 		}
 	},
 
-
 	getDir : function() {
 		if(!jscolor.dir) {
 			var detected = jscolor.detectDir();
@@ -40,7 +34,6 @@ var jscolor = {
 		}
 		return jscolor.dir;
 	},
-
 
 	detectDir : function() {
 		var base = location.href;
@@ -64,7 +57,6 @@ var jscolor = {
 		return false;
 	},
 
-
 	bind : function() {
 		var matchClass = new RegExp('(^|\\s)('+jscolor.bindClass+')\\s*(\\{[^}]*\\})?', 'i');
 		var e = document.getElementsByTagName('input');
@@ -82,7 +74,6 @@ var jscolor = {
 		}
 	},
 
-
 	preload : function() {
 		for(var fn in jscolor.imgRequire) {
 			if(jscolor.imgRequire.hasOwnProperty(fn)) {
@@ -99,7 +90,6 @@ var jscolor = {
 		arrow : [ 7, 11 ]
 	},
 
-
 	imgRequire : {},
 	imgLoaded : {},
 
@@ -108,7 +98,6 @@ var jscolor = {
 		jscolor.imgRequire[filename] = true;
 	},
 
-
 	loadImage : function(filename) {
 		if(!jscolor.imgLoaded[filename]) {
 			jscolor.imgLoaded[filename] = new Image();
@@ -116,11 +105,9 @@ var jscolor = {
 		}
 	},
 
-
 	fetchElement : function(mixed) {
 		return typeof mixed === 'string' ? document.getElementById(mixed) : mixed;
 	},
-
 
 	addEvent : function(el, evnt, func) {
 		if(el.addEventListener) {
@@ -129,7 +116,6 @@ var jscolor = {
 			el.attachEvent('on'+evnt, func);
 		}
 	},
-
 
 	fireEvent : function(el, evnt) {
 		if(!el) {
@@ -146,7 +132,6 @@ var jscolor = {
 			el['on'+evnt]();
 		}
 	},
-
 
 	getElementPos : function(e) {
 		var e1=e, e2=e;
@@ -316,14 +301,12 @@ var jscolor = {
 
 	},
 
-
 	/*
 	 * Usage example:
 	 * var myColor = new jscolor.color(myInputElement)
 	 */
 
 	color : function(target, prop) {
-
 
 		this.required = true; // refuse empty values?
 		this.adjust = true; // adjust value to uniform notation?
@@ -352,13 +335,11 @@ var jscolor = {
 		this.pickerInsetColor = 'ThreeDShadow ThreeDHighlight ThreeDHighlight ThreeDShadow'; // CSS color
 		this.pickerZIndex = 10000;
 
-
 		for(var p in prop) {
 			if(prop.hasOwnProperty(p)) {
 				this[p] = prop[p];
 			}
 		}
-
 
 		this.hidePicker = function() {
 			if(isPickerOwner()) {
@@ -383,7 +364,6 @@ var jscolor = {
 				}
 				var l = (ts[b]+ps[b])/2;
 
-				// picker pos
 				if (!this.pickerSmartPosition) {
 					var pp = [
 						tp[a],
@@ -402,7 +382,6 @@ var jscolor = {
 				drawPicker(pp[a], pp[b]);
 			}
 		};
-
 
 		this.importColor = function() {
 			if(!valueElement) {
@@ -794,7 +773,6 @@ var jscolor = {
 			}
 		}
 
-
 		function redrawSld() {
 			// redraw the slider pointer
 			switch(modeID) {
@@ -806,11 +784,9 @@ var jscolor = {
 				'0 ' + (THIS.pickerFace+THIS.pickerInset+y - Math.floor(jscolor.images.arrow[1]/2)) + 'px';
 		}
 
-
 		function isPickerOwner() {
 			return jscolor.picker && jscolor.picker.owner === THIS;
 		}
-
 
 		function blurTarget() {
 			if(valueElement === target) {
@@ -821,13 +797,11 @@ var jscolor = {
 			}
 		}
 
-
 		function blurValue() {
 			if(valueElement !== target) {
 				THIS.importColor();
 			}
 		}
-
 
 		function setPad(e) {
 			var mpos = jscolor.getRelMousePos(e);
@@ -839,7 +813,6 @@ var jscolor = {
 			}
 		}
 
-
 		function setSld(e) {
 			var mpos = jscolor.getRelMousePos(e);
 			var y = mpos.y - THIS.pickerFace - THIS.pickerInset;
@@ -848,7 +821,6 @@ var jscolor = {
 				case 1: THIS.fromHSV(null, 1 - y/(jscolor.images.sld[1]-1), null, leavePad); break;
 			}
 		}
-
 
 		function dispatchImmediateChange() {
 			if (THIS.onImmediateChange) {
@@ -859,7 +831,6 @@ var jscolor = {
 				}
 			}
 		}
-
 
 		var THIS = this;
 		var modeID = this.pickerMode.toLowerCase()==='hvs' ? 1 : 0;
@@ -920,6 +891,5 @@ var jscolor = {
 	}
 
 };
-
 
 jscolor.install();

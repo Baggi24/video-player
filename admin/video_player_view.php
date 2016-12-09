@@ -1,16 +1,14 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
-	global $wpdb;
+function hugeit_vp_html_show_video_players($rows, $pageNav, $sort, $cat_row){
 	?>
     <script language="javascript">
 		function ordering(name,as_or_desc)
 		{
-			document.getElementById('asc_or_desc').value=as_or_desc;		
+			document.getElementById('asc_or_desc').value=as_or_desc;
 			document.getElementById('order_by').value=name;
 			document.getElementById('admin_form').submit();
 		}
@@ -18,17 +16,16 @@ function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
 		{
 			document.getElementById('saveorder').value="save";
 			document.getElementById('admin_form').submit();
-			
+
 		}
 		function listItemTask(this_id,replace_id)
 		{
 			document.getElementById('oreder_move').value=this_id+","+replace_id;
 			document.getElementById('admin_form').submit();
 		}
-		function doNothing() {  
+		function doNothing() {
 			var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
 			if( keyCode == 13 ) {
-
 
 				if(!e) var e = window.event;
 
@@ -45,23 +42,17 @@ function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
 
 <div class="wrap">
         <?php $path_site2 = plugins_url("../images", __FILE__); ?>
-	<div class="free_version_banner">
-		<img class="manual_icon" src="<?php echo $path_site2; ?>/icon-user-manual.png" alt="user manual" />
-		<p class="usermanual_text">If you have any difficulties in using the options, Follow the link to <a href="http://huge-it.com/wordpress-video-player-user-manual/" target="_blank">User Manual</a></p>
-		<a class="get_full_version" href="http://huge-it.com/video-player/" target="_blank">GET THE FULL VERSION</a>
-		<a href="http://huge-it.com" class="gotohuge" target="_blank"><img class="huge_it_logo" src="<?php echo $path_site2; ?>/Huge-It-logo.png"/></a>
-		<div style="clear: both;"></div>
-		<div  class="description_text"><p>This is the LITE version of the plugin. Click "GET THE FULL VERSION" for more advanced options.   We appreciate every customer.</p></div>
-	</div>
+	<?php include 'video_player_free_banner.php'; ?>
 	<div id="poststuff">
 		<div id="video_players-list-page">
-			<form method="post"  onkeypress="doNothing()" action="admin.php?page=video_players_huge_it_video_player" id="admin_form" name="admin_form">
+			<form method="post"  onkeypress="doNothing()" action="admin.php?page=hugeit_vp_video_player" id="admin_form" name="admin_form">
+				<?php $url_add_new = wp_nonce_url('admin.php?page=hugeit_vp_video_player&task=add_cat', 'hugeit_vp_add_new_', 'hugeit_vp_add_cat_data'); ?>
 			<h2>Huge-IT Video Albums
-				<a onclick="window.location.href='admin.php?page=video_players_huge_it_video_player&task=add_cat'" class="add-new-h2" >Add New Video Album</a>
+				<a onclick="window.location.href='<?php echo $url_add_new; ?>'" class="add-new-h2" >Add New Video Album</a>
 			</h2>
 			<?php
 			$serch_value='';
-			if(isset($_POST['serch_or_not'])) {if($_POST['serch_or_not']=="search"){ $serch_value=esc_html(stripslashes($_POST['search_events_by_title'])); }else{$serch_value="";}} 
+			if(isset($_POST['serch_or_not'])) {if($_POST['serch_or_not']=="search"){ $serch_value=esc_html(stripslashes($_POST['search_events_by_title'])); }else{$serch_value="";}}
 			$serch_fields='<div class="alignleft actions"">
 				<label for="search_events_by_title" style="font-size:14px">Filter: </label>
 					<input type="text" name="search_events_by_title" value="'.$serch_value.'" id="search_events_by_title" onchange="clear_serch_texts()">
@@ -69,10 +60,9 @@ function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
 			<div class="alignleft actions">
 				<input type="button" value="Search" onclick="document.getElementById(\'page_number\').value=\'1\'; document.getElementById(\'serch_or_not\').value=\'search\';
 				 document.getElementById(\'admin_form\').submit();" class="button-secondary action">
-				 <input type="button" value="Reset" onclick="window.location.href=\'admin.php?page=video_players_huge_it_video_player\'" class="button-secondary action">
+				 <input type="button" value="Reset" onclick="window.location.href=\'admin.php?page=hugeit_vp_video_player\'" class="button-secondary action">
 			</div>';
 
-		
 			?>
 			<table class="wp-list-table widefat fixed pages" style="width:95%">
 				<thead>
@@ -84,28 +74,27 @@ function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
 				 </tr>
 				</thead>
 				<tbody>
-				 <?php 
+				 <?php
 				 $trcount=1;
 				  for($i=0; $i<count($rows);$i++){
 					$trcount++;
-					$ka0=0;
-					$ka1=0;
 
-
-					$uncat=$rows[$i]->par_name;
+					  $uncat=$rows[$i]->par_name;
 					if(isset($rows[$i]->prod_count))
 						$pr_count=$rows[$i]->prod_count;
 					else
 						$pr_count=0;
-
-
 					?>
 					<tr <?php if($trcount%2==0){ echo 'class="has-background"';}?>>
-						<td><?php echo $rows[$i]->id; ?></td>
-						<td><a  href="admin.php?page=video_players_huge_it_video_player&task=edit_cat&id=<?php echo $rows[$i]->id?>"><?php echo esc_html(stripslashes($rows[$i]->name)); ?></a></td>
+						<td><?php
+							$id = absint($rows[$i]->id);
+							echo $id; ?></td>
+						<?php $url_edit =  wp_nonce_url('admin.php?page=hugeit_vp_video_player&task=edit_cat&id=' . $id, 'edit_cat_' . $id, 'hugeit_vp_edit_cat'); ?>
+						<td><a href="<?php echo $url_edit; ?>"><?php echo esc_html(stripslashes($rows[$i]->name)); ?></a></td>
 						<td>(<?php if(!($pr_count)){echo '0';} else{ echo $rows[$i]->prod_count;} ?>)</td>
-						<td><a  href="admin.php?page=video_players_huge_it_video_player&task=remove_cat&id=<?php echo $rows[$i]->id?>">Delete</a></td>
-					</tr> 
+						<?php $url_del = wp_nonce_url('admin.php?page=hugeit_vp_video_player&task=remove_cat&id=' . $id, 'remove_cat_' .$id, 'hugeit_vp_remove_cat'); ?>
+						<td><a  href="<?php echo $url_del; ?>">Delete</a></td>
+					</tr>
 				 <?php } ?>
 				</tbody>
 			</table>
@@ -113,55 +102,40 @@ function html_showvideo_players( $rows,  $pageNav,$sort,$cat_row){
 			 <input type="hidden" name="asc_or_desc" id="asc_or_desc" value="<?php if(isset($_POST['asc_or_desc'])) echo esc_attr($_POST['asc_or_desc']);?>"  />
 			 <input type="hidden" name="order_by" id="order_by" value="<?php if(isset($_POST['order_by'])) echo esc_attr($_POST['order_by']);?>"  />
 			 <input type="hidden" name="saveorder" id="saveorder" value="" />
-
-			 <?php
-			?>
-			
-			
-		   
 			</form>
 		</div>
 	</div>
 </div>
     <?php
-
 }
-function Html_editvideo_player($ord_elem,$row,$cat_row, $rowim, $rowsld, $paramssld, $rowsposts, $rowsposts8, $postsbycat)
-
-{
- global $wpdb;
-	
+function hugeit_vp_html_edit_video_player($ord_elem, $row, $cat_row, $rowim, $rowsld, $paramssld, $rowsposts, $rowsposts8, $postsbycat) {
+	$row_id = absint($row->id);
 	if(isset($_GET["addslide"])){
-	if($_GET["addslide"] == 1){
-	header('Location: admin.php?page=video_players_huge_it_video_player&id='.$row->id.'&task=apply');
+		if($_GET["addslide"] == 1){
+			$url = wp_nonce_url( 'admin.php?page=hugeit_vp_video_player&id='. $row_id .'&task=apply', 'save_data_' . $row_id, 'hugeit_vp_save_data' );
+			$url = html_entity_decode($url);
+			header('Location: ' . $url);
+		}
 	}
-	}
-		
-	
 ?>
 <script type="text/javascript">
 jQuery("#save-buttom").click(function(){
-	submitbutton("apply");
+	hugeit_vp_submitbutton("apply");
 })
-function submitbutton(pressbutton) 
+function hugeit_vp_submitbutton(pressbutton, id)
 {
 	if(!document.getElementById('name').value){
 	alert("Name is required.");
 	return;
-	
 	}
-	
-	document.getElementById("adminForm").action=document.getElementById("adminForm").action+"&task="+pressbutton;
+
+	if (!jQuery('#' + id).data('delete-slide')) {
+		document.getElementById("adminForm").action=document.getElementById("adminForm").action+"&task="+pressbutton;
+	}
 	document.getElementById("adminForm").submit();
-	
 }
-function change_select()
-{
-		submitbutton('apply'); 
-	
-}
+
 jQuery(function() {
-        
 	jQuery( "#images-list" ).sortable({
 	  stop: function() {
 			jQuery("#images-list > li").removeClass('has-background');
@@ -175,35 +149,26 @@ jQuery(function() {
 	  },
 	  revert: true
 	});
-   // jQuery( "ul, li" ).disableSelection();
 	});
 </script>
-
 <!-- GENERAL PAGE, ADD IMAGES PAGE -->
 
 <div class="wrap">
-<?php $path_site2 = plugins_url("../images", __FILE__); ?>
-    
-    <div class="free_version_banner">
-		<img class="manual_icon" src="<?php echo $path_site2; ?>/icon-user-manual.png" alt="user manual" />
-		<p class="usermanual_text">If you have any difficulties in using the options, Follow the link to <a href="http://huge-it.com/wordpress-video-player-user-manual/" target="_blank">User Manual</a></p>
-		<a class="get_full_version" href="http://huge-it.com/video-player/" target="_blank">GET THE FULL VERSION</a>
-		<a href="http://huge-it.com" class="gotohuge" target="_blank"><img class="huge_it_logo" src="<?php echo $path_site2; ?>/Huge-It-logo.png"/></a>
-		<div style="clear: both;"></div>
-		<div  class="description_text"><p>This is the LITE version of the plugin. Click "GET THE FULL VERSION" for more advanced options.   We appreciate every customer.</p></div>
-	</div>
-<form action="admin.php?page=video_players_huge_it_video_player&id=<?php echo $row->id; ?>" method="post" name="adminForm" id="adminForm">
+	<?php $url_save = wp_nonce_url('admin.php?page=hugeit_vp_video_player&id=' . $row_id, 'save_data_' . $row_id, 'hugeit_vp_save_data' ); ?>
+	<?php include 'video_player_free_banner.php'; ?>
+<form action="<?php echo $url_save; ?>" method="post" name="adminForm" id="adminForm">
 
 	<div id="poststuff" >
 	<div id="video_player-header">
 		<ul id="video_players-list">
-			
 			<?php
 			foreach($rowsld as $rowsldires){
-				if($rowsldires->id != $row->id){
+				$rowsldires_id = absint($rowsldires->id);
+				if($rowsldires_id != $row_id){
+					$url_edit = wp_nonce_url('admin.php?page=hugeit_vp_video_player&task=edit_cat&id=' . $rowsldires_id, 'edit_cat_' . $rowsldires_id , 'hugeit_vp_edit_cat');
 				?>
 					<li>
-						<a href="#" onclick="window.location.href='admin.php?page=video_players_huge_it_video_player&task=edit_cat&id=<?php echo $rowsldires->id; ?>'" ><?php echo $rowsldires->name; ?></a>
+						<a href="#" onclick="window.location.href='<?php echo $url_edit; ?>'" ><?php echo sanitize_text_field($rowsldires->name); ?></a>
 					</li>
 				<?php
 				}
@@ -211,12 +176,13 @@ jQuery(function() {
 					<li class="active" style="background-image:url(<?php echo plugins_url('../images/edit.png', __FILE__) ;?>)">
 						<input class="text_area" onfocus="this.style.width = ((this.value.length + 1) * 8) + 'px'" type="text" name="name" id="name" maxlength="250" value="<?php echo esc_html(stripslashes($row->name));?>" />
 					</li>
-				<?php	
+				<?php
 				}
 			}
 		?>
 			<li class="add-new">
-				<a onclick="window.location.href='admin.php?page=video_players_huge_it_video_player&amp;task=add_cat'">+</a>
+				<?php $url_add_cat = wp_nonce_url('admin.php?page=hugeit_vp_video_player&amp;task=add_cat', 'hugeit_vp_add_cat_', 'hugeit_vp_add_cat_data'); ?>
+				<a onclick="window.location.href='<?php echo $url_add_cat; ?>'">+</a>
 			</li>
 		</ul>
 		</div>
@@ -224,80 +190,78 @@ jQuery(function() {
 			<!-- Content -->
 			<div id="post-body-content">
 
-
 			<?php add_thickbox(); ?>
-
 				<div id="post-body">
 					<div id="post-body-heading">
 						<h3>Videos</h3>
-						
+	<script>
+		jQuery(document).ready(function($){
+			jQuery(".wp-media-buttons-icon").click(function() {
+				jQuery(".attachment-filters").css("display","none");
+			});
+		  var _custom_media = true,
+			  _orig_send_attachment = wp.media.editor.send.attachment;
 
 
-						<script>
-jQuery(document).ready(function($){
-	jQuery(".wp-media-buttons-icon").click(function() {
-		jQuery(".attachment-filters").css("display","none");
-	});
-  var _custom_media = true,
-      _orig_send_attachment = wp.media.editor.send.attachment;
-	 
+		  jQuery('.huge-it-newuploader .button').click(function(e) {
+			var send_attachment_bkp = wp.media.editor.send.attachment;
 
-  jQuery('.huge-it-newuploader .button').click(function(e) {
-    var send_attachment_bkp = wp.media.editor.send.attachment;
-	
-    var button = jQuery(this);
-    var id = button.attr('id').replace('_button', '');
-    _custom_media = true;
+			var button = jQuery(this);
+			var id = button.attr('id').replace('_button', '');
+			_custom_media = true;
 
-	jQuery("#"+id).val('');
-	wp.media.editor.send.attachment = function(props, attachment){
-      if ( _custom_media ) {
-	     jQuery("#"+id).val(attachment.url+';;;'+jQuery("#"+id).val());
-		 jQuery("#save-buttom").click();
-      } else {
-        return _orig_send_attachment.apply( this, [props, attachment] );
-      };
-    }
-  
-    wp.media.editor.open(button);
-	 
-    return false;
-  });
+			jQuery("#"+id).val('');
+			wp.media.editor.send.attachment = function(props, attachment){
+			  if ( _custom_media ) {
+				 jQuery("#"+id).val(attachment.url+';;;'+jQuery("#"+id).val());
+				 jQuery("#save-buttom").click();
+			  } else {
+				return _orig_send_attachment.apply( this, [props, attachment] );
+			  };
+			}
 
-  jQuery('.add_media').on('click', function(){
-    _custom_media = false;
-	
-  });
-});
-</script>
-						<input type="hidden" name="imagess" id="_unique_name" />
-						<span class="wp-media-buttons-icon"></span>						
-						<div class="huge-it-newuploader uploader add-new-image">
-							<input type="button" class="button button-primary wp-media-buttons-icon" name="_unique_name_button" id="_unique_name_button" value="Upload Video" />
-						</div>
-						<a href="admin.php?page=video_players_huge_it_video_player&task=video_player_video&id=<?php echo $_GET['id']; ?>&TB_iframe=1" class="button button-primary add-video-slide thickbox"  id="slideup3s" value="iframepop">
-							<span class="wp-media-buttons-icon"></span>Add Video From Url
-						</a>
-						<!--<a href="admin.php?page=video_players_huge_it_video_player&task=video_player_vimeo&id=<?php // echo $_GET['id']; ?>&TB_iframe=1" class="button button-primary add-video-slide thickbox"  id="slideup3s" value="iframepop">
-							<span class="wp-media-buttons-icon"></span>Add Vimeo Video
-						</a>-->
-					</div>
+			wp.media.editor.open(button);
+
+			return false;
+		  });
+
+		  jQuery('.add_media').on('click', function(){
+			_custom_media = false;
+
+		  });
+		});
+	</script>
+			<input type="hidden" name="imagess" id="_unique_name" />
+			<span class="wp-media-buttons-icon"></span>
+			<div class="huge-it-newuploader uploader add-new-image">
+				<input type="button" class="button button-primary wp-media-buttons-icon" name="_unique_name_button" id="_unique_name_button" value="Upload Video" />
+			</div>
+			<a href="admin.php?page=hugeit_vp_video_player&task=video_player_video&id=<?php echo absint($_GET['id']); ?>&TB_iframe=1&width=783&height=610" class="button button-primary add-video-slide thickbox"  id="slideup3s" value="iframepop">
+				<span class="wp-media-buttons-icon"></span>Add Video From Url
+			</a>
+			</div>
 					<ul id="images-list">
 					<?php
-					
-					function get_youtube_id_from_url($url){						
+
+					function get_youtube_id_from_url($url){
 						if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
 							return $match[1];
 						}
 					}
-					
+
 					$i=2;
-					foreach ($rowim as $key=>$rowimages){ ?>
+					foreach ($rowim as $key=>$rowimages){
+						$rowimages_id = absint($rowimages->id);
+						?>
 					<?php if($rowimages->sl_type == ''){$rowimages->sl_type = 'video';} ?>
+						<?php
+						$url_remove = wp_nonce_url('admin.php?page=hugeit_vp_video_player&task=edit_cat&id=' . $row_id . '&removeslide=' . $rowimages_id, 'remove_slide_' . $row_id, 'hugeit_vp_edit_cat');
+						$url_remove = html_entity_decode($url_remove);
+						?>
 						<?php switch ($rowimages->sl_type) {
 						case 'video':	?>
-						<li <?php if($i%2==0){echo "class='has-background'";}$i++; ?>>
-						<input class="order_by" type="hidden" name="order_by_<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->ordering); ?>" />
+						<li <?php if($i%2==0) {echo "class='has-background'";} $i++; ?>>
+						<input class="order_by" type="hidden" name="order_by_<?php echo $rowimages_id; ?>" value="<?php echo esc_attr($rowimages->ordering); ?>" />
 							<div class="image-container">
 								<?php $path_site = plugins_url("../images", __FILE__); ?>
 								<?php if($rowimages->image_url == ''){ ?>
@@ -311,7 +275,7 @@ jQuery(document).ready(function($){
 										  var _custom_media = true,
 											  _orig_send_attachment = wp.media.editor.send.attachment;
 
-										  jQuery('.huge-it-editnewuploader .button<?php echo $rowimages->id; ?>').click(function(e) {
+										  jQuery('.huge-it-editnewuploader .button<?php echo $rowimages_id; ?>').click(function(e) {
 											var send_attachment_bkp = wp.media.editor.send.attachment;
 											var button = jQuery(this);
 											var id = button.attr('id').replace('_button', '');
@@ -345,32 +309,32 @@ jQuery(document).ready(function($){
 										});
 
 										});
-											function deleteproject<?php echo $rowimages->id; ?>(){
-											   jQuery('#adminForm').attr('action', 'admin.php?page=video_players_huge_it_video_player&task=edit_cat&id=<?php echo $row->id; ?>&removeslide=<?php echo $rowimages->id; ?>');
-											}
+								function deleteproject<?php echo $rowimages_id; ?>(){
+								   jQuery('#adminForm').attr('action', '<?php echo $url_remove; ?>');
+								}
 										</script>
-								<input type="hidden" name="imagess<?php echo $rowimages->id; ?>" id="_unique_name<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->image_url); ?>" />
+								<input type="hidden" name="imagess<?php echo $rowimages_id; ?>" id="_unique_name<?php echo $rowimages_id; ?>" value="<?php echo esc_attr($rowimages->image_url); ?>" />
 								<span class="wp-media-buttons-icon"></span>
-								<div class="editimgbutton_block huge-it-editnewuploader uploader button<?php echo $rowimages->id; ?> add-new-image">
+								<div class="editimgbutton_block huge-it-editnewuploader uploader button<?php echo $rowimages_id; ?> add-new-image">
 									<span class="edit_image_info">Set Custom Thumbnail</span>
-									<input type="button" class="editimgbutton button<?php echo $rowimages->id; ?> wp-media-buttons-icon" name="_unique_name_button<?php echo $rowimages->id; ?>" id="_unique_name_button<?php echo $rowimages->id; ?>" value="" />
+									<input type="button" class="editimgbutton button<?php echo $rowimages_id; ?> wp-media-buttons-icon" name="_unique_name_button<?php echo $rowimages_id; ?>" id="_unique_name_button<?php echo $rowimages_id; ?>" value="" />
 								</div>
 									</div>
 							</div>
 							<div data-video-type="video" class="image-options">
 								<div class="description-block">
-									<label for="titleimage<?php echo $rowimages->id; ?>">Title:</label>
-									<input  class="text_area" type="text" id="titleimage<?php echo $rowimages->id; ?>" name="titleimage<?php echo $rowimages->id; ?>" id="titleimage<?php echo $rowimages->id; ?>"  value="<?php echo esc_html(stripslashes($rowimages->name)); ?>">
+									<label for="titleimage<?php echo $rowimages_id; ?>">Title:</label>
+									<input  class="text_area" type="text" id="titleimage<?php echo $rowimages_id; ?>" name="titleimage<?php echo $rowimages_id; ?>" id="titleimage<?php echo $rowimages_id; ?>"  value="<?php echo esc_html(stripslashes($rowimages->name)); ?>">
 								</div>
 								<div class="description-block">
-									<label for="for_video_1<?php echo $rowimages->id; ?>">Url:</label>
-									<input style="padding-right:20px;" type="text" name="for_video_1<?php echo $rowimages->id; ?>" id="for_video_1<?php echo $rowimages->id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_1)); ?>" />
-									<div class="huge-it-editnewuploader uploader button<?php echo $rowimages->id; ?>">
-										<input type="button" class="button<?php echo $rowimages->id; ?> wp-media-buttons-icon editimageicon" name="for_video_1_button<?php echo $rowimages->id; ?>" id="for_video_1_button<?php echo $rowimages->id; ?>" value="" />
+									<label for="for_video_1<?php echo $rowimages_id; ?>">Url:</label>
+									<input style="padding-right:20px;" type="text" name="for_video_1<?php echo $rowimages_id; ?>" id="for_video_1<?php echo $rowimages_id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_1)); ?>" />
+									<div class="huge-it-editnewuploader uploader button<?php echo $rowimages_id; ?>">
+										<input type="button" class="button<?php echo $rowimages_id; ?> wp-media-buttons-icon editimageicon" name="for_video_1_button<?php echo $rowimages_id; ?>" id="for_video_1_button<?php echo $rowimages_id; ?>" value="" />
 									</div>
 								</div>
 								<div class="remove-image-container">
-									<a onclick="deleteproject<?php echo $rowimages->id; ?>(); submitbutton('apply');" id="remove_image<?php echo $rowimages->id; ?>" class="button remove-image">X</a>
+									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); hugeit_vp_submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
 								</div>
 							</div>
 						<div class="clear"></div>
@@ -379,7 +343,7 @@ jQuery(document).ready(function($){
 						case 'youtube':
 ?>
 						<li <?php if($i%2==0){echo "class='has-background'";}$i++; ?>>
-						<input class="order_by" type="hidden" name="order_by_<?php echo $rowimages->id; ?>" value="<?php echo $rowimages->ordering; ?>" />
+						<input class="order_by" type="hidden" name="order_by_<?php echo $rowimages_id; ?>" value="<?php echo esc_attr($rowimages->ordering); ?>" />
 							<div class="image-container">
 								<?php $path_site = plugins_url("../images", __FILE__); ?>
 								<?php if($rowimages->image_url == ''){ ?>
@@ -393,7 +357,7 @@ jQuery(document).ready(function($){
 											var _custom_media = true,
 											  _orig_send_attachment = wp.media.editor.send.attachment;
 
-											jQuery('.huge-it-editnewuploader .button<?php echo $rowimages->id; ?>').click(function(e) {
+											jQuery('.huge-it-editnewuploader .button<?php echo $rowimages_id; ?>').click(function(e) {
 												var send_attachment_bkp = wp.media.editor.send.attachment;
 												var button = jQuery(this);
 												var id = button.attr('id').replace('_button', '');
@@ -425,50 +389,49 @@ jQuery(document).ready(function($){
 													jQuery(".attachment-filters").css("display","none");
 												});
 											});
-											
-											
+
+
 										});
-										function deleteproject<?php echo $rowimages->id; ?>() {
-										   jQuery('#adminForm').attr('action', 'admin.php?page=video_players_huge_it_video_player&task=edit_cat&id=<?php echo $row->id; ?>&removeslide=<?php echo $rowimages->id; ?>');
+										function deleteproject<?php echo $rowimages_id; ?>() {
+										   jQuery('#adminForm').attr('action', '<?php echo $url_remove; ?>');
 										}
 									</script>
-									<input class="hidden_image_url" type="hidden" name="imagess<?php echo $rowimages->id; ?>" id="_unique_name<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->image_url); ?>" />
+									<input class="hidden_image_url" type="hidden" name="imagess<?php echo $rowimages_id; ?>" id="_unique_name<?php echo $rowimages_id; ?>" value="<?php echo esc_attr($rowimages->image_url); ?>" />
 									<span class="wp-media-buttons-icon"></span>
-									<div class="editimgbutton_block huge-it-editnewuploader uploader button<?php echo $rowimages->id; ?> add-new-image">
+									<div class="editimgbutton_block huge-it-editnewuploader uploader button<?php echo $rowimages_id; ?> add-new-image">
 										<span class="edit_image_info">Set Custom Thumbnail</span>
-										<input type="button" class="editimgbutton button<?php echo $rowimages->id; ?> wp-media-buttons-icon" name="_unique_name_button<?php echo $rowimages->id; ?>" id="_unique_name_button<?php echo $rowimages->id; ?>" value="" />
+										<input type="button" class="editimgbutton button<?php echo $rowimages_id; ?> wp-media-buttons-icon" name="_unique_name_button<?php echo $rowimages_id; ?>" id="_unique_name_button<?php echo $rowimages_id; ?>" value="" />
 									</div>
 								</div>
 								<div class="default_thumbnail">
-									<div class="button set_default_thumbnail" data-video-type="youtube" data-video-id="<?=get_youtube_thumb_id_from_url($rowimages->video_url_1); ?>">Set Default Thumbnail</div>
+									<div class="button set_default_thumbnail" data-video-type="youtube" data-video-id="<?php echo hugeit_vp_get_youtube_thumb_id_from_url($rowimages->video_url_1); ?>">Set Default Thumbnail</div>
 								</div>
 							</div>
-							
+
 							<div data-video-type="youtube" class="image-options">
 								<div class="description-block">
-									<label for="titleimage<?php echo $rowimages->id; ?>">Title:</label>
-									<input  class="text_area" type="text" id="titleimage<?php echo $rowimages->id; ?>" name="titleimage<?php echo $rowimages->id; ?>" id="titleimage<?php echo $rowimages->id; ?>"  value="<?php echo esc_html(stripslashes($rowimages->name)); ?>">
+									<label for="titleimage<?php echo $rowimages_id; ?>">Title:</label>
+									<input  class="text_area" type="text" id="titleimage<?php echo $rowimages_id; ?>" name="titleimage<?php echo $rowimages_id; ?>" id="titleimage<?php echo $rowimages_id; ?>"  value="<?php echo esc_html(stripslashes($rowimages->name)); ?>">
 								</div>
 								<div class="description-block">
-									<label for="for_video_1<?php echo $rowimages->id; ?>">Url:</label>
-									<input class="youtube_link video_link_change" type="text" name="for_video_1<?php echo $rowimages->id; ?>" id="for_video_1<?php echo $rowimages->id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_1)); ?>" />
+									<label for="for_video_1<?php echo $rowimages_id; ?>">Url:</label>
+									<input class="youtube_link video_link_change" type="text" name="for_video_1<?php echo $rowimages_id; ?>" id="for_video_1<?php echo $rowimages_id; ?>" value="<?php echo $rowimages->video_url_1; ?>" />
 									<div class="button update_video_link">Update</div>
 								</div>
 								<div class="link-block">
-									<input type="hidden" name="for_video_2<?php echo $rowimages->id; ?>" id="for_video_2<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->video_url_2); ?>" />
+									<input type="hidden" name="for_video_2<?php echo $rowimages_id; ?>" id="for_video_2<?php echo $rowimages_id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_2)); ?>" />
 								</div>
 								<div class="video_preview_container">
-									<?php 
-										$video_thumb_url=get_youtube_thumb_id_from_url($rowimages->video_url_1);
-									?>
-									<img src="<?php echo "http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg" ?>" alt="" />
-									<div class="yt_play_center"></div>
+									<?php
+										$video_thumb_url=hugeit_vp_get_youtube_thumb_id_from_url($rowimages->video_url_1); ?>
+										<img src="<?php echo "http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg" ?>" alt="" />
+										<div class="yt_play_center"></div>
 								</div>
 								<div class="remove-image-container">
-									<a onclick="deleteproject<?php echo $rowimages->id; ?>(); submitbutton('apply');" id="remove_image<?php echo $rowimages->id; ?>" class="button remove-image">X</a>
+									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); hugeit_vp_submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
 								</div>
 							</div>
-							
+
 						<div class="clear"></div>
 						</li>
 						<?php
@@ -476,7 +439,7 @@ jQuery(document).ready(function($){
 						case "vimeo":
 							?>
 						<li <?php if($i%2==0){echo "class='has-background'";}$i++; ?>>
-						<input class="order_by" type="hidden" name="order_by_<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->ordering); ?>" />
+						<input class="order_by" type="hidden" name="order_by_<?php echo $rowimages_id; ?>" value="<?php echo esc_attr($rowimages->ordering); ?>" />
 							<div class="image-container">
 								<?php $path_site = plugins_url("../images", __FILE__); ?>
 								<?php if($rowimages->image_url == ''){ ?>
@@ -490,7 +453,7 @@ jQuery(document).ready(function($){
 											var _custom_media = true,
 											  _orig_send_attachment = wp.media.editor.send.attachment;
 
-											  jQuery('.huge-it-editnewuploader .button<?php echo $rowimages->id; ?>').click(function(e) {
+											  jQuery('.huge-it-editnewuploader .button<?php echo $rowimages_id; ?>').click(function(e) {
 												var send_attachment_bkp = wp.media.editor.send.attachment;
 												var button = jQuery(this);
 												var id = button.attr('id').replace('_button', '');
@@ -531,55 +494,54 @@ jQuery(document).ready(function($){
 											})
 
 										});
-										function deleteproject<?php echo $rowimages->id; ?>() {
-										   jQuery('#adminForm').attr('action', 'admin.php?page=video_players_huge_it_video_player&task=edit_cat&id=<?php echo $row->id; ?>&removeslide=<?php echo $rowimages->id; ?>');
+										function deleteproject<?php echo $rowimages_id; ?>() {
+										   jQuery('#adminForm').attr('action', '<?php echo $url_remove; ?>');
 										}
-											
-									</script>
-									<input class="hidden_image_url" type="hidden" name="imagess<?php echo $rowimages->id; ?>" id="_unique_name<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->image_url); ?>" />
-									<span class="wp-media-buttons-icon"></span>
-									<div class="editimgbutton_block huge-it-editnewuploader uploader button<?php echo $rowimages->id; ?> add-new-image">
-										<span class="edit_image_info">Set Custom Thumbnail</span>
-										<input type="button" class="editimgbutton button<?php echo $rowimages->id; ?> wp-media-buttons-icon" name="_unique_name_button<?php echo $rowimages->id; ?>" id="_unique_name_button<?php echo $rowimages->id; ?>" value="" />
-									</div>
 
-								
+									</script>
+									<input class="hidden_image_url" type="hidden" name="imagess<?php echo $rowimages_id; ?>" id="_unique_name<?php echo $rowimages_id; ?>" value="<?php echo esc_attr($rowimages->image_url); ?>" />
+									<span class="wp-media-buttons-icon"></span>
+									<div class="editimgbutton_block huge-it-editnewuploader uploader button<?php echo $rowimages_id; ?> add-new-image">
+										<span class="edit_image_info">Set Custom Thumbnail</span>
+										<input type="button" class="editimgbutton button<?php echo $rowimages_id; ?> wp-media-buttons-icon" name="_unique_name_button<?php echo $rowimages_id; ?>" id="_unique_name_button<?php echo $rowimages_id; ?>" value="" />
+									</div>
 								</div>
 								<div class="default_thumbnail">
-									<?php 
-									$vidid = explode( "/", $rowimages->video_url_1);
-									$vidid=end($vidid);
+									<?php
+									$vid_id = explode( "/", $rowimages->video_url_1);
+									$vidid=end($vid_id);
 									?>
-									<div class="button set_default_thumbnail" data-video-type="vimeo" data-video-id="<?=$vidid; ?>">Set Default Thumbnail</div>
+									<div class="button set_default_thumbnail" data-video-type="vimeo" data-video-id="<?php echo $vidid; ?>">Set Default Thumbnail</div>
 								</div>
 							</div>
 							<div data-video-type="vimeo" class="image-options">
 								<div class="description-block">
-									<label for="titleimage<?php echo $rowimages->id; ?>">Title:</label>
-									<input  class="text_area" type="text" id="titleimage<?php echo $rowimages->id; ?>" name="titleimage<?php echo $rowimages->id; ?>" id="titleimage<?php echo $rowimages->id; ?>"  value="<?php echo esc_html(stripslashes($rowimages->name)); ?>">
+									<label for="titleimage<?php echo $rowimages_id; ?>">Title:</label>
+									<input  class="text_area" type="text" id="titleimage<?php echo $rowimages_id; ?>" name="titleimage<?php echo $rowimages_id; ?>" id="titleimage<?php echo $rowimages_id; ?>"  value="<?php echo esc_html(stripslashes($rowimages->name)); ?>">
 								</div>
 								<div class="description-block">
-									<label for="for_video_1<?php echo $rowimages->id; ?>">Url:</label>
-									<input class="vimeo_link video_link_change" type="text" name="for_video_1<?php echo $rowimages->id; ?>" id="for_video_1<?php echo $rowimages->id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_1)); ?>" />
+									<label for="for_video_1<?php echo $rowimages_id; ?>">Url:</label>
+									<input class="vimeo_link video_link_change" type="text" name="for_video_1<?php echo $rowimages_id; ?>" id="for_video_1<?php echo $rowimages_id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_1)); ?>" />
 									<div class="button update_video_link">Update</div>
 								</div>
 								<div class="link-block">
-									<input type="hidden" name="for_video_2<?php echo $rowimages->id; ?>" id="for_video_2<?php echo $rowimages->id; ?>" value="<?php echo esc_attr($rowimages->video_url_2); ?>" />
+									<input type="hidden" name="for_video_2<?php echo $rowimages_id; ?>" id="for_video_2<?php echo $rowimages_id; ?>" value="<?php echo esc_html(stripslashes($rowimages->video_url_2)); ?>" />
 								</div>
 								<div class="video_preview_container">
-									<?php 
-										$vidid = explode( "/", $rowimages->video_url_1);
-										$vidid=end($vidid);
-										$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
-										$vidurl="https://player.vimeo.com/video/".$vidid;
-										$hash = unserialize($hash);
-										$video_thumb_url=$hash[0]['thumbnail_large'];
-									?>
-									<img src="<?php echo esc_attr($video_thumb_url); ?>" alt="" />
-									<div class="vimeo_play_center"></div>
+									<?php
+											$vidid = explode( "/", $rowimages->video_url_1);
+											$vidid=end($vidid);
+											$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
+											$vidurl="https://player.vimeo.com/video/".$vidid;
+											$hash = unserialize($hash);
+											$video_thumb_url=$hash[0]['thumbnail_large'];
+											?>
+											<img src="<?php echo esc_url($video_thumb_url); ?>" alt="" />
+											<div class="vimeo_play_center"></div>
+
 								</div>
 								<div class="remove-image-container">
-									<a onclick="deleteproject<?php echo $rowimages->id; ?>(); submitbutton('apply');" id="remove_image<?php echo $rowimages->id; ?>" class="button remove-image">X</a>
+									<a onclick="deleteproject<?php echo $rowimages_id; ?>(); hugeit_vp_submitbutton('apply', 'remove_image<?php echo $rowimages_id; ?>');" id="remove_image<?php echo $rowimages_id; ?>" class="button remove-image" data-delete-slide="1">X</a>
 								</div>
 							</div>
 							<div class="clear"></div>
@@ -592,13 +554,13 @@ jQuery(document).ready(function($){
 				</div>
 
 			</div>
-				
+
 			<!-- SIDEBAR -->
 			<div id="postbox-container-1" class="postbox-container">
 				<div id="side-sortables" class="meta-box-sortables ui-sortable">
 					<div id="video_player-unique-options" class="postbox">
 					<h3 class="hndle"><span>Select The Video Player View</span></h3>
-					<ul id="video_player-unique-options-list">						
+					<ul id="video_player-unique-options-list">
 					<div id="video_player-current-options-3" class="video_player-current-options">
 					<ul id="slider-unique-options-list">
 						<li>
@@ -631,20 +593,14 @@ jQuery(document).ready(function($){
 							<label for="album_width">Video Width(px)</label>
 							<input type="number" name="album_width" id="album_width" min="250" value="<?php echo esc_attr($row->width); ?>" />
 						</li>
-						
-						
-
 					</ul>
 					</div>
-
-
 					</ul>
 						<div id="major-publishing-actions">
 							<div id="publishing-action">
-								<input type="button" onclick="submitbutton('apply')" value="Save Video Player" id="save-buttom" class="button button-primary button-large">
+								<input type="button" onclick="hugeit_vp_submitbutton('apply')" value="Save Video Player" id="save-buttom" class="button button-primary button-large">
 							</div>
 							<div class="clear"></div>
-							<!--<input type="button" onclick="window.location.href='admin.php?page=video_players_huge_it_video_player'" value="Cancel" class="button-secondary action">-->
 						</div>
 					</div>
 					<div id="video_player-shortcode-box" class="postbox shortcode ms-toggle">
@@ -654,12 +610,12 @@ jQuery(document).ready(function($){
 							<li rel="tab-1" class="selected">
 								<h4>Shortcode</h4>
 								<p>Copy &amp; paste the shortcode directly into any WordPress post or page.</p>
-								<textarea class="full" readonly="readonly">[huge_it_video_player id="<?php echo $row->id; ?>"]</textarea>
+								<textarea class="full" readonly="readonly">[huge_it_video_player id="<?php echo $row_id; ?>"]</textarea>
 							</li>
 							<li rel="tab-2">
 								<h4>Template Include</h4>
 								<p>Copy &amp; paste this code into a template file to include the slideshow within your theme.</p>
-								<textarea class="full" readonly="readonly">&lt;?php echo do_shortcode("[huge_it_video_player id='<?php echo $row->id; ?>']"); ?&gt;</textarea>
+								<textarea class="full" readonly="readonly">&lt;?php echo do_shortcode("[huge_it_video_player id='<?php echo $row_id; ?>']"); ?&gt;</textarea>
 							</li>
 						</ul>
 					</div>
@@ -671,191 +627,10 @@ jQuery(document).ready(function($){
 	<input type="hidden" name="task" value="" />
 </form>
 </div>
-
 <?php
-
 }
 
-
-function html_popup_posts($ord_elem, $count_ord,$row,$cat_row, $rowim, $rowsld, $paramssld, $rowsposts, $rowsposts8, $postsbycat){
-	global $wpdb;
-
-?>
-			<style>
-				html.wp-toolbar {
-					padding:0px !important;
-				}
-				#wpadminbar,#adminmenuback,#screen-meta, .update-nag,#dolly {
-					display:none;
-				}
-				#wpbody-content {
-					padding-bottom:30px;
-				}
-				#adminmenuwrap {display:none !important;}
-				.auto-fold #wpcontent, .auto-fold #wpfooter {
-					margin-left: 0px;
-				}
-				#wpfooter {display:none;}
-			</style>
-			<script type="text/javascript">
-				jQuery(document).ready(function() {
-
-					jQuery('.huge-it-insert-post-button').on('click', function() {
-						var ID1 = jQuery('#huge-it-add-posts-params').val();
-						if(ID1==""){alert("Please select images to insert into video_player.");return false;}
-						
-						window.parent.uploadID.val(ID1);
-						
-						tb_remove();
-						jQuery("#save-buttom").click();
-						
-					});
-						
-					jQuery('.huge-it-post-checked').change(function(){
-						if(jQuery(this).is(':checked')){
-							jQuery(this).addClass('active');
-							jQuery(this).parent().addClass('active');
-						}else {
-							jQuery(this).removeClass('active');
-							jQuery(this).parent().removeClass('active');
-						}
-						
-						var inputval="";
-						jQuery('#huge-it-add-posts-params').val("");
-						jQuery('.huge-it-post-checked').each(function(){
-							if(jQuery(this).is(':checked')){
-								inputval+=jQuery(this).val()+";";
-							}
-						});
-						jQuery('#huge-it-add-posts-params').val(inputval);
-					});
-	
-					
-					jQuery("#huge-it-categories-list").change(function(){
-						var currentCategoryID=jQuery(this).val();
-					
-						jQuery('#huge-it-posts-list li').not("#huge-it-posts-list-heading").css({"display":"none"});
-						jQuery('li[data-id*="'+currentCategoryID+'"]').css({"display":"block"});
-						
-					});
-					//jQuery("#huge-it-categories-list").change();
-										
-					jQuery('#huge_it_video_player_add_posts_wrap .view-type-block a').click(function(){
-						jQuery('#huge_it_video_player_add_posts_wrap .view-type-block a').removeClass('active');
-						jQuery(this).addClass('active');
-						var strtype=jQuery(this).attr('href').replace('#','');
-						jQuery('#huge-it-posts-list').removeClass('list').removeClass('thumbs');
-						jQuery('#huge-it-posts-list').addClass(strtype);
-						return false;
-					});
-					
-					
-					jQuery('.updated').css({"display":"none"});
-				<?php	if($_GET["closepop"] == 1){ ?>
-					jQuery("#closepopup").click();
-					self.parent.location.reload();
-				<?php	} ?>
-				});
-				
-			</script>
-			<a id="closepopup"  onclick=" parent.eval('tb_remove()')" style="display:none;" > [X] </a>
-	
-	
-	<div id="huge_it_video_player_add_posts">
-					<div id="huge_it_video_player_add_posts_wrap">
-						<h2>Add post</h2>
-						<div class="control-panel">
-						<form method="post"  onkeypress="doNothing()" action="admin.php?page=video_players_huge_it_video_player&task=popup_posts&id=<?php echo $_GET['id']; ?>" id="huge-it-category-form" name="admin_form">
-							<label for="huge-it-categories-list">Select Category <select id="huge-it-categories-list" name="iframecatid" onchange="this.form.submit()">
-
-							 <?php $categories = get_categories(  ); ?>
-
-							<?php	 foreach ($categories as $strcategories){
-							if(isset($_POST["iframecatid"])){
-?>
-								 <option value="<?php echo $strcategories->cat_ID; ?>" <?php if($strcategories->cat_ID == $_POST["iframecatid"]){echo 'selected="selected"';} ?>><?php echo $strcategories->cat_name; ?></option>';
-								
-							<?php	}
-else
-{
-?>
-								<option value="<?php echo $strcategories->cat_ID; ?>"><?php echo $strcategories->cat_name; ?></option>';
-<?php
-}							}
-							?> 
-							</select></label>
-							</form>
-							<form method="post"  onkeypress="doNothing()" action="admin.php?page=video_players_huge_it_video_player&task=popup_posts&id=<?php echo $_GET['id']; ?>&closepop=1" id="admin_form" name="admin_form">
-							<button class='save-video_player-options button-primary huge-it-insert-post-button' id='huge-it-insert-post-button-top'>Insert Posts</button>
-							<label for="huge-it-description-length">Description Length <input id="huge-it-description-length" type="text" name="posthuge-it-description-length" value="<?php echo esc_html(stripslashes($row->published)); ?>" placeholder="Description length" /></label>
-							<div class="view-type-block">
-								<a class="view-type list active" href="#list">View List</a>
-								<a class="view-type thumbs" href="#thumbs">View List</a>
-							</div>
-						</div>
-						<div style="clear:both;"></div>
-						<ul id="huge-it-posts-list" class="list">
-							<li id="huge-it-posts-list-heading" class="hascolor">
-								<div class="huge-it-posts-list-image">Image</div>
-								<div class="huge-it-posts-list-title">Title</div>
-								<div class="huge-it-posts-list-description">
-									Description
-									
-								</div>
-								<div class="huge-it-posts-list-link">Link</div>
-								<div class="huge-it-posts-list-category">Category</div>
-							</li>
-							<?php 
-
-
-
-							$strx=1;
-							foreach($rowsposts8 as $rowspostspop1){
-								 $query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."posts where post_type = 'post' and post_status = 'publish' and ID = %d  order by ID ASC", $rowspostspop1->object_id);
-							$rowspostspop=$wpdb->get_results($query);
-							//print_r($rowspostspop);
-							
-							
-								$post_categories =  wp_get_post_categories( $rowspostspop[0]->ID, $rowspostspop[0]->ID ); 
-								$cats = array();
-								
-								
-								foreach($post_categories as $c){
-									$cat = get_category( $c );
-									$cats[] = array( 'name' => $cat->name, 'slug' => $cat->slug, 'id' => $cat->term_id );
-									//echo	$cat->slug;
-								}
-								if(get_the_post_thumbnail($rowspostspop[0]->ID, 'thumbnail') != ''){
-									$strx++;
-									$hascolor="";
-									if($strx%2==0){$hascolor='class="hascolor"';}
-							?>
-								
-								<li <?php echo $hascolor; ?>>
-									<input type="checkbox" class="huge-it-post-checked"  value="<?php echo $rowspostspop[0]->ID; ?>">
-									<div class="huge-it-posts-list-image"><?php echo get_the_post_thumbnail($rowspostspop[0]->ID, 'thumbnail'); ?></div>
-									<div class="huge-it-posts-list-title"><?php echo $rowspostspop[0]->post_title;	?></div>
-									<div class="huge-it-posts-list-description"><?php echo	$rowspostspop[0]->post_content;	?></div>
-									<div class="huge-it-posts-list-link"><?php echo	$rowspostspop[0]->guid; ?></div>
-									<div class="huge-it-posts-list-category"><?php echo	$cat->slug;	?></div>
-								</li>
-							<?php }
-								}	?>
-						</ul>
-						<input id="huge-it-add-posts-params" type="hidden" name="popupposts" value="" />
-						<div class="clear"></div>
-						<button class='save-video_player-options button-primary huge-it-insert-post-button' id='huge-it-insert-post-button-bottom'>Insert Posts</button>
-						</form>
-						
-					</div>
-				</div>		
-	<?php
-}
-?>
-<?php
-function html_video_player_video(){
-	global $wpdb;
-
+function hugeit_vp_html_video_player_video(){
 ?>
 	<style>
 		html.wp-toolbar {
@@ -876,21 +651,21 @@ function html_video_player_video(){
 		#TB_window {height:250px !important;}
 	</style>
 	<script type="text/javascript">
-		jQuery(document).ready(function() {			
-		
-		jQuery('.huge-it-insert-video-button').click(function(){				
+		jQuery(document).ready(function() {
+
+		jQuery('.huge-it-insert-video-button').click(function(){
 				jQuery('.huge-it-insert-post-button').on('click', function() {
 				var ID1 = jQuery('#huge_it_add_video_input').val();
 				if(ID1==""){alert("Please copy and past url form Youtobe or Vimeo to insert into slider.");return false;}
-				
+
 				window.parent.uploadID.val(ID1);
-				
+
 				tb_remove();
 				jQuery("#save-buttom").click();
 			});
 
 			jQuery('#huge_it_add_video_input').change(function(){
-				
+
 				if (jQuery(this).val().indexOf("youtube") >= 0){
 					jQuery('#add-video-popup-options > div').removeClass('active');
 					jQuery('#add-video-popup-options  .youtube').addClass('active');
@@ -901,22 +676,24 @@ function html_video_player_video(){
 					jQuery('#add-video-popup-options > div').removeClass('active');
 					jQuery('#add-video-popup-options  .error-message').addClass('active');
 				}
-			})	
+			})
 				});
-					<?php	
+					<?php
 			if(isset($_GET["closepop"])){
 			if($_GET["closepop"] == 1){ ?>
 					jQuery("#closepopup").click();
 					self.parent.location.reload();
 			<?php	}	} ?>
 			jQuery('.updated').css({"display":"none"});
-			
+
 			jQuery("#huge_it_add_video_input").on("change keyup",function(){
 				var url=jQuery(this).val();
+				var addVideoSaveNonce = jQuery(this).parents('#huge_it_slider_add_videos_wrap').data('add-video-save-nonce');
 				var data={
 					action:"video_player_ajax",
-					task:"get_video_meta_from_url",
-					url:url,
+					nonce: addVideoSaveNonce,
+					task: "get_video_meta_from_url",
+					url: url,
 				}
 				jQuery.post('<?php echo admin_url( 'admin-ajax.php' ); ?>',data,function(response){
 					if(response.success){
@@ -938,18 +715,25 @@ function html_video_player_video(){
 		});
 	</script>
 	<a id="closepopup"  onclick=" parent.eval('tb_remove()')" style="display:none;"> [X] </a>
-
 	<div id="huge_it_slider_add_videos">
-		<div id="huge_it_slider_add_videos_wrap">
+		<?php $hugeit_vp_add_video_save_nonce = wp_create_nonce('hugeit_vp_add_video_save'); ?>
+		<div id="huge_it_slider_add_videos_wrap" data-add-video-save-nonce="<?php echo $hugeit_vp_add_video_save_nonce; ?>">
 			<h2>Add Video From Url (Youtube/Vimeo Or Custom Video)</h2>
 			<div class="control-panel">
-				<form method="post" action="admin.php?page=video_players_huge_it_video_player&task=video_player_video&id=<?php echo $_GET['id']; ?>&closepop=1" >
+				<?php
+					$id = absint($_GET['id']);
+					$url = wp_nonce_url(
+					'admin.php?page=hugeit_vp_video_player&task=video_player_video&id=' . $id . '&closepop=1',
+					'add_video_' . $id,
+					'hugeit_vp_add_video'
+				); ?>
+				<form method="post" action="<?php echo $url; ?>" >
 					<input type="text" id="huge_it_add_video_input" name="show_video_url_1" placeholder="http://" />
 					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'>Insert Video Url</button>
 					<div id="add-video-popup-options">
 						<div>
 							<div>
-								<label for="show_title">Title:</label>	
+								<label for="show_title">Title:</label>
 								<div>
 									<input id="show_title" name="show_title" value="" type="text" />
 								</div>
@@ -962,302 +746,7 @@ function html_video_player_video(){
 					</div>
 				</form>
 			</div>
-		</div>	
+		</div>
 	</div>
 <?php
-}
-?>
-<?php
-function html_video_player_youtube(){
-	global $wpdb;
-
-?>
-	<style>
-		html.wp-toolbar {
-			padding:0px !important;
-		}
-		#wpadminbar,#adminmenuback,#screen-meta, .update-nag,#dolly {
-			display:none;
-		}
-		#wpbody-content {
-			padding-bottom:30px;
-		}
-		#adminmenuwrap {display:none !important;}
-		.auto-fold #wpcontent, .auto-fold #wpfooter {
-			margin-left: 0px;
-		}
-		#wpfooter {display:none;}
-		iframe {height:250px !important;}
-		#TB_window {height:250px !important;}
-	</style>
-	<script type="text/javascript">
-		jQuery(document).ready(function() {			
-		
-		jQuery('.huge-it-insert-video-button').click(function(){	
-				jQuery('.huge-it-insert-post-button').on('click', function() {
-					var ID1 = jQuery('#huge_it_add_video_input').val();
-					if(ID1==""){alert("Please copy and past url form Youtobe or Vimeo to insert into slider.");return false;}
-					
-					window.parent.uploadID.val(ID1);
-					
-					tb_remove();
-					jQuery("#save-buttom").click();
-				});
-
-					jQuery('#huge_it_add_video_input').change(function(){
-						
-						if (jQuery(this).val().indexOf("youtube") >= 0){
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .youtube').addClass('active');
-						}else if (jQuery(this).val().indexOf("vimeo") >= 0){
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .vimeo').addClass('active');
-						}else {
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .error-message').addClass('active');
-						}
-					})	
-				});
-					<?php	
-			if(isset($_GET["closepop"])){
-			if($_GET["closepop"] == 1){ ?>
-					jQuery("#closepopup").click();
-					self.parent.location.reload();
-			<?php	}	} ?>
-			jQuery('.updated').css({"display":"none"});
-		});
-	</script>
-	<a id="closepopup"  onclick="parent.eval('tb_remove()')" style="display:none;">[X]</a>
-	<div id="huge_it_slider_add_videos">
-		<div id="huge_it_slider_add_videos_wrap">
-			<h2>Add Youtube Video</h2>
-			<div class="control-panel">
-				<form method="post" action="admin.php?page=video_players_huge_it_video_player&task=video_player_youtube&id=<?php echo $_GET['id']; ?>&closepop=1" >
-					<input type="text" id="huge_it_add_video_input" name="show_video_url_1" />
-					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'>Insert Video Url</button>
-					<div id="add-video-popup-options">
-						<div>
-							<div>
-								<label for="show_title">Title:</label>	
-								<div>
-									<input name="show_title" value="" type="text" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>	
-	</div>
-<?php
-}
-
-function html_video_player_vimeo(){
-	global $wpdb;
-
-?>
-	<style>
-		html.wp-toolbar {
-			padding:0px !important;
-		}
-		#wpadminbar,#adminmenuback,#screen-meta, .update-nag,#dolly {
-			display:none;
-		}
-		#wpbody-content {
-			padding-bottom:30px;
-		}
-		#adminmenuwrap {display:none !important;}
-		.auto-fold #wpcontent, .auto-fold #wpfooter {
-			margin-left: 0px;
-		}
-		#wpfooter {display:none;}
-		iframe {height:250px !important;}
-		#TB_window {height:250px !important;}
-	</style>
-	<script type="text/javascript">
-		jQuery(document).ready(function() {			
-		
-		jQuery('.huge-it-insert-video-button').click(function(){	
-				jQuery('.huge-it-insert-post-button').on('click', function() {
-					var ID1 = jQuery('#huge_it_add_video_input').val();
-					if(ID1==""){alert("Please copy and past url form Youtobe or Vimeo to insert into slider.");return false;}
-					
-					window.parent.uploadID.val(ID1);
-					
-					tb_remove();
-					jQuery("#save-buttom").click();
-				});
-
-					jQuery('#huge_it_add_video_input').change(function(){
-						
-						if (jQuery(this).val().indexOf("youtube") >= 0){
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .youtube').addClass('active');
-						}else if (jQuery(this).val().indexOf("vimeo") >= 0){
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .vimeo').addClass('active');
-						}else {
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .error-message').addClass('active');
-						}
-					})	
-				});
-					<?php	
-			if(isset($_GET["closepop"])){
-			if($_GET["closepop"] == 1){ ?>
-					jQuery("#closepopup").click();
-					self.parent.location.reload();
-			<?php	}	} ?>
-			jQuery('.updated').css({"display":"none"});
-		});
-	</script>
-	<a id="closepopup"  onclick="parent.eval('tb_remove()')" style="display:none;">[X]</a>
-	<div id="huge_it_slider_add_videos">
-		<div id="huge_it_slider_add_videos_wrap">
-			<h2>Add Vimeo Video</h2>
-			<div class="control-panel">
-				<form method="post" action="admin.php?page=video_players_huge_it_video_player&task=video_player_vimeo&id=<?php echo $_GET['id']; ?>&closepop=1" >
-					<input type="text" id="huge_it_add_video_input" name="show_video_url_1" />
-					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'>Insert Video Url</button>
-					<div id="add-video-popup-options">
-						<div>
-							<div>
-								<label for="show_title">Title:</label>	
-								<div>
-									<input name="show_title" value="" type="text" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>	
-	</div>
-<?php
-}
-
-function html_video_player_upload(){
-	global $wpdb;
-	?>
-	<style>
-		html.wp-toolbar {
-			padding:0px !important;
-		}
-		#wpadminbar,#adminmenuback,#screen-meta, .update-nag,#dolly {
-			display:none;
-		}
-		#wpbody-content {
-			padding-bottom:30px;
-		}
-		#adminmenuwrap {display:none !important;}
-		.auto-fold #wpcontent, .auto-fold #wpfooter {
-			margin-left: 0px;
-		}
-		#wpfooter {display:none;}
-		iframe {height:250px !important;}
-		#TB_window {height:250px !important;}
-	</style>
-	<script type="text/javascript">
-		jQuery(document).ready(function() {			
-		
-		jQuery('.huge-it-insert-video-button').click(function(){	
-				jQuery('.huge-it-insert-post-button').on('click', function() {
-					var ID1 = jQuery('#huge_it_add_video_input').val();
-					if(ID1==""){alert("Please copy and past url form Youtobe or Vimeo to insert into slider.");return false;}
-					
-					window.parent.uploadID.val(ID1);
-					
-					tb_remove();
-					jQuery("#save-buttom").click();
-				});
-
-					/*jQuery('#huge_it_add_video_input').change(function(){
-						
-						if (jQuery(this).val().indexOf("youtube") >= 0){
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .youtube').addClass('active');
-						}else if (jQuery(this).val().indexOf("vimeo") >= 0){
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .vimeo').addClass('active');
-						}else {
-							jQuery('#add-video-popup-options > div').removeClass('active');
-							jQuery('#add-video-popup-options  .error-message').addClass('active');
-						}
-					})	*/
-				});
-					<?php	
-			if(isset($_GET["closepop"])){
-			if($_GET["closepop"] == 1){ ?>
-					jQuery("#closepopup").click();
-					self.parent.location.reload();
-			<?php	}	} ?>
-			jQuery('.updated').css({"display":"none"});
-		});
-	</script>
-	<script>
-	jQuery(document).ready(function($){
-	  var _custom_media = true,
-		  _orig_send_attachment = wp.media.editor.send.attachment;
-		 
-
-	  jQuery('#huge_it_add_video_input').click(function(e) {
-		var send_attachment_bkp = wp.media.editor.send.attachment;
-		
-		var button = jQuery(this);
-		//var id = button.attr('id').replace('_button', '');
-		_custom_media = true;
-
-		//jQuery("#"+id).val('');
-		wp.media.editor.send.attachment = function(props, attachment){
-		  if ( _custom_media ) {
-			console.log(attachment);
-			jQuery("#show_title").val(attachment.title);
-			jQuery("#show_video_url_1").val(attachment.url);
-		  } else {
-			return _orig_send_attachment.apply( this, [props, attachment] );
-		  };
-		}
-	  
-		wp.media.editor.open(button);
-		 
-		return false;
-	  });
-
-	  jQuery('.add_media').on('click', function(){
-		_custom_media = false;
-		
-	  });
-		/*jQuery(".wp-media-buttons-icon").click(function() {
-			jQuery(".media-menu-item").css("display","none");
-			jQuery(".media-menu-item:first").css("display","block");
-			jQuery(".separator").next().css("display","block");
-			jQuery('.attachment-filters').val('image').trigger('change');
-			jQuery(".attachment-filters").css("display","none");
-		});*/
-	});
-	</script>
-	<a id="closepopup"  onclick="parent.eval('tb_remove()')" style="display:none;">[X]</a>
-	<div id="huge_it_slider_add_videos">
-		<div id="huge_it_slider_add_videos_wrap">
-			<h2>Upload Video</h2>
-			<div class="control-panel">
-				<form method="post" action="admin.php?page=video_players_huge_it_video_player&task=video_player_upload&id=<?php echo $_GET['id']; ?>&closepop=1" >
-					<input type="button" class="button" id="huge_it_add_video_input" name="show_video_url_12" value="Upload Video" />
-					<input type="hidden" id="show_video_url_1" name="show_video_url_1" value="" />
-					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'>Insert Video Url</button>
-					<div id="add-video-popup-options">
-						<div>
-							<div>
-								<label for="show_title">Title:</label>	
-								<div>
-									<input name="show_title" id="show_title" value="" type="text" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>	
-	</div>
-	<?php
 }
