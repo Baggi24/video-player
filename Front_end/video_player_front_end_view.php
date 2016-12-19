@@ -743,6 +743,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                                     /* ONLOAD STUFF */
                                     /* *** */
                                     if(autoplay=="true"){
+                                        video.play();
                                         video.autoplay = true;
                                         addClass("playing",container);
                                         removeClass("poster",container);
@@ -1881,12 +1882,13 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                             }
 						<?php
                         else : ?>
+                        if(typeof youtube_player.stopVideo === 'function') {
                             youtube_player.stopVideo();
+                        }
                             playlist_autoplay="true";
                         <?php
                         endif; ?>
 					},2000);
-					
 					
 					youtube_player = new YT.Player('youtube_player_<?php echo $i; ?>', {
 						autoplay         : 0,
@@ -1912,7 +1914,9 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 						}
 					});
 					function onReady() {
-						youtube_player.pauseVideo();
+                        if(typeof youtube_player.pauseVideo === 'function') {
+                            youtube_player.pauseVideo();
+                        }
 						youtube_player.addEventListener('onStateChange', function(e) {
 							if(e.data==0){
 								/* video ended. load next track in playlist */
@@ -2567,13 +2571,17 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 								/* DISPLAY YOUTUBE PLAYER */
 								var id=active.getAttribute("data-video-id");
 								var thumb=active.getAttribute("data-poster");
-								youtube_player.loadVideoById(id);
+                                if(typeof youtube_player.loadVideoById === 'function') {
+                                    youtube_player.loadVideoById(id);
+                                }
 								youtube.style.display="block";
 								if(playlist_autoplay=="true"){
 									youtube_player.playVideo();
 									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
 								}else{
-									youtube_player.pauseVideo();
+                                    if(typeof youtube_player.pauseVideo === 'function') {
+                                        youtube_player.pauseVideo();
+                                    }
 									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb img.thumb").setAttribute("src",thumb);
 									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="block";
 								}
@@ -2589,7 +2597,9 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 							case "vimeo":
 								/* HIDE YOUTUBE PLAYER */
 								youtube.style.display="none";
-								youtube_player.loadVideoById("");
+                                if(typeof youtube_player.loadVideoById === 'function') {
+                                    youtube_player.loadVideoById("");
+                                }
 								global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
 								/* DISPLAY VIMEO PLAYER */ 
 								var id=active.getAttribute("data-video-id");
@@ -2684,7 +2694,9 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 						if(type=="youtube"){
 							var id=active.getAttribute("data-video-id");
 							global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
-							youtube_player.loadVideoById(id);
+                            if(typeof youtube_player.loadVideoById === 'function') {
+                                youtube_player.loadVideoById(id);
+                            }
 							youtube_player.playVideo();
 							playlist_autoplay="true";
 						}
