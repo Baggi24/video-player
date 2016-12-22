@@ -95,7 +95,7 @@ function hugeit_vp_images_list_shotrcode($atts)
     ), $atts));
 
     wp_enqueue_media();
-    wp_enqueue_style("font-awesome",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
+    wp_enqueue_style("hugeicons",plugins_url("icon-fonts/css/hugeicons.css", __FILE__), FALSE);
     wp_enqueue_script("froogaloop",plugins_url("froogaloop.min.js", __FILE__), FALSE);
 
     return hugeit_vp_images_list($atts['id']);
