@@ -1,9 +1,10 @@
 <?php
+
 /*
 Plugin Name: Huge IT Video Player
 Plugin URI: http://huge-it.com/video-player/
-Description: Huge-IT Video player is perfect for using for creating various portfolios within various views. 
-Version: 10.0
+Description: Huge-IT Video player is perfect for using for creating various portfolios within various views.
+Version: 1.2.0
 Author: Huge-IT
 Author: http://huge-it.com/
 License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
