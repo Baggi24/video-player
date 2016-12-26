@@ -117,9 +117,9 @@ function hugeit_vp_images_list($id) {
 add_action('admin_menu', 'hugeit_vp_options_panel');
 function hugeit_vp_options_panel()
 {
-    $GLOBALS['hugeit_vp_page_category'] = add_menu_page('Theme page title', 'Video Player', 'manage_options', 'hugeit_vp_video_player', 'hugeit_vp_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
-    $GLOBALS['hugeit_vp_page_option'] = add_submenu_page('hugeit_vp_video_player', 'General Options', 'General Options', 'manage_options', 'hugeit_vp_Options_styles', 'hugeit_vp_Options_styles');
-	add_submenu_page('hugeit_vp_video_player', 'Featured Plugins', 'Featured Plugins', 'manage_options', 'hugeit_vp_featured_plugins', 'hugeit_vp_featured_plugins');
+    $GLOBALS['hugeit_vp_page_category'] = add_menu_page('Theme page title', 'Video Player', 'publish_pages', 'hugeit_vp_video_player', 'hugeit_vp_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
+    $GLOBALS['hugeit_vp_page_option'] = add_submenu_page('hugeit_vp_video_player', 'General Options', 'General Options', 'publish_pages', 'hugeit_vp_Options_styles', 'hugeit_vp_Options_styles');
+	add_submenu_page('hugeit_vp_video_player', 'Featured Plugins', 'Featured Plugins', 'publish_pages', 'hugeit_vp_featured_plugins', 'hugeit_vp_featured_plugins');
 	add_submenu_page('hugeit_vp_video_player', 'Licensing', 'Licensing', 'manage_options', 'hugeit_vp_licensing', 'hugeit_vp_licensing');
 }
 
