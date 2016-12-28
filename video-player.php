@@ -119,7 +119,7 @@ function hugeit_vp_options_panel()
 {
     $GLOBALS['hugeit_vp_page_category'] = add_menu_page('Theme page title', 'Video Player', 'publish_pages', 'hugeit_vp_video_player', 'hugeit_vp_video_player', plugins_url('images/huge_it_video_player_logo_for_menu.png', __FILE__));
     $GLOBALS['hugeit_vp_page_option'] = add_submenu_page('hugeit_vp_video_player', 'General Options', 'General Options', 'publish_pages', 'hugeit_vp_Options_styles', 'hugeit_vp_Options_styles');
-	add_submenu_page('hugeit_vp_video_player', 'Featured Plugins', 'Featured Plugins', 'publish_pages', 'hugeit_vp_featured_plugins', 'hugeit_vp_featured_plugins');
+    	$GLOBALS['hugeit_vp_page_featured'] = add_submenu_page('hugeit_vp_video_player', 'Featured Plugins', 'Featured Plugins', 'publish_pages', 'hugeit_vp_featured_plugins', 'hugeit_vp_featured_plugins');
 	add_submenu_page('hugeit_vp_video_player', 'Licensing', 'Licensing', 'manage_options', 'hugeit_vp_licensing', 'hugeit_vp_licensing');
 }
 
@@ -139,6 +139,7 @@ function hugeit_vp_admin_script($hook)
 {
     global $hugeit_vp_page_category;
     global $hugeit_vp_page_option;
+    global $hugeit_vp_page_featured;
 
     if($hook == $hugeit_vp_page_category) {
         wp_enqueue_media();
@@ -155,6 +156,9 @@ function hugeit_vp_admin_script($hook)
         wp_enqueue_script("admin_js", plugins_url("js/admin.js", __FILE__), FALSE);
         wp_enqueue_script('param_block2', plugins_url("elements/jscolor/jscolor.js", __FILE__));
         wp_localize_script('admin_js', 'ajax_object',array( 'ajax_url' => admin_url( 'admin-ajax.php' )));
+    }
+    if($hook == $hugeit_vp_page_featured) {
+        wp_enqueue_style("admin_css", plugins_url("style/admin.style.css", __FILE__), FALSE);
     }
 }
 
