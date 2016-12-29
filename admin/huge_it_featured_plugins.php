@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="huge-plugins">
     <div class="plaings-block">
         <div class="plugin">
-            <div class="image-block photo-gallery"><a href="http://huge-it.com/portfolio-gallery/" target="_blank"></a></div>
+            <div class="image-block photo-gallery"><a href="http://huge-it.com/wordpress-photo-gallery/" target="_blank"></a></div>
             <div class="info-block">
-                <h2><a href="http://huge-it.com/portfolio-gallery/" target="_blank">Photo Gallery </a></h2>
+                <h2><a href="http://huge-it.com/wordpress-photo-gallery/" target="_blank">Photo Gallery </a></h2>
                 <p>Access advanced options and customization tools of this ultimate gallery, use the best ever functionality and unique features.</p>
-                <a href="http://huge-it.com/portfolio-gallery/" class="view" target="_blank">View Plugin</a>
+                <a href="http://huge-it.com/wordpress-photo-gallery/" class="view" target="_blank">View Plugin</a>
             </div>
         </div>
         <div class="plugin">
@@ -70,11 +70,11 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
         </div>
         <div class="plugin">
-            <div class="image-block login"><a href="http://huge-it.com/product-catalog/" target="_blank"></a></div>
+            <div class="image-block login"><a href="http://huge-it.com/wordpress-login/" target="_blank"></a></div>
             <div class="info-block">
-                <h2><a href="http://huge-it.com/product-catalog/" target="_blank">Login</a></h2>
+                <h2><a href="http://huge-it.com/wordpress-login/" target="_blank">Login</a></h2>
                 <p>Add Login and sign up buttons on your site with amazing popup. Customize and style it to your liking, using security options and reCAPTCHA.</p>
-                <a href="http://huge-it.com/product-catalog/" class="view" target="_blank">View Plugin</a>
+                <a href="http://huge-it.com/wordpress-login/" class="view" target="_blank">View Plugin</a>
             </div>
         </div>
         <div class="plugin">
