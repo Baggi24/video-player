@@ -5,6 +5,7 @@
         advanced features, settings to customize every area of the plugin, then check out the Full License plugin. The
         full version of the plugin is available in 3 different packages of one-time payment.', 'hugeit_maps' ); ?>
     </p>
+    <a href="http://huge-it.com/video-player/" class="button-primary" target="_blank"><?php _e('Purchase a License', 'product-catalog' ); ?></a>
     <br/><br/>
 
     <div class="video-player">
