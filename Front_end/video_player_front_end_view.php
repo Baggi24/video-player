@@ -1671,13 +1671,13 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 								jQuery(document).ready(function(){
 									function vimhw<?php echo $i; ?>(){
 										var w=<?php echo $width; ?>;
-										if(jQuery("#vimeo_single_player_<?php echo $video_id; ?>").parent().width()<=w){
-											document.getElementById("vimeo_single_player_<?php echo $video_id; ?>").style.width="100%";
-											var w=document.getElementById("vimeo_single_player_<?php echo $video_id; ?>").offsetWidth;
-											document.getElementById("vimeo_single_player_<?php echo $video_id; ?>").style.height=w*0.56+"px";
+										if(jQuery("#vimeo_single_player_container_<?php echo $video_id; ?>").parent().width()<=w){
+											document.getElementById("vimeo_single_player_container_<?php echo $video_id; ?>").style.width="100%";
+											var w=document.getElementById("vimeo_single_player_container_<?php echo $video_id; ?>").offsetWidth;
+											document.getElementById("vimeo_single_player_container_<?php echo $video_id; ?>").style.height=w*0.56+"px";
 										}else{
-											document.getElementById("vimeo_single_player_<?php echo $video_id; ?>").style.width="<?php echo $width; ?>px";
-											document.getElementById("vimeo_single_player_<?php echo $video_id; ?>").style.height="<?php echo $width*0.56; ?>px";
+											document.getElementById("vimeo_single_player_container_<?php echo $video_id; ?>").style.width="<?php echo $width; ?>px";
+											document.getElementById("vimeo_single_player_container_<?php echo $video_id; ?>").style.height="<?php echo $width*0.56; ?>px";
 										}
 									}
 									
@@ -1786,7 +1786,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 							
 							<?php
 							break;
-					} 
+					}
 					$j++;
 			} ?>
 			<?php
@@ -1842,7 +1842,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 		}
 		?>
 		
-		video_param_aprox_height=video_param_width*0.7;
+		video_param_aprox_height=video_param_width*0.56;
 		/* check if video player exists */
 		global_container=document.querySelector(video_container_id);
 		if(global_container){
@@ -2575,6 +2575,8 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                                     youtube_player.loadVideoById(id);
                                 }
 								youtube.style.display="block";
+                                youtube.style.height=video_param_aprox_height+"px";
+
 								if(playlist_autoplay=="true"){
 									youtube_player.playVideo();
 									global_container.querySelector(".players_wrapper #youtube_<?php echo $i; ?>_thumb").style.display="none";
@@ -3767,6 +3769,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 				left:0px;
 				width:100%;
 				max-height:none;
+                height: 100%;
 			}
 
 			#huge_it_album_video_player_<?php echo $i; ?> .players_wrapper .custom_thumb img.play {

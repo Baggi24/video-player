@@ -4,11 +4,6 @@ jQuery(document).ready(function () {
 		jQuery(".free_version_banner").css("display","none");
 		videoPlayerSetCookie( 'videoPlayerBannerShow', 'no', {expires:86400} );
 	});
-
-	jQuery(".close_christmas").on("click",function(){
-		jQuery(".backend-banner").css("display","none");
-		videoPlayerSetCookie( 'videoPlayerChristmas', 'no', {expires:345600} );
-	});
 	
 	jQuery(".update_video_link").on("click tap",function(){
 		var button=jQuery(this);

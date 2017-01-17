@@ -408,12 +408,12 @@ class Huge_it_video_player_Widget extends WP_Widget {
             <select id="<?php echo $this->get_field_id('video_player_id'); ?>" name="<?php echo $this->get_field_name('video_player_id'); ?>">
 
             <?php
-             global $wpdb;
+            global $wpdb;
             $query="SELECT * FROM ".$wpdb->prefix."huge_it_video_players ";
             $rowwidget=$wpdb->get_results($query);
             foreach($rowwidget as $rowwidgetecho){
             ?>
-                <option <?php if($rowwidgetecho->id == $instance['video_player_id']){ echo 'selected'; } ?> value="<?php echo $rowwidgetecho->id; ?>"><?php echo $rowwidgetecho->name; ?></option>
+                <option <?php if($rowwidgetecho->id == $selected_video_player){ echo 'selected'; } ?> value="<?php echo $rowwidgetecho->id; ?>"><?php echo $rowwidgetecho->name; ?></option>
                 <?php } ?>
             </select>
 		</p>

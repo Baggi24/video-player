@@ -20,28 +20,3 @@
     <div  class="description_text"><p>This is the Lite version of the plugin. Click "GET THE FULL VERSION" for more advanced options and customization possibilities. We appreciate your attention and cooperation.</p></div>
     <div style="clear: both;"></div>
 </div>
-<div class="backend-christmas-banner" <?php if( isset($_COOKIE['videoPlayerChristmas']) && $_COOKIE['videoPlayerChristmas'] == "no" ) echo 'style="display:none"'; ?>>
-    <div class="banner-block">
-        <div class="image-block">
-            <a target="_blank" href="http://huge-it.com/">
-        </div>
-        <div class="text-block">
-            <a target="_blank" href="http://huge-it.com/">
-                <p>Upgrade your plugin and get Developer's License for 13 WordPress plugins worth <span>$760 for <strong>$149</strong> </span>
-                    Plus, we add 12 months of FREE support and updates. The deal is available for a limited time only.</p>
-                <button>Get Sale Now</button>
-            </a>
-        </div>
-        <div class="share-block">
-            <span>Follow us</span>
-            <ul>
-                <li><a target="_blank" href="https://www.facebook.com/hugeit/" class="facebook"></a></li>
-                <li><a target="_blank" href="https://twitter.com/HugeITcom" class="twitter"></a></li>
-                <li><a target="_blank" href="https://plus.google.com/111845940220835549549" class="google"></a></li>
-                <li><a target="_blank" href="https://www.youtube.com/channel/UCueCH_ulkgQZhSuc0L5rS5Q" class="youtube"></a></li>
-            </ul>
-        </div>
-    </div>
-    <a href="" class="close_christmas"></a>
-    <!--  hin@ .close  -->
-</div>
