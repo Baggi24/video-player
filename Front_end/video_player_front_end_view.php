@@ -54,6 +54,10 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 						if($video->sl_type=="youtube"){
 							$video_thumb_url = hugeit_vp_get_youtube_thumb_id_from_url($video->video_url_1);
 							$video_id = absint($video->id);
+							$last = 0;
+                            if ($video_id == $videos[0]->id) {
+                                $last = 1;
+                            }
 							?>
 							var youtube_single_player_<?php echo $video_id; ?>;
 							youtube_single_player_<?php echo $video_id; ?> = new YT.Player('youtube_single_player_<?php echo $video_id; ?>',{
@@ -61,7 +65,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 								enablejsapi      : 1,
 								playerVars:{
 									'autohide':			<?php echo absint($paramssld['video_pl_yt_autohide']); ?>,
-									'autoplay':			<?php if($j==0){ echo absint($video_player[0]->autoplay); }else{ echo 0; } ?>,
+									'autoplay':			<?php if( $j==0 && $last == 1 ){ echo absint($video_player[0]->autoplay); }else{ echo 0; } ?>,
 									'controls': 		1,
 									'fs':				<?php echo absint($paramssld['video_pl_yt_fullscreen']); ?>,
 									'disablekb':		0,
@@ -77,7 +81,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 
 							});
 							
-							if(<?php echo absint($video_player[0]->autoplay); ?>==0){
+							if(<?php echo absint($video_player[0]->autoplay); ?>==0 <?php echo '||' . $last; ?>==0){
 								jQuery("#youtube_single_player_container_<?php echo $video_id; ?> .thumbnail_block").css({display:'block'});
 							}
 							jQuery("#youtube_single_player_container_<?php echo $video_id; ?> .thumbnail_block").on("click",function(){
@@ -147,7 +151,11 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                                 volume_dragging="";
                                 /* PLUGIN PARAMETERS */
                                 <?php
-                                if($video_player[0]->autoplay==1){
+                                $last = 0;
+                                if ($video_id == $videos[0]->id) {
+                                    $last = 1;
+                                }
+                                if($video_player[0]->autoplay==1 && $last == 1){
                                     $autoplay="true";
                                 }else{
                                     $autoplay="false";
@@ -3868,7 +3876,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 													<img src="<?php echo esc_url($video->image_url); ?>" alt="<?php echo esc_html($video->name); ?>" />
 												<?php } ?>
 											</div>
-											<span class="item_title"><?php echo esc_html($video->name); ?></span>
+											<span class="item_title"><?php echo esc_html(wp_unslash($video->name)); ?></span>
 										</div>
 									</li>
 									<?php
@@ -3880,7 +3888,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 											<div class="thumb">
 												<img src="<?php echo esc_url($video->image_url); ?>" alt="<?php echo esc_html($video->name); ?>" />
 											</div>
-											<span class="item_title"><?php echo esc_html($video->name); ?></span>
+											<span class="item_title"><?php echo esc_html(wp_unslash($video->name)); ?></span>
 										</div>
 									</li>
 									<?php
@@ -3901,7 +3909,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 											<div class="thumb">
 												<img src="<?php echo esc_url($video->image_url); ?>" alt="<?php echo esc_html($video->name); ?>" />
 											</div>
-											<span class="item_title"><?php echo esc_html($video->name); ?></span>
+											<span class="item_title"><?php echo esc_html(wp_unslash($video->name)); ?></span>
 										</div>
 									</li>
 									<?php 

@@ -269,7 +269,13 @@ function hugeit_vp_ajax_callback(){
 			$video_image="";
 			if(isset($youtube_exp[1])){
 				$video_id=hugeit_vp_get_youtube_thumb_id_from_url($video_url);
-				$video_title="";
+
+                $url = esc_url("http://www.youtube.com/watch?v=".$video_id);
+                $page = file_get_contents($url);
+                $doc = new DOMDocument();
+                $doc->loadHTML($page);
+                $title_div = $doc->getElementById('eow-title');
+                $video_title = trim($title_div->nodeValue);
 				$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 				$type="youtube";
 			}else{
@@ -279,7 +285,7 @@ function hugeit_vp_ajax_callback(){
 					$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
 					$hash = unserialize($hash);
 					$video_image = esc_url($hash[0]['thumbnail_large']);
-					$video_title = esc_html($hash[0]['title']);
+					$video_title = trim($hash[0]['title']);
 					$type="vimeo";
 				}
 			}
