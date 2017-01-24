@@ -244,6 +244,7 @@ function hugeit_vp_video_player() {
 add_action("wp_ajax_video_player_ajax", "hugeit_vp_ajax_callback");
 
 function hugeit_vp_ajax_callback(){
+    $protocol = is_ssl() ? 'https:' : 'http:';
 	function hugeit_vp_get_youtube_thumb_id_from_url($url){
 		if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', esc_url($url), $match)) {
 			if(!empty($match[1])){
@@ -270,19 +271,19 @@ function hugeit_vp_ajax_callback(){
 			if(isset($youtube_exp[1])){
 				$video_id=hugeit_vp_get_youtube_thumb_id_from_url($video_url);
 
-                $url = esc_url("http://www.youtube.com/watch?v=".$video_id);
+                $url = esc_url($protocol . "//www.youtube.com/watch?v=".$video_id);
                 $page = file_get_contents($url);
                 $doc = new DOMDocument();
                 $doc->loadHTML($page);
                 $title_div = $doc->getElementById('eow-title');
                 $video_title = trim($title_div->nodeValue);
-				$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
+				$video_image = esc_url($protocol . '//img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 				$type="youtube";
 			}else{
 				if(isset($vimeo_exp[1])){
 					$vidid = explode( "/", $video_url);
 					$vidid=end($vidid);
-					$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
+					$hash=file_get_contents($protocol . "//vimeo.com/api/v2/video/".$vidid.".php");
 					$hash = unserialize($hash);
 					$video_image = esc_url($hash[0]['thumbnail_large']);
 					$video_title = trim($hash[0]['title']);
@@ -302,10 +303,10 @@ function hugeit_vp_ajax_callback(){
 			$video_id = esc_html($_POST['video_id']);
 			$video_image="";
 			if($_POST['type']=="youtube"){
-				$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
+				$video_image = esc_url($protocol . '//img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 			}
 			if($_POST['type']=="vimeo"){
-				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
+				$hash = file_get_contents($protocol . "//vimeo.com/api/v2/video/".$video_id.".php");
 				$hash = unserialize($hash);
 				$video_image = esc_url($hash[0]['thumbnail_large']);
 			}
@@ -327,13 +328,13 @@ function hugeit_vp_ajax_callback(){
 			if($type=="youtube"){
 				$video_id =hugeit_vp_get_youtube_thumb_id_from_url($link);
 				if($video_id){
-					$video_image = esc_url('http://img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
+					$video_image = esc_url($protocol . '//img.youtube.com/vi/'.$video_id.'/mqdefault.jpg');
 				}
 				
 			}elseif($type=="vimeo"){
 				$link_explode = explode( "/", $link);
 				$video_id = end($link_explode);
-				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$video_id.".php");
+				$hash = file_get_contents($protocol . "//vimeo.com/api/v2/video/".$video_id.".php");
 				$hash = unserialize($hash);
 				$video_image = esc_url($hash[0]['thumbnail_large']);
 			}

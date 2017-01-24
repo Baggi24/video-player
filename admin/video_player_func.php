@@ -161,6 +161,8 @@ INSERT INTO
 
 function hugeit_vp_video_player_video($id){
 	global $wpdb;
+    $protocol = is_ssl() ? 'https:' : 'http:';
+
 	$id = absint($id);
 	if(isset($_POST["show_video_url_1"]) or isset($_POST["show_video_url_2"])){
 		if($_POST["show_video_url_1"] != ''){
@@ -187,12 +189,12 @@ function hugeit_vp_video_player_video($id){
 			$video_thumb_url = sanitize_text_field(hugeit_vp_get_youtube_thumb_id_from_url($_POST["show_video_url_1"]));
 			$sql_video = "INSERT INTO 
 			`" . $table_name . "` ( `name`, `video_player_id`, `video_url_1`, `image_url`, `sl_type`, `ordering`, `published`) VALUES 
-			( '".sanitize_text_field($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', 'http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg', 'youtube', '0', '1' )";
+			( '".sanitize_text_field($_POST["show_title"])."', '".$id."', '".esc_url($_POST["show_video_url_1"])."', '".$protocol."//img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg', 'youtube', '0', '1' )";
 		}else{
 			if(isset($vimeoinsert[1])){
 				$vidid = explode( "/", esc_url($_POST["show_video_url_1"]));
 				$vidid = end($vidid);
-				$hash = file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
+				$hash = file_get_contents($protocol."//vimeo.com/api/v2/video/".$vidid.".php");
 				$hash = unserialize($hash);
 				$video_thumb_url = esc_url($hash[0]['thumbnail_large']);
 				if($_POST["show_title"]==""){

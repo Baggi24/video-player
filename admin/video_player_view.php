@@ -109,6 +109,7 @@ function hugeit_vp_html_show_video_players($rows, $pageNav, $sort, $cat_row){
     <?php
 }
 function hugeit_vp_html_edit_video_player($ord_elem, $row, $cat_row, $rowim, $rowsld, $paramssld, $rowsposts, $rowsposts8, $postsbycat) {
+    $protocol = is_ssl() ? 'https:' : 'http:';
 	$row_id = absint($row->id);
 	if(isset($_GET["addslide"])){
 		if($_GET["addslide"] == 1){
@@ -424,7 +425,7 @@ jQuery(function() {
 								<div class="video_preview_container">
 									<?php
 										$video_thumb_url=hugeit_vp_get_youtube_thumb_id_from_url($rowimages->video_url_1); ?>
-										<img src="<?php echo "http://img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg" ?>" alt="" />
+										<img src="<?php echo $protocol . "//img.youtube.com/vi/".$video_thumb_url."/mqdefault.jpg" ?>" alt="" />
 										<div class="yt_play_center"></div>
 								</div>
 								<div class="remove-image-container">
@@ -531,7 +532,7 @@ jQuery(function() {
 									<?php
 											$vidid = explode( "/", $rowimages->video_url_1);
 											$vidid=end($vidid);
-											$hash=file_get_contents("http://vimeo.com/api/v2/video/".$vidid.".php");
+											$hash=file_get_contents( $protocol . "//vimeo.com/api/v2/video/".$vidid.".php");
 											$vidurl="https://player.vimeo.com/video/".$vidid;
 											$hash = unserialize($hash);
 											$video_thumb_url=$hash[0]['thumbnail_large'];
