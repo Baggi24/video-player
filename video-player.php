@@ -543,6 +543,15 @@ INSERT INTO `$table_name` (`name`, `title`,`description`, `value`) VALUES
 
 query1;
 
+    $video_pl_yt_related_query = "SELECT count(name) FROM " . $table_name . " WHERE name = 'video_pl_yt_related'";
+    $video_pl_yt_related = $wpdb->get_var($video_pl_yt_related_query);
+    $sql_1_1 = "
+INSERT INTO `" . $table_name . "`(`name`, `title`,`description`, `value`) VALUES
+                                 ('video_pl_yt_related', 'Allow Related Videos', 'Allow Related Videos', '1')";
+    if(absint($video_pl_yt_related) === 0) {
+        $wpdb->query($sql_1_1);
+    }
+
     $table_name = $wpdb->prefix . "huge_it_videos";
     $sql_2 = "
 INSERT INTO 

@@ -73,7 +73,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 									'enablejsapi': 1,
 									// 'cc_load_policy': 1, // forces closed captions on
 									'iv_load_policy':	<?php echo absint($paramssld['video_pl_yt_annotation']); ?>, // annotations, 1=on, 3=off
-									'rel':				1,
+									'rel':				<?php echo absint($paramssld['video_pl_yt_related']); ?>,
 									'showinfo':			<?php echo absint($paramssld['video_pl_yt_showinfo']); ?>,
 									'theme':			'<?php echo esc_html($paramssld['video_pl_yt_theme']); ?>',	// dark, light
 									'color':			'<?php echo esc_html($paramssld['video_pl_yt_color']); ?>'	// red, white
@@ -1905,14 +1905,14 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 							'autohide':			<?php echo absint($paramssld['video_pl_yt_autohide']); ?>,
 							'autoplay':			0,
 							'controls': 		1,
-							'fs':				0,
+							'fs':				<?php echo absint($paramssld['video_pl_yt_fullscreen']); ?>,
 							'disablekb':		0,
 							'modestbranding':	1,
 							'enablejsapi': 1,
 							// 'cc_load_policy': 1, // forces closed captions on
 							'iv_load_policy':	<?php echo absint($paramssld['video_pl_yt_annotation']); ?>, // annotations, 1=on, 3=off
 							// 'playlist': videoID, videoID, videoID, etc,
-							'rel':				1,
+                            'rel':				<?php echo absint($paramssld['video_pl_yt_related']); ?>,
 							'showinfo':			<?php echo absint($paramssld['video_pl_yt_showinfo']); ?>,
 							'theme':			'<?php echo esc_html($paramssld['video_pl_yt_theme']); ?>',	// dark, light
 							'color':			'<?php echo esc_html($paramssld['video_pl_yt_color']); ?>'	// red, white
