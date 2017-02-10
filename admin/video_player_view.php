@@ -654,38 +654,30 @@ function hugeit_vp_html_video_player_video(){
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 
-		jQuery('.huge-it-insert-video-button').click(function(){
-				jQuery('.huge-it-insert-post-button').on('click', function() {
-				var ID1 = jQuery('#huge_it_add_video_input').val();
-				if(ID1==""){alert("Please copy and past url form Youtobe or Vimeo to insert into slider.");return false;}
-
-				window.parent.uploadID.val(ID1);
-
-				tb_remove();
-				jQuery("#save-buttom").click();
-			});
-
-			jQuery('#huge_it_add_video_input').change(function(){
-
-				if (jQuery(this).val().indexOf("youtube") >= 0){
-					jQuery('#add-video-popup-options > div').removeClass('active');
-					jQuery('#add-video-popup-options  .youtube').addClass('active');
-				}else if (jQuery(this).val().indexOf("vimeo") >= 0){
-					jQuery('#add-video-popup-options > div').removeClass('active');
-					jQuery('#add-video-popup-options  .vimeo').addClass('active');
-				}else {
-					jQuery('#add-video-popup-options > div').removeClass('active');
-					jQuery('#add-video-popup-options  .error-message').addClass('active');
-				}
-			})
-				});
-					<?php
+		jQuery('.huge-it-insert-video-button').click(function(e){
+		    e.preventDefault();
+        });
+        <?php
 			if(isset($_GET["closepop"])){
 			if($_GET["closepop"] == 1){ ?>
 					jQuery("#closepopup").click();
 					self.parent.location.reload();
 			<?php	}	} ?>
 			jQuery('.updated').css({"display":"none"});
+
+            jQuery('#huge_it_add_video_input').change(function(){
+
+                if (jQuery(this).val().indexOf("youtube") >= 0){
+                    jQuery('#add-video-popup-options > div').removeClass('active');
+                    jQuery('#add-video-popup-options  .youtube').addClass('active');
+                }else if (jQuery(this).val().indexOf("vimeo") >= 0){
+                    jQuery('#add-video-popup-options > div').removeClass('active');
+                    jQuery('#add-video-popup-options  .vimeo').addClass('active');
+                }else {
+                    jQuery('#add-video-popup-options > div').removeClass('active');
+                    jQuery('#add-video-popup-options  .error-message').addClass('active');
+                }
+            })
 
 			jQuery("#huge_it_add_video_input").on("change keyup",function(){
 				var url=jQuery(this).val();
@@ -695,17 +687,20 @@ function hugeit_vp_html_video_player_video(){
 					nonce: addVideoSaveNonce,
 					task: "get_video_meta_from_url",
 					url: url,
-				}
-				jQuery.post('<?php echo admin_url( 'admin-ajax.php' ); ?>',data,function(response){
+				};
+
+                jQuery.post('<?php echo admin_url( 'admin-ajax.php' ); ?>',data,function(response){
 					if(response.success){
 						jQuery("#show_title").val(response.title);
 						jQuery("#show_description").val(response.image_url);
-						if(jQuery("#add-video-popup-options .thumb_block").length){
+
+                        if(jQuery("#add-video-popup-options .thumb_block").length){
 							jQuery("#add-video-popup-options .thumb_block").remove();
 							jQuery("#add-video-popup-options").append("<div class='thumb_block'><img class='"+response.type+"' src='"+response.image_url+"' alt='"+response.title+"' /><div class='"+response.type+"_play'></div></div>");
 						}else{
 							jQuery("#add-video-popup-options").append("<div class='thumb_block'><img class='"+response.type+"' src='"+response.image_url+"' alt='"+response.title+"' /><div class='"+response.type+"_play'></div></div>");
 						}
+                        jQuery("#insert_video").submit();
 					}else{
 						if(response.fail){
 							//do nothing
@@ -728,23 +723,23 @@ function hugeit_vp_html_video_player_video(){
 					'add_video_' . $id,
 					'hugeit_vp_add_video'
 				); ?>
-				<form method="post" action="<?php echo $url; ?>" >
-					<input type="text" id="huge_it_add_video_input" name="show_video_url_1" placeholder="http://" />
-					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'>Insert Video Url</button>
-					<div id="add-video-popup-options">
-						<div>
-							<div>
-								<label for="show_title">Title:</label>
-								<div>
-									<input id="show_title" name="show_title" value="" type="text" />
-								</div>
-							</div>
-							<div>
-								<label for="show_video_url_2">Image Url:</label>
-								<input type="text" id="show_description" name="show_video_image_url" />
-							</div>
-						</div>
-					</div>
+				<form id="insert_video" method="post" action="<?php echo $url; ?>" >                    
+                        <input type="text" id="huge_it_add_video_input" name="show_video_url_1" placeholder="http://" />
+                        <button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'>Insert Video Url</button>                    
+                    <div id="add-video-popup-options">
+                        <div>
+                            <div>
+                                <label for="show_title">Title:</label>
+                                <div>
+                                    <input id="show_title" name="show_title" value="" type="text" />
+                                </div>
+                            </div>
+                            <div>
+                                <label for="show_video_url_2">Image Url:</label>
+                                <input type="text" id="show_description" name="show_video_image_url" />
+                            </div>
+                        </div>
+                    </div>
 				</form>
 			</div>
 		</div>
