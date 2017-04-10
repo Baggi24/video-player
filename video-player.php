@@ -602,5 +602,15 @@ INSERT INTO `$table_name` (`id`, `name`, `layout`, `width`, `album_single`, `ord
 	if(!$wpdb->get_row("select * from ".$wpdb->prefix."huge_it_video_params WHERE name='video_pl_controls_panel_opacity'")){
 		$wpdb->query("INSERT INTO `".$wpdb->prefix."huge_it_video_params` (`name`, `title`,`description`, `value`) VALUES ('video_pl_controls_panel_opacity', 'Controls', 'Controls', '0')");
 	}
+
+    /**
+     *  Check if column 'loop_single' exist
+     */
+    $check_column = ("SHOW COLUMNS FROM `$table_name` LIKE 'loop_single'");
+	$loop_single_exist = $wpdb->get_results($check_column);
+    if(!$loop_single_exist){
+        $wpdb->query("ALTER TABLE `$table_name` ADD COLUMN loop_single INT(11) DEFAULT 0 AFTER autoplay");
+    }
+
 }
 register_activation_hook(__FILE__, 'hugeit_vp_activate');

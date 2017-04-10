@@ -87,6 +87,15 @@ jQuery(document).ready(function () {
 			}
 		},"json");
 	});
+
+    jQuery("#album_single").on('change', function () {
+        if(jQuery("#album_single option:selected").val() === "album") {
+            jQuery("#album_repeat").attr("disabled", true);
+        }
+        else if(jQuery("#album_single option:selected").val() === "single"){
+            jQuery("#album_repeat").attr("disabled", false);
+        }
+    });
 });
 
 function videoPlayerSetCookie(name, value, options) {

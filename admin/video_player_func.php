@@ -131,7 +131,7 @@ function hugeit_vp_add_video_player() {
 	$ord_elem=$wpdb->get_results($query); 
 	$cat_row=$wpdb->get_results("SELECT * FROM ".$wpdb->prefix."huge_it_video_players");
 	$cat_row=hugeit_vp_open_cat_in_tree($cat_row);
-	
+
 	$table_name = $wpdb->prefix . "huge_it_video_players";
     $sql_2 = "
 INSERT INTO 
@@ -262,6 +262,7 @@ function hugeit_vp_apply_cat($id){
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  layout = %s  WHERE id = %d ", sanitize_text_field($_POST["album_playlist_layout"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  width = %s  WHERE id = %d ", absint($_POST["album_width"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  autoplay = %s  WHERE id = %d ", absint($_POST["album_autoplay"]), $id));
+	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  loop_single = %s  WHERE id = %d ", absint($_POST["album_repeat"]), $id));
 	$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_it_video_players SET  ordering = '1'  WHERE id = %d ", $id));
 			}
         }

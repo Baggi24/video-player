@@ -35,7 +35,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
         $video_playertitle = esc_html($video_player[0]->name);
         $video_playeralbum = esc_html($video_player[0]->album_single);
         $videoAautoPlay = absint($video_player[0]->autoplay);
-        $width = absint($video_player[0]->width);
+        $width = absint($video_player[0]->width);        
 	$path_site = plugins_url("../images", __FILE__);
 	switch($video_playeralbum){
 		case 'single':
@@ -58,6 +58,10 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                             if ($video_id == $videos[0]->id) {
                                 $last = 1;
                             }
+                            $repeat = 0;
+                            if(absint($video_player[0]->loop_single) == 1 && $last != 0){
+                                $repeat = 'onStateChange';
+                            }
 							?>
 							var youtube_single_player_<?php echo $video_id; ?>;
 							youtube_single_player_<?php echo $video_id; ?> = new YT.Player('youtube_single_player_<?php echo $video_id; ?>',{
@@ -79,7 +83,18 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 									'color':			'<?php echo esc_html($paramssld['video_pl_yt_color']); ?>'	// red, white
 								},
 
+                                events: {
+                                    'onStateChange': <?php echo $repeat; ?>
+                                }
 							});
+
+                            function onStateChange(state) {
+                                if (state.data === YT.PlayerState.ENDED) {
+                                    youtube_single_player_<?php echo $video_id; ?>.loadVideoById({
+                                        videoId: '<?php echo $video_thumb_url; ?>',
+                                    });
+                                }
+                            }
 							
 							if(<?php echo absint($video_player[0]->autoplay); ?>==0 <?php echo '||' . $last; ?>==0){
 								jQuery("#youtube_single_player_container_<?php echo $video_id; ?> .thumbnail_block").css({display:'block'});
@@ -111,8 +126,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 					?>
 				}
 			</script>
-			<?php 
-			
+			<?php
 			foreach($videos as $video){
 					$video_playeralbum = $video->sl_type;
                     $video_id = absint($video->id);
@@ -121,6 +135,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                     $margin_top = absint($paramssld['video_pl_margin_top']);
                     $margin_bottom = absint($paramssld['video_pl_margin_bottom']);
                     $border_size = absint($paramssld['video_pl_border_size']);
+
                     $border_color = esc_html($paramssld['video_pl_border_color']);
 
 					switch($video_playeralbum){
@@ -1667,13 +1682,15 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 							$i=rand(1,100000);
 							$vid = esc_url($video->video_url_1);
 							$vid = explode("/",$vid);
-							$vidid=  end($vid);
+							$vidid=end($vid);
 							if($j==0){
 								$autoplay = absint($video_player[0]->autoplay);
+                                $loop = absint($video_player[0]->loop_single);
 							}else{
 								$autoplay=0;
+								$loop = 0;
 							}
-							$vidurl="https://player.vimeo.com/video/".$vidid."?player_id=vimeo_single_player_".$video_id."&color=".$paramssld['video_pl_vimeo_color']."&autoplay=".$autoplay;
+							$vidurl="https://player.vimeo.com/video/".$vidid."?player_id=vimeo_single_player_".$video_id."&color=".$paramssld['video_pl_vimeo_color']."&autoplay=".$autoplay . "&loop=" .$loop;
 							?>
 							<script>
 								jQuery(document).ready(function(){
