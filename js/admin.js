@@ -87,14 +87,16 @@ jQuery(document).ready(function () {
 			}
 		},"json");
 	});
-
+    if(jQuery("#album_single option:selected").val() === "album") {
+        jQuery(".repeat").css("display", "none");
+    }
     jQuery("#album_single").on('change', function () {
         if(jQuery("#album_single option:selected").val() === "album") {
-            jQuery("#album_repeat").attr("disabled", true);
-        }
-        else if(jQuery("#album_single option:selected").val() === "single"){
-            jQuery("#album_repeat").attr("disabled", false);
-        }
+        	jQuery(".repeat").css("display", "none");
+		}
+		else if(jQuery("#album_single option:selected").val() === "single"){
+            jQuery(".repeat").css("display", "block");
+		}
     });
 });
 

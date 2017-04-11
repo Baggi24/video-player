@@ -594,7 +594,7 @@ jQuery(function() {
 							<label for="album_width">Video Width(px)</label>
 							<input type="number" name="album_width" id="album_width" min="250" value="<?php echo esc_attr($row->width); ?>" />
 						</li>
-                        <li>
+                        <li class="repeat">
                             <label for="album_repeat">Repeat</label>
                             <select name="album_repeat" id="album_repeat" >
                                 <option value="1" <?php if($row->loop_single=="1"){ echo 'selected="selected"'; } ?>>On</option>

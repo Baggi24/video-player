@@ -58,10 +58,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
                             if ($video_id == $videos[0]->id) {
                                 $last = 1;
                             }
-                            $repeat = 0;
-                            if(absint($video_player[0]->loop_single) == 1 && $last != 0){
-                                $repeat = 'onStateChange';
-                            }
+                            $repeat = absint($video_player[0]->loop_single);
 							?>
 							var youtube_single_player_<?php echo $video_id; ?>;
 							youtube_single_player_<?php echo $video_id; ?> = new YT.Player('youtube_single_player_<?php echo $video_id; ?>',{
@@ -70,6 +67,8 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 								playerVars:{
 									'autohide':			<?php echo absint($paramssld['video_pl_yt_autohide']); ?>,
 									'autoplay':			<?php if( $j==0 && $last == 1 ){ echo absint($video_player[0]->autoplay); }else{ echo 0; } ?>,
+                                    'loop':             <?php if( $j==0 && $last == 1 ){ echo $repeat; }else{ echo 0; } ?>,
+									'playlist':         <?php if( $j==0 && $last == 1 && $repeat == 1){ echo "'" . $video_thumb_url . "'"; }else{ echo 0; } ?>,
 									'controls': 		1,
 									'fs':				<?php echo absint($paramssld['video_pl_yt_fullscreen']); ?>,
 									'disablekb':		0,
@@ -80,12 +79,8 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 									'rel':				<?php echo absint($paramssld['video_pl_yt_related']); ?>,
 									'showinfo':			<?php echo absint($paramssld['video_pl_yt_showinfo']); ?>,
 									'theme':			'<?php echo esc_html($paramssld['video_pl_yt_theme']); ?>',	// dark, light
-									'color':			'<?php echo esc_html($paramssld['video_pl_yt_color']); ?>'	// red, white
+									'color':			'<?php echo esc_html($paramssld['video_pl_yt_color']); ?>',	// red, white
 								},
-
-                                events: {
-                                    'onStateChange': <?php echo $repeat; ?>
-                                }
 							});
 
                             function onStateChange(state) {
@@ -1690,7 +1685,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 								$autoplay=0;
 								$loop = 0;
 							}
-							$vidurl="https://player.vimeo.com/video/".$vidid."?player_id=vimeo_single_player_".$video_id."&color=".$paramssld['video_pl_vimeo_color']."&autoplay=".$autoplay . "&loop=" .$loop;
+							$vidurl="https://player.vimeo.com/video/".$vidid."?player_id=vimeo_single_player_".$video_id."&color=".$paramssld['video_pl_vimeo_color']."&autoplay=".$autoplay."&loop=".$loop;
 							?>
 							<script>
 								jQuery(document).ready(function(){
@@ -1712,7 +1707,7 @@ function hugeit_vp_front_end_video_player($videos, $paramssld, $video_player) {
 									
 									jQuery("#vimeo_single_player_container_<?php echo $video_id; ?> .thumbnail_block").on("click",function(){
 										jQuery("#vimeo_single_player_container_<?php echo $video_id; ?> .thumbnail_block").css({display:'none'});
-										jQuery("#vimeo_single_player_container_<?php echo $video_id; ?> #vimeo_single_player_<?php echo $video_id; ?>").attr("src","https://player.vimeo.com/video/<?php echo $vidid; ?>?player_id=vimeo_single_player_<?php echo $video_id; ?>&color=<?php echo $paramssld['video_pl_vimeo_color']; ?>&autoplay=1");
+										jQuery("#vimeo_single_player_container_<?php echo $video_id; ?> #vimeo_single_player_<?php echo $video_id; ?>").attr("src","https://player.vimeo.com/video/<?php echo $vidid; ?>?player_id=vimeo_single_player_<?php echo $video_id; ?>&color=<?php echo $paramssld['video_pl_vimeo_color']; ?>&autoplay=1&loop=<?php echo $loop; ?>");
 									});
 									
 									vimhw<?php echo $i; ?>();
